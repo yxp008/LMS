@@ -1,0 +1,51 @@
+# 数据文件
+*.ndjson
+*.json.gz
+*.bin
+*.cmrk2
+export_data.json
+
+# 编译产物
+processor/processor
+collector/elk_logs/reader
+*.exe
+
+# Python
+__pycache__/
+*.pyc
+
+# ClickHouse（仅保留最小配置）
+data/clickhouse_data/*
+!data/clickhouse_data/preprocessed_configs/
+data/clickhouse_data/preprocessed_configs/*
+!data/clickhouse_data/preprocessed_configs/config_minimal.xml
+
+# Kafka 数据
+kafka/data/
+
+# Vector 运行时
+collector/vector_data/
+collector/elk_logs/.processed.json
+collector/elk_logs/.reader.lock
+collector/vector_wsl.toml
+
+# 临时文件
+*.log
+*.err
+
+# Go module
+processor/go.sum
+collector/elk_logs/go.sum
+collector/elk_logs/go.mod
+
+# IDE / 系统
+.idea/
+.vscode/
+*:Zone.Identifier
+Thumbs.db
+
+# 凭据
+frontend/smtp_config.json
+
+# 数据库设计文档（二进制）
+database_design/*.docx

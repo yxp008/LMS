@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS - 日志管理系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">LMS</div>
+                <span>日志管理系统</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="logs">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    <span>日志查询</span>
+                </li>
+                <li class="nav-item" data-page="collectors">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                    <span>采集器</span>
+                </li>
+                <li class="nav-item" data-page="alerts">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                    <span>告警规则</span>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="header">
+                <h1 id="page-title">日志查询</h1>
+                <div class="header-actions">
+                    <span id="current-time"></span>
+                </div>
+            </header>
+
+            <!-- 日志查询页面（含子Tab） -->
+            <div id="page-logs" class="page active">
+                <div class="sub-tabs">
+                    <button class="sub-tab active" data-subtab="dashboard" onclick="switchSubTab('dashboard')">仪表盘</button>
+                    <button class="sub-tab" data-subtab="logs" onclick="switchSubTab('logs')">日志查询</button>
+                    <button class="sub-tab" data-subtab="charts" onclick="switchSubTab('charts')">可视化分析</button>
+                </div>
+
+                <!-- 仪表盘子页面 -->
+                <div id="subtab-dashboard" class="sub-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon total"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg></div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="stat-total">0</div>
+                                <div class="stat-label">日志总量</div>
+                            </div>
+                        </div>
+                    <div class="stat-card">
+                        <div class="stat-icon error"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-errors">0</div>
+                            <div class="stat-label">错误日志</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warn"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-warns">0</div>
+                            <div class="stat-label">警告日志</div>
+                        </div>
+                    </div>
+                        <div class="stat-card">
+                            <div class="stat-icon today"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="stat-24h">0</div>
+                                <div class="stat-label">近24小时</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-row">
+                        <div class="chart-card">
+                            <h3>日志级别分布</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-levels"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>日志来源分布</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-sources"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card full-width">
+                        <h3>最近错误日志 <span style="font-weight:400;font-size:12px;color:var(--text-secondary)">(最多显示 10 条)</span></h3>
+                        <div id="recent-errors" class="log-list-mini"></div>
+                    </div>
+                </div>
+
+                <!-- 日志查询子页面 -->
+                <div id="subtab-logs" class="sub-content">
+                    <div class="filter-bar">
+                        <button class="btn btn-primary" onclick="loadLogs(1)">查询</button>
+                        <button class="btn" onclick="resetFilters()">重置</button>
+                        <select id="filter-level" onchange="loadLogs(1)">
+                            <option value="">所有级别</option>
+                            <option value="1">INFO</option>
+                            <option value="2">WARN</option>
+                            <option value="3">ERROR</option>
+                            <option value="4">DEBUG</option>
+                        </select>
+                        <select id="filter-host" onchange="loadLogs(1)">
+                            <option value="">所有主机</option>
+                        </select>
+                        <select id="filter-source" onchange="loadLogs(1)">
+                            <option value="">所有来源</option>
+                        </select>
+                        <input type="text" id="filter-search" placeholder="搜索日志内容...">
+                        <label style="color:var(--text-secondary);font-size:13px">日期范围:</label>
+                        <span class="datepicker-wrap">
+                            <input type="text" id="filter-start" placeholder="开始日期" autocomplete="off" style="min-width:120px">
+                        </span>
+                        <span style="color:var(--text-secondary)">至</span>
+                        <span class="datepicker-wrap">
+                            <input type="text" id="filter-end" placeholder="结束日期" autocomplete="off" style="min-width:120px">
+                        </span>
+                        <button id="btn-auto-refresh" class="btn btn-primary btn-sm" onclick="toggleLogAutoRefresh()" style="margin-left:8px">自动刷新: 开</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:150px">时间</th>
+                                    <th style="width:65px">级别</th>
+                                    <th style="width:100px">主机</th>
+                                    <th style="width:100px">来源</th>
+                                    <th>消息内容</th>
+                                    <th>标签（Tags）</th>
+                                    <th style="width:70px">采集器</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logs-table-body">
+                                <tr><td colspan="7" class="empty-state">暂无数据</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination" id="pagination"></div>
+                </div>
+
+                <!-- 可视化分析子页面 -->
+                <div id="subtab-charts" class="sub-content">
+                    <div class="chart-card full-width">
+                        <h3>日志时间线（近24小时）</h3>
+                        <div class="chart-wrapper-lg">
+                            <canvas id="chart-timeline"></canvas>
+                        </div>
+                    </div>
+                    <div class="charts-row">
+                        <div class="chart-card">
+                            <h3>主机日志量排名</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-hosts"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>来源类型占比</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-source-pie"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 采集器页面 -->
+            <div id="page-collectors" class="page">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>采集器ID</th>
+                                <th>采集器名称</th>
+                                <th>采集源</th>
+                                <th style="width:100px">状态</th>
+                                <th style="width:80px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="collectors-table-body">
+                            <tr><td colspan="5" class="empty-state">暂无数据</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 告警规则页面 -->
+            <div id="page-alerts" class="page">
+                <div style="margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <button class="btn btn-primary" onclick="showAddAlertRule()">+ 新建告警规则</button>
+                    <button class="btn" onclick="showSmtpConfig()">SMTP 邮件配置</button>
+                    <button class="btn" onclick="showAlertTriggers()" style="background:rgba(243,156,18,0.15);color:#f39c12;border-color:rgba(243,156,18,0.3)">告警触发显示</button>
+                    <span id="smtp-status" style="color:var(--text-secondary);font-size:13px"></span>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>规则ID</th>
+                                <th>名称</th>
+                                <th>描述</th>
+                                <th>告警SQL</th>
+                                <th>轮询间隔</th>
+                                <th>通知渠道</th>
+                                <th>通知地址</th>
+                                <th>等级</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="alerts-table-body">
+                            <tr><td colspan="11" class="empty-state">暂无数据</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="log-detail-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>日志详情</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="log-detail-body"></div>
+        </div>
+    </div>
+
+    <div id="alert-rule-modal" class="modal hidden">
+        <div class="modal-content" style="max-width:600px">
+            <div class="modal-header">
+                <h3 id="alert-rule-modal-title">新建告警规则</h3>
+                <button class="modal-close" onclick="closeAlertRuleModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="alert-edit-id">
+                <div class="form-group">
+                    <label>规则名称 <span style="color:var(--error)">*</span></label>
+                    <input type="text" id="alert-name" placeholder="输入告警名称">
+                </div>
+                <div class="form-group">
+                    <label>告警描述</label>
+                    <textarea id="alert-desc" rows="2" placeholder="告警描述"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>告警SQL <span style="color:var(--error)">*</span></label>
+                    <textarea id="alert-sql" rows="2" placeholder="SELECT count() FROM LMS.LMS_Logs WHERE Level = '3'"></textarea>
+                    <div id="sql-validation-result" style="margin-top:4px;display:none"></div>
+                </div>
+                <div class="form-group">
+                    <label>轮询间隔 <span style="color:var(--error)">*</span></label>
+                    <input type="text" id="alert-interval" placeholder="如 5m, 1h, 30s">
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex:1">
+                        <label>通知渠道</label>
+                        <select id="alert-channel">
+                            <option value="1">邮件</option>
+                            <option value="2">短信</option>
+                            <option value="3">Webhook</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1">
+                        <label>告警等级</label>
+                        <select id="alert-level">
+                            <option value="1">严重</option>
+                            <option value="2">高</option>
+                            <option value="3">中</option>
+                            <option value="4">低</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>通知地址 <span style="color:var(--error)">*</span></label>
+                    <input type="text" id="alert-address" placeholder="邮件地址/手机号/Webhook URL">
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <select id="alert-status">
+                        <option value="1">启用</option>
+                        <option value="0">停用</option>
+                    </select>
+                </div>
+                <div style="text-align:right;margin-top:16px">
+                    <button class="btn" onclick="validateSql()">验证SQL</button>
+                    <button class="btn" onclick="closeAlertRuleModal()" style="margin-left:8px">取消</button>
+                    <button class="btn btn-primary" onclick="saveAlertRule()" style="margin-left:8px">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alert-triggers-modal" class="modal hidden">
+        <div class="modal-content" style="max-width:900px">
+            <div class="modal-header">
+                <h3>告警规则 & 触发统计</h3>
+                <button class="modal-close" onclick="closeAlertTriggers()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0;max-height:65vh;overflow-y:auto">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width:70px">规则ID</th>
+                            <th>名称</th>
+                            <th>描述</th>
+                            <th style="width:80px">通知渠道</th>
+                            <th>通知地址</th>
+                            <th style="width:60px">等级</th>
+                            <th style="width:80px">触发次数</th>
+                            <th style="width:150px">最近触发</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alert-triggers-body">
+                        <tr><td colspan="8" class="empty-state">暂无告警规则</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="smtp-config-modal" class="modal hidden">
+        <div class="modal-content" style="max-width:500px">
+            <div class="modal-header">
+                <h3>SMTP 邮件配置</h3>
+                <button class="modal-close" onclick="closeSmtpConfig()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>SMTP 服务器 <span style="color:var(--error)">*</span></label>
+                    <input type="text" id="smtp-host" placeholder="如 smtp.qq.com">
+                    <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">SMTP服务器地址，如 smtp.qq.com、smtp.163.com、smtp.gmail.com</div>
+                </div>
+                <div class="form-group">
+                    <label>端口 <span style="color:var(--error)">*</span></label>
+                    <input type="number" id="smtp-port" value="465">
+                    <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">SSL加密端口通常为465，STARTTLS端口为587</div>
+                </div>
+                <div class="form-group">
+                    <label>发件人邮箱 <span style="color:var(--error)">*</span></label>
+                    <input type="email" id="smtp-sender" placeholder="your@email.com">
+                    <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">用于发送告警邮件的邮箱地址</div>
+                </div>
+                <div class="form-group">
+                    <label>SMTP 授权码 <span style="color:var(--error)">*</span></label>
+                    <input type="password" id="smtp-password" placeholder="非登录密码，需在邮箱设置中获取">
+                    <div style="font-size:11px;color:var(--text-secondary);margin-top:4px">不是邮箱登录密码！需在邮箱设置→SMTP服务中开启并获取授权码</div>
+                </div>
+                <div style="background:var(--bg-primary);padding:12px;border-radius:var(--radius);margin-top:12px">
+                    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">常用 SMTP 配置参考:</div>
+                    <div style="font-size:12px;color:var(--text-secondary);line-height:1.8">
+                        <b>QQ邮箱:</b> smtp.qq.com / 端口465 / 开启方法: 设置→账户→POP3/IMAP/SMTP→开启SMTP→生成授权码<br>
+                        <b>163邮箱:</b> smtp.163.com / 端口465 / 开启方法: 设置→POP3/SMTP/IMAP→开启SMTP→设置授权码<br>
+                        <b>Gmail:</b> smtp.gmail.com / 端口465 / 需开启"两步验证"后生成应用专用密码<br>
+                        <b>Outlook:</b> smtp.office365.com / 端口587 / 使用登录密码或应用密码
+                    </div>
+                </div>
+                <div style="text-align:right;margin-top:16px;display:flex;justify-content:flex-end;gap:8px">
+                    <button class="btn" onclick="testSmtpConnection()">测试连接</button>
+                    <button class="btn" onclick="closeSmtpConfig()">取消</button>
+                    <button class="btn btn-primary" onclick="saveSmtpConfig()">保存配置</button>
+                </div>
+                <div id="smtp-test-result" style="margin-top:10px;display:none"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="collector-loading-modal" class="modal hidden">
+        <div class="modal-content" style="max-width:300px;text-align:center;padding:30px">
+            <div class="loading-spinner"></div>
+            <p id="collector-loading-text" style="margin-top:12px;color:var(--text-primary)">处理中...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
