@@ -145,7 +145,8 @@ pkill -x vector; sleep 2; nohup /home/yxp/.vector/bin/vector --config collector/
 5. 正则脱敏（rules.json 中的规则作用于 message 和 syslog_message 字段）
 6. 字段映射：host.ip → Host，syslog_message → Message，@timestamp → Timestamp
 7. 其余字段存入 Tags（JSON）
-8. 批量写入 ClickHouse（50,000 条/批）
+8. Log_ID = SHA256(Timestamp+Host+Message) 前 16 位十六进制，相同内容产生相同 ID，天然去重
+9. 批量写入 ClickHouse（50,000 条/批）
 ```
 
 ### 脱敏规则
@@ -183,6 +184,16 @@ inputs = ["cleanup_journald", "cleanup_syslog"]
 2. **聚合别名冲突**：`max(Timestamp) AS Timestamp` 与 `WHERE Timestamp` 冲突导致 `ILLEGAL_AGGREGATION`。修复：SQL 中别名改为 `TS`，Python 中重命名为 `Timestamp`。
 
 3. **DELETE 异步**：`ALTER TABLE ... DELETE` 立即返回但可能需数秒生效。用 `OPTIMIZE TABLE ... FINAL` 强制完成。
+
+## 采集器页面
+
+- **采集源开关**：点击 Linux系统日志 / 网络设备日志 / ELK本地日志文件 标签可直接启用/停用对应采集源，触发 Vector 配置重新生成和重启
+- **采集器启停**：启用/停用按钮控制整个采集器的开关
+- 切换采集源时显示加载缓冲页面，操作完成后自动刷新
+
+## Kafka topic
+
+仅保留一个 topic `lms_elk_logs`（6 分区，zstd 压缩，24h 保留），数据流：Vector(file) → Kafka → Processor(Go) → ClickHouse。旧架构的 `lms_elk_logs_clean` 已废弃删除。
 
 ## 前端特性
 

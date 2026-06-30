@@ -452,9 +452,9 @@ class LMSHandler(SimpleHTTPRequestHandler):
         for r in results:
             r["Status"] = actual_status
             r["Source_Types"] = [
-                {"name": "Linux系统日志", "enabled": prefs.get("linux_system_logs", True)},
-                {"name": "网络设备日志", "enabled": prefs.get("network_device_logs", True)},
-                {"name": "ELK本地日志文件", "enabled": prefs.get("elk_file_logs", False)},
+                {"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.get("linux_system_logs", True)},
+                {"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.get("network_device_logs", True)},
+                {"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": prefs.get("elk_file_logs", False)},
             ]
         self._json_response(200, results)
 

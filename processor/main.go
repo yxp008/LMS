@@ -2,12 +2,11 @@ package main
 
 import (
 	"context"
-	"crypto/rand"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
-	"math/big"
 	"net/http"
 	"os"
 	"os/signal"
@@ -83,11 +82,10 @@ func desensitize(raw map[string]interface{}) {
 }
 
 // ============ 字段解析 (对应 VRL process_elk) ============
-func generateLogID() string {
-	n, _ := rand.Int(rand.Reader, big.NewInt(9000))
-	randS := fmt.Sprintf("%04d", 1000+n.Int64())
-	ts := time.Now().UnixMilli()
-	return fmt.Sprintf("L%d%s", ts, randS)
+// generateLogID 基于内容哈希生成，相同内容相同 ID，天然去重
+func generateLogID(ts, host, msg string) string {
+	h := sha256.Sum256([]byte(ts + "|" + host + "|" + msg))
+	return "L" + fmt.Sprintf("%x", h[:8])
 }
 
 func parseTimestamp(src map[string]interface{}) time.Time {
@@ -285,6 +283,7 @@ func main() {
 
 		// 提取标准字段
 		ts := time.Now()
+		tsStr := ts.Format("2006-01-02 15:04:05")
 		host := parseHost(src)
 		msgText := parseMessage(src)
 		level := parseLevel(src)
@@ -309,8 +308,8 @@ func main() {
 		}
 
 		batch = append(batch, map[string]interface{}{
-			"Log_ID":      generateLogID(),
-			"Timestamp":   ts.Format("2006-01-02 15:04:05"),
+			"Log_ID":      generateLogID(tsStr, host, msgText),
+			"Timestamp":   tsStr,
 			"Level":       level,
 			"Host":        host,
 			"Source_Type": "ELK本地日志文件",

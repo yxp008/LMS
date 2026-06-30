@@ -541,7 +541,7 @@ async function loadCollectors() {
     tbody.innerHTML = data.map(c => {
         const enabled = c.Status === '1';
         const sourceTypes = (c.Source_Types || []).map(s =>
-            `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}">${escapeHtml(s.name)}</span>`
+            `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}" onclick="toggleSourceType('${escapeHtml(s.key)}', ${!s.enabled})" title="点击${s.enabled ? '停用' : '启用'}${escapeHtml(s.name)}">${escapeHtml(s.name)}</span>`
         ).join(' ');
         return `
         <tr>
@@ -552,6 +552,29 @@ async function loadCollectors() {
             <td><button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button></td>
         </tr>`;
     }).join('');
+}
+
+function toggleSourceType(type, enable) {
+    const currentPrefs = {};
+    const tags = document.querySelectorAll('.source-tag');
+    tags.forEach(t => {
+        const cls = t.className;
+        currentPrefs[t.getAttribute('data-key') || t.textContent] = cls.includes('source-on');
+    });
+    // 从 API 获取当前状态再操作
+    fetchAPI('/api/collection-prefs').then(prefs => {
+        if (!prefs) return;
+        prefs[type] = enable;
+        const text = enable ? '正在启用采集源...' : '正在停用采集源...';
+        document.getElementById('collector-loading-text').textContent = text;
+        document.getElementById('collector-loading-modal').classList.remove('hidden');
+        postAPI('/api/collection-prefs', prefs).then(result => {
+            setTimeout(() => {
+                document.getElementById('collector-loading-modal').classList.add('hidden');
+                loadCollectors();
+            }, 800);
+        });
+    });
 }
 
 function toggleCollector(id, newStatus) {

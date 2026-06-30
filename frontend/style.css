@@ -741,10 +741,10 @@ body {
     font-size: 12px;
     font-weight: 500;
     margin-right: 4px;
-    cursor: default;
-    user-select: none;
-    pointer-events: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
 }
+.source-tag:hover { opacity: 0.8; }
 .source-tag.source-on {
     background: rgba(46, 204, 113, 0.12);
     color: var(--success);
