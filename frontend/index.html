@@ -112,9 +112,7 @@
                             <option value="3">ERROR</option>
                             <option value="4">DEBUG</option>
                         </select>
-                        <select id="filter-host" onchange="loadLogs(1)">
-                            <option value="">所有主机</option>
-                        </select>
+                        <input type="text" id="filter-host" placeholder="主机地址...">
                         <select id="filter-source" onchange="loadLogs(1)">
                             <option value="">所有来源</option>
                         </select>
@@ -130,6 +128,7 @@
                         <button id="btn-auto-refresh" class="btn btn-primary btn-sm" onclick="toggleLogAutoRefresh()" style="margin-left:8px">自动刷新: 开</button>
                     </div>
 
+                    <div id="result-count" style="font-size:13px;color:var(--text-secondary);margin-bottom:8px"></div>
                     <div class="table-container">
                         <table class="data-table">
                             <thead>

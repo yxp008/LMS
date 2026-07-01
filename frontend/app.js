@@ -203,16 +203,9 @@ function renderSourceChart(data) {
 
 // ========== Logs ==========
 async function loadFilterOptions() {
-    const [hosts, sources] = await Promise.all([
-        fetchAPI('/api/hosts'),
-        fetchAPI('/api/sources')
-    ]);
+    const sources = await fetchAPI('/api/sources');
 
-    const hostSelect = document.getElementById('filter-host');
     const sourceSelect = document.getElementById('filter-source');
-
-    hostSelect.innerHTML = '<option value="">所有主机</option>' +
-        (hosts || []).map(h => `<option value="${escapeHtml(h.Host)}">${escapeHtml(h.Host)} (${h.count})</option>`).join('');
 
     sourceSelect.innerHTML = '<option value="">所有来源</option>' +
         (sources || []).map(s => `<option value="${escapeHtml(s.Source_Type)}">${escapeHtml(s.Source_Type)} (${s.count})</option>`).join('');
@@ -220,6 +213,9 @@ async function loadFilterOptions() {
 
 function initFilterListeners() {
     document.getElementById('filter-search').addEventListener('keydown', e => {
+        if (e.key === 'Enter') loadLogs(1);
+    });
+    document.getElementById('filter-host').addEventListener('keydown', e => {
         if (e.key === 'Enter') loadLogs(1);
     });
 }
@@ -310,7 +306,7 @@ function renderCalendar() {
 
 function resetFilters() {
     document.getElementById('filter-level').value = '';
-    document.getElementById('filter-host').value = '';
+    document.getElementById('filter-host').value = '';  // 文本输入
     document.getElementById('filter-source').value = '';
     document.getElementById('filter-search').value = '';
     document.getElementById('filter-start').value = '';
@@ -325,7 +321,7 @@ async function loadLogs(page) {
     params.set('page_size', '50');
 
     const level = document.getElementById('filter-level').value;
-    const host = document.getElementById('filter-host').value;
+    const host = document.getElementById('filter-host').value.trim();
     const source = document.getElementById('filter-source').value;
     const search = document.getElementById('filter-search').value;
     const startDate = document.getElementById('filter-start').value;
@@ -348,10 +344,13 @@ async function loadLogs(page) {
 
     if (!data.data || data.data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" class="empty-state">暂无匹配的日志数据</td></tr>';
+        document.getElementById('result-count').textContent = '';
         document.getElementById('pagination').innerHTML = '';
         return;
     }
 
+    document.getElementById('result-count').textContent =
+        `查询结果：共 ${data.total.toLocaleString()} 条，当前第 ${data.page} 页`;
     tbody.innerHTML = data.data.map(log => {
         const tags = log.Tags || {};
         const tagStr = Object.keys(tags).length > 0

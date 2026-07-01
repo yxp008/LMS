@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
-	"crypto/sha256"
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
+	"math/big"
 	"net/http"
 	"os"
 	"os/signal"
@@ -26,8 +27,8 @@ var (
 	groupID     = "lms-processor"
 	chURL       = "http://localhost:8123"
 	dbTable     = "LMS.LMS_Logs"
-	flushSize   = 50000
-	flushSecs   = 2
+	flushSize   = 200000
+	flushSecs   = 1
 )
 
 // ============ 脱敏规则 ============
@@ -82,10 +83,12 @@ func desensitize(raw map[string]interface{}) {
 }
 
 // ============ 字段解析 (对应 VRL process_elk) ============
-// generateLogID 基于内容哈希生成，相同内容相同 ID，天然去重
-func generateLogID(ts, host, msg string) string {
-	h := sha256.Sum256([]byte(ts + "|" + host + "|" + msg))
-	return "L" + fmt.Sprintf("%x", h[:8])
+// generateLogID 基于纳秒时间戳+随机数，每条日志唯一
+func generateLogID() string {
+	n, _ := rand.Int(rand.Reader, big.NewInt(9000))
+	randS := fmt.Sprintf("%04d", 1000+n.Int64())
+	ts := time.Now().UnixMilli()
+	return fmt.Sprintf("L%d%s", ts, randS)
 }
 
 func parseTimestamp(src map[string]interface{}) time.Time {
@@ -210,9 +213,10 @@ func main() {
 		Brokers:     []string{broker},
 		Topic:       sourceTopic,
 		GroupID:     groupID,
-		StartOffset: kafka.LastOffset,
-		MaxWait:     1 * time.Second,
-		MaxBytes:    10e6,
+		StartOffset:    kafka.LastOffset,
+		MaxWait:        500 * time.Millisecond,
+		MinBytes:       1e6,
+		MaxBytes:       50e6,
 	})
 	defer reader.Close()
 
@@ -308,7 +312,7 @@ func main() {
 		}
 
 		batch = append(batch, map[string]interface{}{
-			"Log_ID":      generateLogID(tsStr, host, msgText),
+			"Log_ID":      generateLogID(),
 			"Timestamp":   tsStr,
 			"Level":       level,
 			"Host":        host,
