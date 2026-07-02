@@ -115,23 +115,15 @@ func parseTimestamp(src map[string]interface{}) time.Time {
 }
 
 func parseLevel(src map[string]interface{}) string {
-	raw := ""
-	for _, k := range []string{"level", "severity", "log_level"} {
+	for _, k := range []string{"level", "severity", "log_level", "Level"} {
 		if v, ok := src[k]; ok {
-			raw = strings.ToLower(fmt.Sprint(v))
-			break
+			s := strings.TrimSpace(fmt.Sprint(v))
+			if s != "" {
+				return s
+			}
 		}
 	}
-	switch raw {
-	case "error", "err", "critical", "fatal", "3":
-		return "3"
-	case "warn", "warning", "2":
-		return "2"
-	case "debug", "4":
-		return "4"
-	default:
-		return "1"
-	}
+	return "INFO" // 默认
 }
 
 func parseHost(src map[string]interface{}) string {

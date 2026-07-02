@@ -4,8 +4,9 @@ let charts = {};
 let logAutoRefreshTimer = null;
 let logAutoRefreshEnabled = true;
 
-const LEVEL_MAP = { '1': 'INFO', '2': 'WARN', '3': 'ERROR', '4': 'DEBUG' };
-const LEVEL_COLOR = { '1': '#3498db', '2': '#f39c12', '3': '#e74c3c', '4': '#9b59b6' };
+const LEVEL_MAP = {};
+const LEVEL_COLOR = {};
+const LEVEL_COLORS = ['#3498db','#e74c3c','#f39c12','#2ecc71','#9b59b6','#1abc9c','#e67e22','#34495e','#95a5a6'];
 const CHANNEL_MAP = { '1': '邮件', '2': '短信', '3': 'Webhook' };
 const ALERT_LEVEL_MAP = { '1': '严重', '2': '高', '3': '中', '4': '低' };
 const STATUS_MAP = { '0': '停用', '1': '启用' };
@@ -203,10 +204,19 @@ function renderSourceChart(data) {
 
 // ========== Logs ==========
 async function loadFilterOptions() {
-    const sources = await fetchAPI('/api/sources');
+    const [levels, sources] = await Promise.all([
+        fetchAPI('/api/levels'),
+        fetchAPI('/api/sources')
+    ]);
+    const levelSelect = document.getElementById('filter-level');
+    levelSelect.innerHTML = '<option value="">所有级别</option>' +
+        (levels || []).map(l => `<option value="${escapeHtml(l.Level)}">${escapeHtml(l.Level)} (${l.count})</option>`).join('');
+    (levels || []).forEach((l, i) => {
+        LEVEL_MAP[l.Level] = l.Level;
+        LEVEL_COLOR[l.Level] = LEVEL_COLORS[i % LEVEL_COLORS.length];
+    });
 
     const sourceSelect = document.getElementById('filter-source');
-
     sourceSelect.innerHTML = '<option value="">所有来源</option>' +
         (sources || []).map(s => `<option value="${escapeHtml(s.Source_Type)}">${escapeHtml(s.Source_Type)} (${s.count})</option>`).join('');
 }
@@ -360,7 +370,7 @@ async function loadLogs(page) {
         return `
         <tr class="clickable" onclick='showLogDetail(${JSON.stringify(log).replace(/'/g, "&#39;")})'>
             <td>${formatTime(log.Timestamp)}</td>
-            <td><span class="level-badge level-${level}">${LEVEL_MAP[level] || level}</span></td>
+            <td><span style="display:inline-block;padding:2px 8px;border-radius:12px;font-size:12px;font-weight:600;background:${LEVEL_COLOR[level] || '#555'}22;color:${LEVEL_COLOR[level] || '#aaa'}">${LEVEL_MAP[level] || level}</span></td>
             <td title="${escapeHtml(log.Host)}">${escapeHtml(log.Host)}</td>
             <td title="${escapeHtml(log.Source_Type)}">${escapeHtml(log.Source_Type)}</td>
             <td title="${escapeHtml(log.Message)}">${escapeHtml(log.Message)}</td>
