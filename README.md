@@ -1,33 +1,61 @@
 # LMS 日志管理系统
 
+> V1 — 采集层/处理层分离，Kafka 缓冲，Go 脱敏+解析+入库，跨机器移植
+
 集日志采集、存储、查询、分析、可视化、告警于一体的集中式日志管理系统。
 
 ## 架构
 
 ```
-采集层（客户端）          消息队列           处理层（服务端）
-┌──────────────┐       ┌──────────┐       ┌──────────────┐
-│ ELK NDJSON   │──►    │          │   ──►│ Go Processor  │
-│ Vector(file) │──►    │  Kafka   │   ──►│ 脱敏+解析+入库 │──► ClickHouse
-└──────────────┘       └──────────┘       └──────────────┘
-                                                 │
-                                          server.py(:8080)
-                                                 │
-                                          浏览器 SPA 前端
+┌────────── 采集层（客户端） ──────────┐
+│                                      │
+│  ELK NDJSON ──► Vector(file) ──► Kafka  │
+│                                      │
+└──────────────────────────────────────┘
+                   │
+┌────────── 处理层（服务端） ──────────┐
+│                                      │
+│  Kafka ──► Go Processor ──► ClickHouse │
+│            (脱敏+解析+入库)            │
+│                                      │
+│  server.py(:8080) ──► 浏览器 SPA     │
+│  alert_checker.py                     │
+└──────────────────────────────────────┘
 ```
 
 ## 快速开始
 
 ```bash
-# 启动全部服务
-bash start.sh
+# 首次使用：一键安装
+bash install.sh
 
-# 停止全部服务
+# 启动 / 停止
+bash start.sh
 bash stop.sh
 
-# 访问前端
+# 访问
 http://localhost:8080
 ```
+
+## 安装
+
+```bash
+bash install.sh
+```
+
+脚本自动完成：Go 编译器安装、processor 和 reader 编译、默认配置生成。
+
+**环境依赖（需手动准备）：**
+
+| 依赖 | 路径 |
+|---|---|
+| Vector 0.56 | `~/.vector/bin/vector` |
+| ClickHouse 26.6 | `data/clickhouse_data/clickhouse` |
+| Kafka 3.6 | `~/kafka/` |
+| Go 1.18+ | 脚本自动安装 |
+| Python 3.10 | 系统自带 |
+
+**卸载：** `bash stop.sh` → `rm -rf LMS_mimo`
 
 ## 组件
 
@@ -35,42 +63,69 @@ http://localhost:8080
 |---|---|---|
 | 采集层 | Vector + Go | file 源读取 NDJSON，发往 Kafka |
 | 消息队列 | Kafka 3.6 (KRaft) | 6 分区 zstd 压缩，topic: lms_elk_logs |
-| 处理层 | Go | Kafka 消费 → 正则脱敏 → 批量写 ClickHouse |
-| 存储 | ClickHouse 26.6 | 列式 OLAP，Asia/Shanghai 时区 |
-| 后端 | Python stdlib | REST API + 静态文件服务 |
-| 前端 | Vanilla JS + Chart.js | SPA 单页应用，自定义日历组件 |
+| 处理层 | Go | Kafka 消费 → 正则脱敏 → 字段解析 → 批量写 ClickHouse |
+| 存储 | ClickHouse 26.6 | 列式 OLAP，Asia/Shanghai 时区，hot_warm_cold 存储策略 |
+| 后端 | Python stdlib | REST API + 静态文件，无框架 |
+| 前端 | Vanilla JS + Chart.js | SPA，自定义日历组件，零 CDN 依赖（除 Chart.js） |
 | 告警 | Python | 5 秒轮询，邮件/Webhook 通知 |
 
-## ELK 日志采集
+## ELK 日志采集流程
 
 1. 将 NDJSON 文件放入 `collector/elk_logs/incoming/`
-2. Vector 自动检测并发送至 Kafka
-3. Processor 脱敏后写入 ClickHouse
-4. 前端日志查询选择来源「ELK本地日志文件」
+2. Vector 自动检测并发往 Kafka `lms_elk_logs`
+3. Go Processor 消费 → 正则脱敏 → 字段映射 → 批量写入 ClickHouse
+4. 前端来源选择「ELK本地日志文件」查看
 
-JSON 数组格式需先用 Go reader 转换：`collector/elk_logs/reader input.json > output.ndjson`
+JSON 数组格式需先用 Go reader 转换：
+```bash
+collector/elk_logs/reader input.json > collector/elk_logs/incoming/output.ndjson
+```
+
+## 脱敏规则
+
+`processor/rules.json` 中配置，当前支持手机号和身份证号脱敏：
+
+```
+13812345678 → 138****5678
+320106199001011234 → 320106199****11234
+```
+
+## 前端特性
+
+- 自定义日历日期选择器（零依赖）
+- 筛选器选择后自动触发查询
+- 分页跳转输入框
+- 日志级别/来源/主机筛选
+- 查询结果计数显示
 
 ## 目录结构
 
 ```
 LMS_mimo/
-├── collector/              # 采集层
-│   ├── vector_wsl.toml.template
-│   ├── collection_prefs.json
-│   └── elk_logs/incoming/  # 日志投放目录
-├── processor/              # 处理层（Go）
-│   ├── main.go
-│   ├── rules.json          # 脱敏规则
-│   └── processor
-├── frontend/               # Web 前后端
-│   ├── server.py
-│   ├── alert_checker.py
+├── collector/                    # 采集层（可独立部署）
+│   ├── vector_wsl.toml.template  # Vector 配置模板
+│   ├── collection_prefs.json     # 采集源开关
+│   └── elk_logs/
+│       ├── reader.go             # JSON→NDJSON 转换工具
+│       └── incoming/             # 日志投放目录
+├── processor/                    # 处理层（Go）
+│   ├── main.go                   # Kafka→脱敏→ClickHouse
+│   └── rules.json                # 脱敏规则
+├── frontend/                     # Web 前后端
+│   ├── server.py                 # API 服务
+│   ├── alert_checker.py          # 告警守护
 │   ├── index.html / app.js / style.css
-├── data/clickhouse_data/   # ClickHouse
-├── kafka/data/             # Kafka 持久化
-├── start.sh / stop.sh      # 启停脚本
-└── CLAUDE.md               # 开发指南
+├── data/clickhouse_data/         # ClickHouse
+├── kafka/data/                   # Kafka 持久化
+├── install.sh                    # 一键安装
+├── start.sh / stop.sh            # 启停脚本
+├── README.md
+└── CLAUDE.md                     # 开发指南
 ```
+
+## 移植
+
+`bash install.sh && bash start.sh` 即可在新机器运行。所有路径基于 `${PROJECT_ROOT}` 自动计算，无需修改代码。
 
 ## 许可证
 
