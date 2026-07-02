@@ -79,7 +79,7 @@ bash stop.sh
 # 单独启动组件
 frontend/server
 # 告警已合并到 server 中 (goroutine)
-/home/yxp/LMS_mimo/processor/processor &
+./processor/processor &
 
 # 直接查询 ClickHouse
 curl -s 'http://localhost:8123/' -d 'SELECT 1'
@@ -94,7 +94,6 @@ pgrep -f "frontend/server"
 tail -f /tmp/vector.log
 tail -f /tmp/processor.log
 tail -f /tmp/lms_frontend.log
-tail -f /tmp/processor.log
 
 # 重新生成 Vector 配置
 # Vector 配置通过 API 触发：curl -X POST http://localhost:8080/api/collection-prefs ...
@@ -108,10 +107,10 @@ fuser -k 8080/tcp; sleep 2; nohup $PROJECT_ROOT/frontend/server > /tmp/lms_front
 # 重新采集 ELK 数据（清除进度 + 删除 ClickHouse 数据）
 rm -rf collector/vector_data/elk_file
 curl -s 'http://localhost:8123/' -d "ALTER TABLE LMS.LMS_Logs DELETE WHERE Source_Type='ELK本地日志文件'"
-pkill -x vector; sleep 2; nohup /home/yxp/.vector/bin/vector --config collector/vector_wsl.toml > /tmp/vector.log 2>&1 & disown
+pkill -x vector; sleep 2; nohup ~/.vector/bin/vector --config collector/vector_wsl.toml > /tmp/vector.log 2>&1 & disown
 
 # JSON 数组 → NDJSON 转换
-/home/yxp/LMS_mimo/collector/elk_logs/reader /path/to/array.json > /path/to/output.ndjson
+./collector/elk_logs/reader /path/to/array.json > /path/to/output.ndjson
 
 # 查看 Kafka topic 状态
 ~/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic lms_elk_logs
@@ -213,8 +212,8 @@ Go server 启动时调用 `generateVectorConfig(prefs)` 读取模板，根据 `c
 
 - **无构建步骤** — HTML/CSS/JS 直接使用，Go 需 `go build` 编译
 - **无测试框架** — 项目中不存在任何测试
-- **无版本控制** — git 仓库（https://github.com/yxp008/LMS）
-- **日志级别**存储为字符串（`"1"`=INFO、`"2"`=WARN、`"3"`=ERROR、`"4"`=DEBUG）
+- **git 仓库** — https://github.com/yxp008/LMS
+- **日志级别**存储为字符串，保留各日志源原始等级值，不做统一映射
 - **SQL 注入风险** — API 通过字符串拼接构建 SQL。**不要**在新端点中引入类似模式
 - **SMTP 凭据**以明文存储
 - **相对路径** — 基于 `PROJECT_ROOT` 自动计算，支持跨机器移植
