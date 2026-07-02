@@ -1,6 +1,6 @@
 # LMS 日志管理系统
 
-> V3.1 — 五层架构，Go 全栈（采集/处理/查询），Kafka 缓冲，三级存储
+> V3.2 — 五层架构，Go 全栈（采集/处理/查询），Kafka 缓冲，三级存储
 
 集日志采集、存储、查询、分析、可视化、告警于一体的集中式日志管理系统。
 
@@ -66,7 +66,7 @@ bash install.sh
 | 消息队列 | Kafka 3.6 (KRaft) | 6 分区 zstd 压缩，topic: lms_elk_logs |
 | 处理层 | Go | Kafka 消费 → 正则脱敏 → 字段解析 → 批量写入 |
 | 存储层 | ClickHouse 26.6 | 列式 OLAP，三级存储：SSD(热)→HDD(温)→MinIO(冷) |
-| 查询层 | Go | HTTP REST API（16 端点）+ 告警 goroutine 二合一 |
+| 查询层 | Go | HTTP REST API（16 端点）+ 告警轮询 goroutine |
 | 可视化层 | Vanilla JS + Chart.js | SPA，自定义日历组件 |
 
 ## ELK 日志采集流程
@@ -95,7 +95,8 @@ collector/elk_logs/reader input.json > collector/elk_logs/incoming/output.ndjson
 - 自定义日历日期选择器（零依赖）
 - 筛选器选择后自动触发查询
 - 分页跳转输入框
-- 日志级别/来源/主机筛选
+- 日志级别动态加载，保留各源原始等级名称
+- 来源/主机筛选
 - 查询结果计数显示
 
 ## 目录结构
