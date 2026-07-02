@@ -28,7 +28,7 @@ PROJECT_DIR = Path(__file__).parent.parent
 COLLECTION_PREFS_FILE = PROJECT_DIR / "collector" / "collection_prefs.json"
 VECTOR_TEMPLATE = PROJECT_DIR / "collector" / "vector_wsl.toml.template"
 VECTOR_CONFIG = PROJECT_DIR / "collector" / "vector_wsl.toml"
-VECTOR_BIN = "/home/yxp/.vector/bin/vector"
+VECTOR_BIN = Path.home() / ".vector" / "bin" / "vector"
 VECTOR_PID_FILE = Path("/tmp/vector.pid")
 VECTOR_LOG = "/tmp/vector.log"
 
@@ -76,7 +76,7 @@ def ch_query_raw(sql):
 
 def load_collection_prefs():
     """加载采集偏好配置"""
-    defaults = {"linux_system_logs": True, "network_device_logs": True, "elk_file_logs": False, "elk_file_path": "/home/yxp/LMS_mimo/collector/elk_logs/incoming/"}
+    defaults = {"linux_system_logs": True, "network_device_logs": True, "elk_file_logs": False, "elk_file_path": str(PROJECT_DIR / "collector/elk_logs/incoming/")}
     if COLLECTION_PREFS_FILE.exists():
         try:
             with open(COLLECTION_PREFS_FILE) as f:
@@ -149,8 +149,9 @@ def generate_vector_config(prefs):
 
     VECTOR_CONFIG.parent.mkdir(parents=True, exist_ok=True)
     cfg_text = "\n".join(output_lines) + "\n"
-    # 替换 ELK 文件路径占位符
-    elk_path = prefs.get("elk_file_path", "/home/yxp/LMS_mimo/collector/elk_logs/")
+    # 替换占位符
+    cfg_text = cfg_text.replace("__PROJECT_ROOT__", str(PROJECT_DIR))
+    elk_path = prefs.get("elk_file_path", str(PROJECT_DIR / "collector/elk_logs/incoming/"))
     cfg_text = cfg_text.replace("__ELK_FILE_PATH__", elk_path)
     VECTOR_CONFIG.write_text(cfg_text)
 

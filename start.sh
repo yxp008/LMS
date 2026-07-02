@@ -1,15 +1,17 @@
 #!/bin/bash
 # LMS 日志管理系统 - 启动脚本
 
-CH_BIN="/home/yxp/LMS_mimo/data/clickhouse_data/clickhouse"
-CH_CFG="/home/yxp/LMS_mimo/data/clickhouse_data/preprocessed_configs/config.xml"
-CH_CFG_SAFE="/home/yxp/LMS_mimo/data/clickhouse_data/preprocessed_configs/config_minimal.xml"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$SCRIPT_DIR"
+CH_BIN="$PROJECT_ROOT/data/clickhouse_data/clickhouse"
+CH_CFG="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config.xml"
+CH_CFG_SAFE="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config_minimal.xml"
 CH_HTTP="http://localhost:8123"
-VECTOR_BIN="/home/yxp/.vector/bin/vector"
-VECTOR_CFG="/home/yxp/LMS_mimo/collector/vector_wsl.toml"
-KAFKA_BIN="/home/yxp/kafka/bin/kafka-server-start.sh"
-KAFKA_CFG="/home/yxp/kafka/config/kraft/server.properties"
-PROCESSOR_BIN="/home/yxp/LMS_mimo/processor/processor"
+VECTOR_BIN="$HOME/.vector/bin/vector"
+VECTOR_CFG="$PROJECT_ROOT/collector/vector_wsl.toml"
+KAFKA_BIN="$HOME/kafka/bin/kafka-server-start.sh"
+KAFKA_CFG="$HOME/kafka/config/kraft/server.properties"
+PROCESSOR_BIN="$PROJECT_ROOT/processor/processor"
 FRONTEND_PORT=8080
 
 echo "=========================================="
@@ -103,7 +105,7 @@ else
     # 释放可能被残留进程占用的端口
     fuser -k $FRONTEND_PORT/tcp 2>/dev/null
     sleep 1
-    nohup python3 /home/yxp/LMS_mimo/frontend/server.py > /tmp/lms_frontend.log 2>&1 &
+    nohup python3 $PROJECT_ROOT/frontend/server.py > /tmp/lms_frontend.log 2>&1 &
     disown
     # 前端启动较慢（需初始化 Vector），等最多 10 秒
     for i in 1 2 3 4 5; do
@@ -125,7 +127,7 @@ echo "[6/6] 启动告警检查器..."
 if pgrep -f "alert_checker.py" > /dev/null 2>&1; then
     echo "  -> 告警检查器已在运行"
 else
-    nohup python3 /home/yxp/LMS_mimo/frontend/alert_checker.py > /tmp/lms_alert_checker.log 2>&1 &
+    nohup python3 $PROJECT_ROOT/frontend/alert_checker.py > /tmp/lms_alert_checker.log 2>&1 &
     disown
     sleep 2
     if pgrep -f "alert_checker.py" > /dev/null 2>&1; then
