@@ -53,7 +53,8 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 |---|---|
 | `frontend/server.go` | Go Web 服务 + 告警 goroutine（已编译为 `frontend/server`） |
 | `frontend/server.py` | Python 原版（保留作参考） |
-| `frontend/alert_checker.py` | Python 原告警（保留作参考） |
+| `frontend/alert_checker.py` | Python 原告警（参考） |
+| `frontend/server` | Go 编译的查询层二进制 |
 | `frontend/app.js` | SPA 全部逻辑（原生 JS） |
 | `frontend/style.css` | 全部样式（含自定义日期选择器） |
 | `collector/vector_wsl.toml` | 生成的 Vector 采集配置（**勿直接编辑**） |
