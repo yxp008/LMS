@@ -15,6 +15,7 @@ data_dir = "__PROJECT_ROOT__/collector/vector_data"
 [sources.journald]
 type = "journald"
 current_boot_only = true
+# ===== END COLLECTION =====
 
 # ===== COLLECTION: network_device_logs =====
 [sources.syslog_udp]
