@@ -1,6 +1,6 @@
 # LMS 日志管理系统
 
-> V1 — 采集层/处理层分离，Kafka 缓冲，Go 脱敏+解析+入库，跨机器移植
+> V3.1 — 五层架构，Go 全栈（采集/处理/查询），Kafka 缓冲，三级存储
 
 集日志采集、存储、查询、分析、可视化、告警于一体的集中式日志管理系统。
 
@@ -14,7 +14,7 @@
                                             │
                            ┌── 查询层 ──────┘
                            │日志API + 告警轮询
-                           │server.py / alert_checker.py
+                           │server.go (Go) + goroutine
                            └───────┬────────┘
                                    │
                            ┌── 可视化层 ───┐
@@ -55,7 +55,6 @@ bash install.sh
 | ClickHouse 26.6 | `data/clickhouse_data/clickhouse` |
 | Kafka 3.6 | `~/kafka/` |
 | Go 1.18+ | 脚本自动安装 |
-| Python 3.10 | 系统自带 |
 
 **卸载：** `bash stop.sh` → `rm -rf LMS_mimo`
 
@@ -67,9 +66,8 @@ bash install.sh
 | 消息队列 | Kafka 3.6 (KRaft) | 6 分区 zstd 压缩，topic: lms_elk_logs |
 | 处理层 | Go | Kafka 消费 → 正则脱敏 → 字段解析 → 批量写入 |
 | 存储层 | ClickHouse 26.6 | 列式 OLAP，三级存储：SSD(热)→HDD(温)→MinIO(冷) |
-| 后端 | Python stdlib | REST API + 静态文件，无框架 |
-| 前端 | Vanilla JS + Chart.js | SPA，自定义日历组件，零 CDN 依赖（除 Chart.js） |
-| 告警 | Python | 5 秒轮询，邮件/Webhook 通知 |
+| 查询层 | Go | HTTP REST API（16 端点）+ 告警 goroutine 二合一 |
+| 可视化层 | Vanilla JS + Chart.js | SPA，自定义日历组件 |
 
 ## ELK 日志采集流程
 
@@ -113,9 +111,9 @@ LMS_mimo/
 ├── processor/                    # 处理层（Go）
 │   ├── main.go                   # Kafka→脱敏→ClickHouse
 │   └── rules.json                # 脱敏规则
-├── frontend/                     # Web 前后端
-│   ├── server.py                 # API 服务
-│   ├── alert_checker.py          # 告警守护
+├── frontend/                     # 查询层 + 可视化层
+│   ├── server.go                 # Go Web 服务 + 告警 (编译为 server)
+│   ├── server.py                 # Python 原版（参考）
 │   ├── index.html / app.js / style.css
 ├── data/clickhouse_data/         # ClickHouse
 ├── kafka/data/                   # Kafka 持久化
