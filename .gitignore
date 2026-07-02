@@ -32,6 +32,8 @@ collector/vector_wsl.toml
 # 临时文件
 *.log
 *.err
+__pycache__/
+*.pyc
 
 # Go module
 processor/go.sum
