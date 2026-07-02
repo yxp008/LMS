@@ -13,49 +13,41 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 六个独立进程，由 `start.sh` / `stop.sh` 编排：
 
 ```
-┌──────────────────── 采集层（客户端） ────────────────────┐
-│                                                            │
-│  [ELK NDJSON文件] ──► Vector (file源) ──► Kafka           │
-│                              │               │            │
-│                     vector_wsl.toml    lms_elk_logs       │
-│                              │               │            │
-└──────────────────────────────│───────────────│────────────┘
-                               │               │
-┌──────────────────────────────│───────────────│────────────┐
-│                              │               ▼            │
-│  处理层（服务端）            │     ┌─ Processor (Go) ──┐  │
-│                              │     │  脱敏 + 字段解析   │  │
-│                              │     │  批量写入          │  │
-│                              │     └────────┬──────────┘  │
-│                              │              │             │
-│                              │    server.py (:8080)        │
-│                              │              │             │
-│                              │     alert_checker.py        │
-└──────────────────────────────┴──────────────│─────────────┘
-                                              │
-┌──────────────── 存储层 ────────────────┐     │
-│                                        │     │
-│           ClickHouse (列式 OLAP)  ◄────┘     │
-│                                        │
-│  三级存储策略 (hot_warm_cold):            │
-│  热数据 (0-7天):   SSD 本地存储           │
-│  温数据 (7-30天):  HDD 本地存储           │
-│  冷数据 (30-180天): MinIO 对象存储        │
-│                                        │
-└────────────────────────────────────────┘
+┌─────────── 采集层 ───────────┐
+│ Vector(file) + Go reader     │
+│ NDJSON → Kafka               │
+└──────────────┬───────────────┘
+               │
+┌─────────── 处理层 ───────────┐
+│ Go Processor                 │
+│ 脱敏 + 字段解析 + 批量写入    │
+└──────────────┬───────────────┘
+               │
+┌─────────── 存储层 ───────────┐
+│ ClickHouse (列式 OLAP)       │
+│ 三级存储: SSD→HDD→MinIO      │
+└──────────────┬───────────────┘
+               │
+┌─────────── 查询层 ───────────┐
+│ 日志查询 API + 告警轮询       │
+│ server.py + alert_checker.py │
+│ (规划迁移至 Go)               │
+└──────────────┬───────────────┘
+               │
+┌─────────── 可视化层 ─────────┐
+│ 浏览器 SPA (Vanilla JS)      │
+│ 仪表盘 / 日志查询 / 告警管理   │
+└──────────────────────────────┘
 ```
 
-- **采集层**（`collector/`）：可独立部署在客户端。Vector file 源读取 NDJSON 文件，发往 Kafka topic `lms_elk_logs`。支持 journald 和 syslog 源（当前关闭）。
-- **Kafka**（v3.6.0，KRaft 模式）：消息队列缓冲，Topic `lms_elk_logs` 6 分区 zstd 压缩，数据目录 `/home/yxp/LMS_mimo/kafka/data/`。
-- **处理层**（`processor/`）：Go 编译的独立程序，消费 Kafka → 正则脱敏 → 解析 ELK JSON 字段 → 批量写入 ClickHouse。替代了原来的 Vector VRL 变换。
-- **ClickHouse**（v26.6.1）：列式 OLAP 数据库，独立存储层。时区 `Asia/Shanghai`。四张表：`LMS.LMS_Logs`、`LMS.LMS_Collectors`、`LMS.LMS_AlertRules`、`LMS.LMS_AlertTriggers`。
-  - **三级存储策略 (hot_warm_cold)**：
-    - 热数据（0-7天）：本地 SSD 存储，高性能读写
-    - 温数据（7-30天）：本地 HDD 存储，大容量低成本
-    - 冷数据（30-180天）：MinIO 对象存储归档，通过 ClickHouse S3 外表查询
-  - 配置见 `config_minimal.xml` 中 `<storage_configuration>` 段
-- **server.py**：Python 标准库 `http.server`。在 `:8080` 提供静态前端和 JSON REST API。ClickHouse 查询通过 HTTP POST 发往 `:8123`。启动时读取 `collection_prefs.json`，生成 Vector 配置。
-- **alert_checker.py**：每 5 秒轮询告警规则，匹配时发送邮件（SMTP）或 Webhook。
+五层架构，同级协作：
+
+- **采集层**（`collector/`）：可独立部署在客户端。Vector file 源 + Go reader 读取 NDJSON / JSON 数组文件，发往 Kafka topic `lms_elk_logs`。支持 journald 和 syslog 源（当前关闭）。**技术栈：Vector + Go。**
+- **Kafka**（v3.6.0，KRaft 模式）：采集层与处理层之间的消息队列缓冲。Topic `lms_elk_logs` 6 分区 zstd 压缩，数据目录 `kafka/data/`。
+- **处理层**（`processor/`）：Go 编译的独立程序，消费 Kafka → 正则脱敏 → 解析 ELK JSON 字段 → 批量写入 ClickHouse。**技术栈：Go。**
+- **存储层**（`data/clickhouse_data/`）：ClickHouse v26.6.1，列式 OLAP 数据库。时区 `Asia/Shanghai`。四张表：`LMS.LMS_Logs`、`LMS.LMS_Collectors`、`LMS.LMS_AlertRules`、`LMS.LMS_AlertTriggers`。**三级存储策略 (hot_warm_cold)**：热(0-7d SSD)→温(7-30d HDD)→冷(30-180d MinIO对象存储)。配置见 `config_minimal.xml`。
+- **查询层**（`frontend/server.py` + `frontend/alert_checker.py`）：日志查询 REST API（`server.py`，Python 标准库 `http.server`）+ 告警规则定时轮询（`alert_checker.py`，每 5 秒）。**规划迁移至 Go。**
+- **可视化层**（`frontend/`）：原生 JS SPA（index.html + app.js + style.css），Chart.js 4.4.4 CDN 加载，自定义日历日期选择器。**技术栈：Vanilla JS。**
 - **前端**：原生 JS SPA（index.html + app.js + style.css），Chart.js 4.4.4 CDN 加载，自定义日历日期选择器（零依赖）。
 
 ## 关键路径
