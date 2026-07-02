@@ -105,7 +105,7 @@ else
     # 释放可能被残留进程占用的端口
     fuser -k $FRONTEND_PORT/tcp 2>/dev/null
     sleep 1
-    nohup python3 $PROJECT_ROOT/frontend/server.py > /tmp/lms_frontend.log 2>&1 &
+    nohup $PROJECT_ROOT/frontend/server > /tmp/lms_frontend.log 2>&1 &
     disown
     # 前端启动较慢（需初始化 Vector），等最多 10 秒
     for i in 1 2 3 4 5; do

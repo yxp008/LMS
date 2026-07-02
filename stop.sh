@@ -37,7 +37,7 @@ echo "  -> Kafka 已停止"
 # 4. 停止前端服务
 echo ""
 echo "[4/6] 停止前端服务..."
-pkill -f "python3.*server.py" 2>/dev/null
+pkill -f "frontend/server" 2>/dev/null
 fuser -k 8080/tcp 2>/dev/null
 sleep 1
 echo "  -> 前端服务已停止"

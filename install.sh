@@ -20,7 +20,7 @@ echo "========================================"
 
 # ---------- 1. Go ----------
 echo ""
-echo "[1/5] 检查 Go..."
+echo "[1/7] 检查 Go..."
 if command -v go &> /dev/null; then
     echo "  -> Go $(go version | awk '{print $3}') 已安装"
 else
@@ -31,7 +31,7 @@ fi
 
 # ---------- 2. 编译 processor ----------
 echo ""
-echo "[2/5] 编译 Processor（Kafka → 脱敏 → ClickHouse）..."
+echo "[2/7] 编译 Processor（Kafka → 脱敏 → ClickHouse）..."
 cd "$SCRIPT_DIR/processor"
 if command -v go &> /dev/null; then
     GOPROXY=${GOPROXY:-https://goproxy.cn,direct} go build -o processor . 2>/dev/null || {
@@ -42,9 +42,22 @@ else
     echo "  -> 跳过（Go 不可用）"
 fi
 
-# ---------- 3. 编译 reader ----------
+# ---------- 3. 编译 server ----------
 echo ""
-echo "[3/5] 编译 Reader（JSON数组 → NDJSON 转换）..."
+echo "[3/7] 编译 Server（Go Web 服务 + 告警）..."
+cd "$SCRIPT_DIR/frontend"
+if command -v go &> /dev/null; then
+    GOPROXY=${GOPROXY:-https://goproxy.cn,direct} go build -o server server.go 2>/dev/null || {
+        GOPROXY=https://goproxy.cn,direct go build -o server server.go
+    }
+    echo "  -> server 编译成功"
+else
+    echo "  -> 跳过（Go 不可用）"
+fi
+
+# ---------- 4. 编译 reader ----------
+echo ""
+echo "[4/7] 编译 Reader（JSON数组 → NDJSON 转换）..."
 cd "$SCRIPT_DIR/collector/elk_logs"
 if command -v go &> /dev/null && [ -f reader.go ]; then
     GOPROXY=${GOPROXY:-https://goproxy.cn,direct} go build -o reader reader.go 2>/dev/null || {
@@ -57,7 +70,7 @@ fi
 
 # ---------- 4. 检查外部依赖 ----------
 echo ""
-echo "[4/5] 检查外部依赖..."
+echo "[5/7] 检查外部依赖..."
 
 # Vector
 VECTOR_PATH="$HOME/.vector/bin/vector"
@@ -85,7 +98,7 @@ fi
 
 # ---------- 5. 初始化配置 ----------
 echo ""
-echo "[5/5] 初始化配置..."
+echo "[6/7] 初始化配置..."
 
 # 确保默认采集配置存在
 if [ ! -f "$SCRIPT_DIR/collector/collection_prefs.json" ]; then
