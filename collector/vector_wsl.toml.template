@@ -170,7 +170,8 @@ if exists(.level) { .raw_sev = string!(.level) }
 
 # 提取标准字段
 .Host = "unknown"
-if exists(.hostname) { .Host = string!(.hostname) }
+if exists(.appname) { .Host = string!(.appname) }
+else if exists(.hostname) { .Host = string!(.hostname) }
 else if exists(.host) { .Host = string!(.host) }
 .Message = ""
 if exists(.message) { .Message = string!(.message) }
