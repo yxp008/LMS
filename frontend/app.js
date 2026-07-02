@@ -210,7 +210,7 @@ async function loadFilterOptions() {
     ]);
     const levelSelect = document.getElementById('filter-level');
     levelSelect.innerHTML = '<option value="">所有级别</option>' +
-        (levels || []).map(l => `<option value="${escapeHtml(l.Level)}">${escapeHtml(l.Level)} (${l.count})</option>`).join('');
+        (levels || []).map(l => `<option value="${escapeHtml(l.Level)}">${escapeHtml(LEVEL_MAP[l.Level] || l.Level)} (${l.count})</option>`).join('');
     (levels || []).forEach((l, i) => {
         if (!LEVEL_MAP[l.Level]) LEVEL_MAP[l.Level] = l.Level;
         if (!LEVEL_COLOR[l.Level]) LEVEL_COLOR[l.Level] = LEVEL_COLORS[i % LEVEL_COLORS.length];
