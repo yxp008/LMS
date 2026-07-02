@@ -30,8 +30,7 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
                │
 ┌─────────── 查询层 ───────────┐
 │ 日志查询 API + 告警轮询       │
-│ server.py + alert_checker.py │
-│ (规划迁移至 Go)               │
+│ server.go (Go) + goroutine   │
 └──────────────┬───────────────┘
                │
 ┌─────────── 可视化层 ─────────┐
@@ -46,16 +45,15 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 - **Kafka**（v3.6.0，KRaft 模式）：采集层与处理层之间的消息队列缓冲。Topic `lms_elk_logs` 6 分区 zstd 压缩，数据目录 `kafka/data/`。
 - **处理层**（`processor/`）：Go 编译的独立程序，消费 Kafka → 正则脱敏 → 解析 ELK JSON 字段 → 批量写入 ClickHouse。**技术栈：Go。**
 - **存储层**（`data/clickhouse_data/`）：ClickHouse v26.6.1，列式 OLAP 数据库。时区 `Asia/Shanghai`。四张表：`LMS.LMS_Logs`、`LMS.LMS_Collectors`、`LMS.LMS_AlertRules`、`LMS.LMS_AlertTriggers`。**三级存储策略 (hot_warm_cold)**：热(0-7d SSD)→温(7-30d HDD)→冷(30-180d MinIO对象存储)。配置见 `config_minimal.xml`。
-- **查询层**（`frontend/server.py` + `frontend/alert_checker.py`）：日志查询 REST API（`server.py`，Python 标准库 `http.server`）+ 告警规则定时轮询（`alert_checker.py`，每 5 秒）。**规划迁移至 Go。**
+- **查询层**（`frontend/server.go`）：Go 编译的独立二进制。HTTP REST API（16 个端点）+ 告警规则定时轮询（goroutine，每 5 秒）二合一。原 Python 文件保留作参考。
 - **可视化层**（`frontend/`）：原生 JS SPA（index.html + app.js + style.css），Chart.js 4.4.4 CDN 加载，自定义日历日期选择器。**技术栈：Vanilla JS。**
-- **前端**：原生 JS SPA（index.html + app.js + style.css），Chart.js 4.4.4 CDN 加载，自定义日历日期选择器（零依赖）。
-
 ## 关键路径
 
 | 路径 | 用途 |
 |---|---|
-| `frontend/server.py` | 后端 API + 静态文件服务 |
-| `frontend/alert_checker.py` | 告警轮询守护进程 |
+| `frontend/server.go` | Go Web 服务 + 告警 goroutine（已编译为 `frontend/server`） |
+| `frontend/server.py` | Python 原版（保留作参考） |
+| `frontend/alert_checker.py` | Python 原告警（保留作参考） |
 | `frontend/app.js` | SPA 全部逻辑（原生 JS） |
 | `frontend/style.css` | 全部样式（含自定义日期选择器） |
 | `collector/vector_wsl.toml` | 生成的 Vector 采集配置（**勿直接编辑**） |
@@ -78,8 +76,8 @@ bash start.sh
 bash stop.sh
 
 # 单独启动组件
-python3 frontend/server.py
-python3 frontend/alert_checker.py
+frontend/server
+# 告警已合并到 server 中 (goroutine)
 /home/yxp/LMS_mimo/processor/processor &
 
 # 直接查询 ClickHouse
@@ -89,22 +87,22 @@ curl -s 'http://localhost:8123/' -d 'SELECT 1'
 curl http://localhost:8080/api/stats
 pgrep -f "vector --config"
 pgrep -f "processor/processor"
-pgrep -f "alert_checker.py"
+pgrep -f "frontend/server"
 
 # 查看日志
 tail -f /tmp/vector.log
 tail -f /tmp/processor.log
 tail -f /tmp/lms_frontend.log
-tail -f /tmp/lms_alert_checker.log
+tail -f /tmp/processor.log
 
 # 重新生成 Vector 配置
-cd /home/yxp/LMS_mimo && python3 -c "import sys; sys.path.insert(0,'frontend'); import server; server.generate_vector_config(server.load_collection_prefs())"
+# Vector 配置通过 API 触发：curl -X POST http://localhost:8080/api/collection-prefs ...
 
 # 通过 API 启用/禁用采集类型
 curl -X POST http://localhost:8080/api/collection-prefs -H 'Content-Type: application/json' -d '{"elk_file_logs": true}'
 
 # 强制重启前端
-fuser -k 8080/tcp; sleep 2; nohup python3 frontend/server.py > /tmp/lms_frontend.log 2>&1 & disown
+fuser -k 8080/tcp; sleep 2; nohup $PROJECT_ROOT/frontend/server > /tmp/lms_frontend.log 2>&1 & disown
 
 # 重新采集 ELK 数据（清除进度 + 删除 ClickHouse 数据）
 rm -rf collector/vector_data/elk_file
@@ -153,7 +151,7 @@ pkill -x vector; sleep 2; nohup /home/yxp/.vector/bin/vector --config collector/
 5. 正则脱敏（rules.json 中的规则作用于 message 和 syslog_message 字段）
 6. 字段映射：host.ip → Host，syslog_message → Message，@timestamp → Timestamp
 7. 其余字段存入 Tags（JSON）
-8. Log_ID = SHA256(Timestamp+Host+Message) 前 16 位十六进制，相同内容产生相同 ID，天然去重
+8. Log_ID = L + 毫秒时间戳 + 4位随机数，每条日志唯一
 9. 批量写入 ClickHouse（50,000 条/批）
 ```
 
@@ -181,7 +179,7 @@ inputs = ["cleanup_journald", "cleanup_syslog"]
 # ===== END INPUTS =====
 ```
 
-`server.py::generate_vector_config(prefs)` 读取模板，根据 `collection_prefs.json` 中的布尔标志决定包含或排除各段。`INPUTS` 块中的 `inputs = [...]` 行根据启用的采集类型动态计算。模板中 `__ELK_FILE_PATH__` 占位符被替换为配置路径。
+Go server 启动时调用 `generateVectorConfig(prefs)` 读取模板，根据 `collection_prefs.json` 中的布尔标志决定包含或排除各段。`INPUTS` 块中的 `inputs = [...]` 行根据启用的采集类型动态计算。模板中 `__ELK_FILE_PATH__` 占位符被替换为配置路径。
 
 **注意**：ELK 日志不经过 Vector 的 ClickHouse sink，而是由独立的 Go processor 直接写入。因此当仅有 ELK 启用时，ClickHouse sink 不会出现在生成的配置中。
 
@@ -189,7 +187,7 @@ inputs = ["cleanup_journald", "cleanup_syslog"]
 
 1. **配置文件损坏**：预处理后的 `config.xml` 会出现大量重复注释和空字节。修复：`start.sh` 启动前自动用 `config_minimal.xml` 覆盖。该备份文件需包含 `<path>`、`<http_port>`、`<profiles>`、`<users>` 和 LMS_Logs 表所需的 `<storage_configuration>`（hot_warm_cold 策略）。
 
-2. **聚合别名冲突**：`max(Timestamp) AS Timestamp` 与 `WHERE Timestamp` 冲突导致 `ILLEGAL_AGGREGATION`。修复：SQL 中别名改为 `TS`，Python 中重命名为 `Timestamp`。
+2. **聚合别名冲突**：`max(Timestamp) AS Timestamp` 与 `WHERE Timestamp` 冲突导致 `ILLEGAL_AGGREGATION`。修复：SQL 中别名改为 `TS`，Go 中重命名为 `Timestamp`。
 
 3. **DELETE 异步**：`ALTER TABLE ... DELETE` 立即返回但可能需数秒生效。用 `OPTIMIZE TABLE ... FINAL` 强制完成。
 
@@ -214,11 +212,10 @@ inputs = ["cleanup_journald", "cleanup_syslog"]
 
 - **无构建步骤** — HTML/CSS/JS 直接使用，Go 需 `go build` 编译
 - **无测试框架** — 项目中不存在任何测试
-- **无版本控制** — 非 git 仓库
+- **无版本控制** — git 仓库（https://github.com/yxp008/LMS）
 - **日志级别**存储为字符串（`"1"`=INFO、`"2"`=WARN、`"3"`=ERROR、`"4"`=DEBUG）
 - **SQL 注入风险** — API 通过字符串拼接构建 SQL。**不要**在新端点中引入类似模式
 - **SMTP 凭据**以明文存储
-- **硬编码绝对路径** — 多处路径硬编码，项目迁移后需修改
-- **仅使用标准库** — `server.py` 只使用 Python 标准库
+- **相对路径** — 基于 `PROJECT_ROOT` 自动计算，支持跨机器移植
 - **无认证** — 所有 API 端点对外开放
 - **浏览器缓存** — 前端变更需 `Ctrl+F5` 强制刷新
