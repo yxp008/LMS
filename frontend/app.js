@@ -4,8 +4,8 @@ let charts = {};
 let logAutoRefreshTimer = null;
 let logAutoRefreshEnabled = true;
 
-const LEVEL_MAP = {};
-const LEVEL_COLOR = {};
+const LEVEL_MAP = { '1': 'INFO', '2': 'WARN', '3': 'ERROR', '4': 'DEBUG', 'emerg': 'EMERG', 'alert': 'ALERT', 'crit': 'CRIT', 'error': 'ERROR', 'warn': 'WARN', 'notice': 'NOTICE', 'info': 'INFO', 'debug': 'DEBUG' };
+const LEVEL_COLOR = { '1': '#3498db', '2': '#f39c12', '3': '#e74c3c', '4': '#9b59b6' };
 const LEVEL_COLORS = ['#3498db','#e74c3c','#f39c12','#2ecc71','#9b59b6','#1abc9c','#e67e22','#34495e','#95a5a6'];
 const CHANNEL_MAP = { '1': '邮件', '2': '短信', '3': 'Webhook' };
 const ALERT_LEVEL_MAP = { '1': '严重', '2': '高', '3': '中', '4': '低' };
@@ -212,8 +212,8 @@ async function loadFilterOptions() {
     levelSelect.innerHTML = '<option value="">所有级别</option>' +
         (levels || []).map(l => `<option value="${escapeHtml(l.Level)}">${escapeHtml(l.Level)} (${l.count})</option>`).join('');
     (levels || []).forEach((l, i) => {
-        LEVEL_MAP[l.Level] = l.Level;
-        LEVEL_COLOR[l.Level] = LEVEL_COLORS[i % LEVEL_COLORS.length];
+        if (!LEVEL_MAP[l.Level]) LEVEL_MAP[l.Level] = l.Level;
+        if (!LEVEL_COLOR[l.Level]) LEVEL_COLOR[l.Level] = LEVEL_COLORS[i % LEVEL_COLORS.length];
     });
 
     const sourceSelect = document.getElementById('filter-source');
