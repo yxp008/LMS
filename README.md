@@ -7,20 +7,30 @@
 ## 架构
 
 ```
-┌────────── 采集层（客户端） ──────────┐
-│                                      │
-│  ELK NDJSON ──► Vector(file) ──► Kafka  │
-│                                      │
-└──────────────────────────────────────┘
-                   │
-┌────────── 处理层（服务端） ──────────┐
-│                                      │
-│  Kafka ──► Go Processor ──► ClickHouse │
-│            (脱敏+解析+入库)            │
-│                                      │
-│  server.py(:8080) ──► 浏览器 SPA     │
-│  alert_checker.py                     │
-└──────────────────────────────────────┘
+┌──────────── 采集层（客户端） ────────────┐
+│                                          │
+│  ELK NDJSON ──► Vector(file) ──► Kafka   │
+│                                          │
+└──────────────────────────────────────────┘
+                       │
+┌──────────── 处理层（服务端） ────────────┐
+│                                          │
+│  Kafka ──► Go Processor ──┐              │
+│          (脱敏+解析+入库)   │              │
+│                            │              │
+│  server.py(:8080)          │              │
+│  alert_checker.py          │              │
+└────────────────────────────│──────────────┘
+                             │
+┌──────────── 存储层 ────────│──────────────┐
+│                            ▼              │
+│           ClickHouse (列式 OLAP)          │
+│                                          │
+│  三级存储 (hot_warm_cold):                │
+│  🔥 热数据 0-7天   → SSD 本地存储         │
+│  🌡  温数据 7-30天  → HDD 本地存储         │
+│  ❄️  冷数据 30-180天 → MinIO 对象存储归档  │
+└──────────────────────────────────────────┘
 ```
 
 ## 快速开始
@@ -63,8 +73,8 @@ bash install.sh
 |---|---|---|
 | 采集层 | Vector + Go | file 源读取 NDJSON，发往 Kafka |
 | 消息队列 | Kafka 3.6 (KRaft) | 6 分区 zstd 压缩，topic: lms_elk_logs |
-| 处理层 | Go | Kafka 消费 → 正则脱敏 → 字段解析 → 批量写 ClickHouse |
-| 存储 | ClickHouse 26.6 | 列式 OLAP，Asia/Shanghai 时区，hot_warm_cold 存储策略 |
+| 处理层 | Go | Kafka 消费 → 正则脱敏 → 字段解析 → 批量写入 |
+| 存储层 | ClickHouse 26.6 | 列式 OLAP，三级存储：SSD(热)→HDD(温)→MinIO(冷) |
 | 后端 | Python stdlib | REST API + 静态文件，无框架 |
 | 前端 | Vanilla JS + Chart.js | SPA，自定义日历组件，零 CDN 依赖（除 Chart.js） |
 | 告警 | Python | 5 秒轮询，邮件/Webhook 通知 |

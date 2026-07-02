@@ -27,19 +27,33 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 │                              │     │  脱敏 + 字段解析   │  │
 │                              │     │  批量写入          │  │
 │                              │     └────────┬──────────┘  │
-│                              │              ▼             │
-│                              │        ClickHouse           │
-│                              │              │              │
+│                              │              │             │
 │                              │    server.py (:8080)        │
-│                              │              │              │
+│                              │              │             │
 │                              │     alert_checker.py        │
-└──────────────────────────────┴─────────────────────────────┘
+└──────────────────────────────┴──────────────│─────────────┘
+                                              │
+┌──────────────── 存储层 ────────────────┐     │
+│                                        │     │
+│           ClickHouse (列式 OLAP)  ◄────┘     │
+│                                        │
+│  三级存储策略 (hot_warm_cold):            │
+│  热数据 (0-7天):   SSD 本地存储           │
+│  温数据 (7-30天):  HDD 本地存储           │
+│  冷数据 (30-180天): MinIO 对象存储        │
+│                                        │
+└────────────────────────────────────────┘
 ```
 
 - **采集层**（`collector/`）：可独立部署在客户端。Vector file 源读取 NDJSON 文件，发往 Kafka topic `lms_elk_logs`。支持 journald 和 syslog 源（当前关闭）。
 - **Kafka**（v3.6.0，KRaft 模式）：消息队列缓冲，Topic `lms_elk_logs` 6 分区 zstd 压缩，数据目录 `/home/yxp/LMS_mimo/kafka/data/`。
 - **处理层**（`processor/`）：Go 编译的独立程序，消费 Kafka → 正则脱敏 → 解析 ELK JSON 字段 → 批量写入 ClickHouse。替代了原来的 Vector VRL 变换。
-- **ClickHouse**（v26.6.1）：列式 OLAP 数据库。时区 `Asia/Shanghai`。四张表：`LMS.LMS_Logs`、`LMS.LMS_Collectors`、`LMS.LMS_AlertRules`、`LMS.LMS_AlertTriggers`。
+- **ClickHouse**（v26.6.1）：列式 OLAP 数据库，独立存储层。时区 `Asia/Shanghai`。四张表：`LMS.LMS_Logs`、`LMS.LMS_Collectors`、`LMS.LMS_AlertRules`、`LMS.LMS_AlertTriggers`。
+  - **三级存储策略 (hot_warm_cold)**：
+    - 热数据（0-7天）：本地 SSD 存储，高性能读写
+    - 温数据（7-30天）：本地 HDD 存储，大容量低成本
+    - 冷数据（30-180天）：MinIO 对象存储归档，通过 ClickHouse S3 外表查询
+  - 配置见 `config_minimal.xml` 中 `<storage_configuration>` 段
 - **server.py**：Python 标准库 `http.server`。在 `:8080` 提供静态前端和 JSON REST API。ClickHouse 查询通过 HTTP POST 发往 `:8123`。启动时读取 `collection_prefs.json`，生成 Vector 配置。
 - **alert_checker.py**：每 5 秒轮询告警规则，匹配时发送邮件（SMTP）或 Webhook。
 - **前端**：原生 JS SPA（index.html + app.js + style.css），Chart.js 4.4.4 CDN 加载，自定义日历日期选择器（零依赖）。
