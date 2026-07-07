@@ -461,8 +461,10 @@ function renderTimeline(data) {
     });
 
     const times = Object.keys(timeMap).sort();
-    const datasets = ['1', '2', '3', '4'].map(level => ({
-        label: LEVEL_MAP[level],
+    // 动态获取实际存在的所有 Level
+    const allLevels = [...new Set(data.map(d => d.Level))].sort();
+    const datasets = allLevels.map(level => ({
+        label: LEVEL_MAP[level] || level,
         data: times.map(t => timeMap[t][level] || 0),
         backgroundColor: LEVEL_COLOR[level],
         borderColor: LEVEL_COLOR[level],
@@ -474,7 +476,7 @@ function renderTimeline(data) {
 
     charts['timeline'] = new Chart(ctx, {
         type: 'line',
-        data: { labels: times.map(t => formatTimeShort(t)), datasets },
+        data: { labels: times.map((t, i) => formatTimeShort(t, times[i + 1])), datasets },
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -922,12 +924,20 @@ function formatTime(ts) {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-function formatTimeShort(ts) {
+function formatTimeShort(ts, nextTs) {
     if (!ts) return '-';
     const d = new Date(ts);
     if (isNaN(d.getTime())) return ts;
     const pad = n => String(n).padStart(2, '0');
-    return `${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    // 计算时间间隔
+    let label = `${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    if (nextTs) {
+        const next = new Date(nextTs);
+        if (!isNaN(next.getTime())) {
+            label += `~${pad(next.getHours())}:${pad(next.getMinutes())}`;
+        }
+    }
+    return label;
 }
 
 function escapeHtml(str) {
