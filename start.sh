@@ -24,9 +24,9 @@ echo "[1/6] 启动 ClickHouse..."
 if curl -s "$CH_HTTP/?query=SELECT%201" > /dev/null 2>&1; then
     echo "  -> ClickHouse 已在运行"
 else
-    # 预处理配置经常损坏，先用最小可用配置覆盖
+    # 预处理配置经常损坏，先用最小可用配置覆盖并替换路径
     if [ -f "$CH_CFG_SAFE" ]; then
-        cp "$CH_CFG_SAFE" "$CH_CFG"
+        sed "s|__PROJECT_ROOT__|$PROJECT_ROOT|g" "$CH_CFG_SAFE" > "$CH_CFG"
     fi
     $CH_BIN server --config-file=$CH_CFG --daemon 2>/dev/null
     # ClickHouse 启动较慢，最多等 15 秒

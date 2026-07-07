@@ -1,12 +1,12 @@
 <clickhouse>
-    <path>/home/yxp/LMS_mimo/data/clickhouse_data/</path>
-    <tmp_path>/home/yxp/LMS_mimo/data/clickhouse_data/tmp/</tmp_path>
-    <user_files_path>/home/yxp/LMS_mimo/data/clickhouse_data/user_files/</user_files_path>
-    <format_schema_path>/home/yxp/LMS_mimo/data/clickhouse_data/format_schemas/</format_schema_path>
+    <path>__PROJECT_ROOT__/data/clickhouse_data/</path>
+    <tmp_path>__PROJECT_ROOT__/data/clickhouse_data/tmp/</tmp_path>
+    <user_files_path>__PROJECT_ROOT__/data/clickhouse_data/user_files/</user_files_path>
+    <format_schema_path>__PROJECT_ROOT__/data/clickhouse_data/format_schemas/</format_schema_path>
     <logger>
         <level>warning</level>
-        <log>/home/yxp/LMS_mimo/data/clickhouse_data/clickhouse-server.log</log>
-        <errorlog>/home/yxp/LMS_mimo/data/clickhouse_data/clickhouse-server.err.log</errorlog>
+        <log>__PROJECT_ROOT__/data/clickhouse_data/clickhouse-server.log</log>
+        <errorlog>__PROJECT_ROOT__/data/clickhouse_data/clickhouse-server.err.log</errorlog>
     </logger>
     <http_port>8123</http_port>
     <tcp_port>9000</tcp_port>
@@ -30,10 +30,10 @@
     <storage_configuration>
         <disks>
             <warm_disk>
-                <path>/home/yxp/LMS_mimo/data/clickhouse_data/warm/</path>
+                <path>__PROJECT_ROOT__/data/clickhouse_data/warm/</path>
             </warm_disk>
             <cold_disk>
-                <path>/home/yxp/LMS_mimo/data/clickhouse_data/cold/</path>
+                <path>__PROJECT_ROOT__/data/clickhouse_data/cold/</path>
             </cold_disk>
         </disks>
         <policies>
