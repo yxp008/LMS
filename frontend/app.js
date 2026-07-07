@@ -438,14 +438,14 @@ async function loadCharts() {
     destroyChart('hosts');
     destroyChart('sourcePie');
 
-    const [timeline, hosts, sources] = await Promise.all([
+    const [timeline, hostsDetail, sources] = await Promise.all([
         fetchAPI('/api/timeline?hours=24'),
-        fetchAPI('/api/hosts'),
+        fetchAPI('/api/hosts?detail=1'),
         fetchAPI('/api/sources')
     ]);
 
     renderTimeline(timeline || []);
-    renderHostChart(hosts || []);
+    renderHostChart(hostsDetail || []);
     renderSourcePie(sources || []);
 }
 
@@ -496,29 +496,43 @@ function renderHostChart(data) {
     const ctx = document.getElementById('chart-hosts');
     if (!ctx) return;
 
-    const top = data.slice(0, 10);
+    // 按主机聚合每个等级的计数
+    const hostLevels = {};
+    const allLevels = new Set();
+    data.forEach(d => {
+        if (!hostLevels[d.Host]) hostLevels[d.Host] = {};
+        hostLevels[d.Host][d.Level] = (hostLevels[d.Host][d.Level] || 0) + parseInt(d.count);
+        allLevels.add(d.Level);
+    });
+    // 取前 10 主机
+    const topHosts = Object.entries(hostLevels)
+        .map(([host, levels]) => ({ host, total: Object.values(levels).reduce((a, b) => a + b, 0) }))
+        .sort((a, b) => b.total - a.total).slice(0, 10).map(h => h.host);
+
+    const sortedLevels = [...allLevels].sort();
+    const colors = ['#3498db', '#f39c12', '#e74c3c', '#9b59b6', '#2ecc71', '#1abc9c', '#e67e22', '#34495e'];
+    const datasets = sortedLevels.map((lv, i) => ({
+        label: LEVEL_MAP[lv] || lv,
+        data: topHosts.map(h => hostLevels[h] ? (hostLevels[h][lv] || 0) : 0),
+        backgroundColor: LEVEL_COLOR[lv] || colors[i % colors.length],
+        borderRadius: 0
+    }));
+
     charts['hosts'] = new Chart(ctx, {
         type: 'bar',
-        data: {
-            labels: top.map(d => d.Host),
-            datasets: [{
-                label: '日志数量',
-                data: top.map(d => parseInt(d.count)),
-                backgroundColor: 'rgba(29, 161, 242, 0.6)',
-                borderColor: '#1da1f2',
-                borderWidth: 1,
-                borderRadius: 4
-            }]
-        },
+        data: { labels: topHosts, datasets },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             indexAxis: 'y',
-            scales: {
-                x: { ticks: { color: '#8899a6' }, grid: { color: 'rgba(42,58,74,0.5)' } },
-                y: { ticks: { color: '#8899a6', font: { size: 11 } }, grid: { display: false } }
+            plugins: {
+                legend: { labels: { color: '#8899a6', font: { size: 11 } } },
+                tooltip: { mode: 'index', intersect: false }
             },
-            plugins: { legend: { display: false } }
+            scales: {
+                x: { stacked: true, ticks: { color: '#8899a6' }, grid: { color: 'rgba(42,58,74,0.5)' } },
+                y: { stacked: true, ticks: { color: '#8899a6', font: { size: 11 } }, grid: { display: false } }
+            }
         }
     });
 }
