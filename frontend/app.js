@@ -5,8 +5,8 @@ let logAutoRefreshTimer = null;
 let logAutoRefreshEnabled = true;
 
 const LEVEL_MAP = { '1': 'INFO', '2': 'WARN', '3': 'ERROR', '4': 'DEBUG', 'emerg': 'EMERG', 'alert': 'ALERT', 'crit': 'CRIT', 'error': 'ERROR', 'warn': 'WARN', 'notice': 'NOTICE', 'info': 'INFO', 'debug': 'DEBUG' };
-const LEVEL_COLOR = { '1': '#3498db', '2': '#f39c12', '3': '#e74c3c', '4': '#9b59b6' };
-const LEVEL_COLORS = ['#3498db','#e74c3c','#f39c12','#2ecc71','#9b59b6','#1abc9c','#e67e22','#34495e','#95a5a6'];
+const LEVEL_COLOR = { 'INFO': '#3498db', 'WARN': '#f39c12', 'ERROR': '#e74c3c', 'DEBUG': '#2c3e50', 'EMERG': '#c0392b', 'ALERT': '#e74c3c', 'CRIT': '#e74c3c', 'NOTICE': '#2ecc71' };
+const LEVEL_COLORS = ['#3498db','#f39c12','#e74c3c','#2c3e50','#2ecc71','#1abc9c','#e67e22','#34495e','#95a5a6'];
 const CHANNEL_MAP = { '1': '邮件', '2': '短信', '3': 'Webhook' };
 const ALERT_LEVEL_MAP = { '1': '严重', '2': '高', '3': '中', '4': '低' };
 const STATUS_MAP = { '0': '停用', '1': '启用' };
