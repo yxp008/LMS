@@ -444,14 +444,19 @@ let chartLevelFilter = new Set();
 function buildChartLevelFilter(levels) {
     const bar = document.getElementById('chart-level-filter');
     if (!bar) return;
-    const existing = new Set(chartLevelFilter);
-    if (chartLevelFilter.size === 0) levels.forEach(l => chartLevelFilter.add(l.Level));
-    let html = '<span style=\"color:var(--text-secondary);font-size:13px\">过滤等级：</span>';
+    // 归一化并合并计数
+    const merged = {};
     levels.forEach(l => {
         const lv = LEVEL_MAP[l.Level] || l.Level;
+        merged[lv] = (merged[lv] || 0) + parseInt(l.count);
+    });
+    const entries = Object.entries(merged);
+    if (chartLevelFilter.size === 0) entries.forEach(([lv]) => chartLevelFilter.add(lv));
+    let html = '<span style=\"color:var(--text-secondary);font-size:13px\">过滤等级：</span>';
+    entries.forEach(([lv, cnt]) => {
         const color = LEVEL_COLOR[lv] || '#666';
-        const checked = chartLevelFilter.has(l.Level) ? 'checked' : '';
-        html += `<label style=\"margin-left:8px;cursor:pointer;font-size:12px;color:${color}\"><input type=\"checkbox\" ${checked} onchange=\"toggleChartLevel('${escapeHtml(l.Level)}')\" style=\"accent-color:${color}\"> ${lv}</label>`;
+        const checked = chartLevelFilter.has(lv) ? 'checked' : '';
+        html += `<label style=\"margin-left:8px;cursor:pointer;font-size:12px;color:${color}\"><input type=\"checkbox\" ${checked} onchange=\"toggleChartLevel('${escapeHtml(lv)}')\" style=\"accent-color:${color}\"> ${lv} (${cnt})</label>`;
     });
     bar.innerHTML = html;
 }
@@ -477,7 +482,7 @@ async function loadCharts() {
     buildChartLevelFilter(await fetchAPI('/api/levels') || []);
 
     // 按选中等级过滤
-    const filterD = arr => arr.filter(d => chartLevelFilter.has(d.Level));
+    const filterD = arr => arr.filter(d => chartLevelFilter.has(LEVEL_MAP[d.Level] || d.Level));
     renderTimeline(filterD(timeline || []));
     renderHostChart(filterD(hostsDetail || []));
     renderSourcePie(sources || []);
