@@ -52,6 +52,21 @@ function updateTime() {
 // ========== Sub Tabs ==========
 let currentSubTab = 'dashboard';
 
+function switchToLogsWithLevel(level) {
+    // 切换到日志查询页面
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelector('.nav-item[data-page="logs"]').classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-logs').classList.add('active');
+    document.getElementById('page-title').textContent = '日志查询';
+    // 切换到日志查询子页面
+    switchSubTab('logs');
+    // 设置级别筛选
+    document.getElementById('filter-level').value = level;
+    // 触发查询
+    loadLogs(1);
+}
+
 function switchSubTab(subtab) {
     stopLogAutoRefresh();
     currentSubTab = subtab;

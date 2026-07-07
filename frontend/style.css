@@ -159,6 +159,9 @@ body {
     margin-bottom: 24px;
 }
 
+.stat-card.clickable { cursor: pointer; }
+.stat-card.clickable:hover { border-color: var(--accent); }
+
 .stat-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
