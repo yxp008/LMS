@@ -481,6 +481,15 @@ function renderTimeline(data) {
         pointRadius: 2
     }));
 
+    // 提取每天的首次时间点用于显示日期
+    const dateMarkers = {};
+    times.forEach(t => {
+        const d = new Date(t);
+        const dayKey = `${d.getMonth()+1}-${d.getDate()}`;
+        if (!dateMarkers[dayKey]) dateMarkers[dayKey] = t;
+    });
+    const dateTimes = new Set(Object.values(dateMarkers));
+
     charts['timeline'] = new Chart(ctx, {
         type: 'line',
         data: { labels: times.map((t, i) => formatTimeShort(t, times[i + 1])), datasets },
@@ -489,12 +498,55 @@ function renderTimeline(data) {
             maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
             scales: {
-                x: { ticks: { color: '#8899a6', maxTicksLimit: 12 }, grid: { color: 'rgba(42,58,74,0.5)' } },
+                x: {
+                    ticks: {
+                        color: '#8899a6', maxTicksLimit: 12, maxRotation: 0,
+                        callback: function(val, index) {
+                            const ts = times[index];
+                            if (!ts) return '';
+                            const d = new Date(ts);
+                            const pad = n => String(n).padStart(2, '0');
+                            const time = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+                            if (dateTimes.has(ts)) {
+                                return `${d.getMonth()+1}/${d.getDate()}\n${time}`;
+                            }
+                            return time;
+                        }
+                    },
+                    grid: { color: 'rgba(42,58,74,0.5)' }
+                },
                 y: { ticks: { color: '#8899a6' }, grid: { color: 'rgba(42,58,74,0.5)' }, beginAtZero: true }
             },
             plugins: {
                 legend: { labels: { color: '#8899a6', font: { size: 12 } } }
             }
+        }
+    }, {
+        // 虚线向下连接日期标记
+        id: 'dateLine',
+        afterDraw(chart) {
+            const ctx = chart.ctx;
+            const xAxis = chart.scales.x;
+            const yAxis = chart.scales.y;
+            if (!xAxis || !yAxis) return;
+            ctx.save();
+            ctx.setLineDash([4, 4]);
+            ctx.strokeStyle = 'rgba(136,153,166,0.3)';
+            ctx.lineWidth = 1;
+            dateTimes.forEach(ts => {
+                const meta = chart.getDatasetMeta(0);
+                if (!meta || !meta.data) return;
+                const idx = times.indexOf(ts);
+                if (idx < 0) return;
+                const point = meta.data[idx];
+                if (!point) return;
+                const x = point.x;
+                ctx.beginPath();
+                ctx.moveTo(x, yAxis.bottom + 15);
+                ctx.lineTo(x, yAxis.bottom);
+                ctx.stroke();
+            });
+            ctx.restore();
         }
     });
 }
