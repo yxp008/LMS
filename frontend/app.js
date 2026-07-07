@@ -439,6 +439,29 @@ function jumpToPage(totalPages) {
 }
 
 // ========== Charts ==========
+let chartLevelFilter = new Set();
+
+function buildChartLevelFilter(levels) {
+    const bar = document.getElementById('chart-level-filter');
+    if (!bar) return;
+    const existing = new Set(chartLevelFilter);
+    if (chartLevelFilter.size === 0) levels.forEach(l => chartLevelFilter.add(l.Level));
+    let html = '<span style=\"color:var(--text-secondary);font-size:13px\">过滤等级：</span>';
+    levels.forEach(l => {
+        const lv = LEVEL_MAP[l.Level] || l.Level;
+        const color = LEVEL_COLOR[lv] || '#666';
+        const checked = chartLevelFilter.has(l.Level) ? 'checked' : '';
+        html += `<label style=\"margin-left:8px;cursor:pointer;font-size:12px;color:${color}\"><input type=\"checkbox\" ${checked} onchange=\"toggleChartLevel('${escapeHtml(l.Level)}')\" style=\"accent-color:${color}\"> ${lv}</label>`;
+    });
+    bar.innerHTML = html;
+}
+
+function toggleChartLevel(level) {
+    if (chartLevelFilter.has(level)) chartLevelFilter.delete(level);
+    else chartLevelFilter.add(level);
+    loadCharts();
+}
+
 async function loadCharts() {
     destroyChart('timeline');
     destroyChart('hosts');
@@ -450,8 +473,13 @@ async function loadCharts() {
         fetchAPI('/api/sources')
     ]);
 
-    renderTimeline(timeline || []);
-    renderHostChart(hostsDetail || []);
+    // 构建等级筛选栏
+    buildChartLevelFilter(await fetchAPI('/api/levels') || []);
+
+    // 按选中等级过滤
+    const filterD = arr => arr.filter(d => chartLevelFilter.has(d.Level));
+    renderTimeline(filterD(timeline || []));
+    renderHostChart(filterD(hostsDetail || []));
     renderSourcePie(sources || []);
 }
 
