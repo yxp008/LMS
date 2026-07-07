@@ -265,7 +265,10 @@ function initDatePickers() {
 
     document.getElementById('filter-start').addEventListener('click', e => showDP(e.target));
     document.getElementById('filter-end').addEventListener('click', e => showDP(e.target));
-    document.addEventListener('click', e => { if (!e.target.closest('.datepicker-popup') && !e.target.matches('#filter-start,#filter-end')) hideDP(); });
+    const tlS = document.getElementById('tl-start'), tlE = document.getElementById('tl-end');
+    if (tlS) tlS.addEventListener('click', e => showDP(e.target));
+    if (tlE) tlE.addEventListener('click', e => showDP(e.target));
+    document.addEventListener('click', e => { if (!e.target.closest('.datepicker-popup') && !e.target.matches('#filter-start,#filter-end,#tl-start,#tl-end')) hideDP(); });
 }
 
 function showDP(input) {
@@ -472,8 +475,15 @@ async function loadCharts() {
     destroyChart('hosts');
     destroyChart('sourcePie');
 
+    // 时间线日期范围筛选
+    const tlStart = document.getElementById('tl-start')?.value || '';
+    const tlEnd = document.getElementById('tl-end')?.value || '';
+    const tlURL = (tlStart && tlEnd)
+        ? `/api/timeline?start=${encodeURIComponent(tlStart+' 00:00:00')}&end=${encodeURIComponent(tlEnd+' 23:59:59')}`
+        : '/api/timeline?hours=24';
+
     const [timeline, hostsDetail, sources] = await Promise.all([
-        fetchAPI('/api/timeline?hours=24'),
+        fetchAPI(tlURL),
         fetchAPI('/api/hosts?detail=1'),
         fetchAPI('/api/sources')
     ]);
@@ -488,7 +498,14 @@ async function loadCharts() {
     renderSourcePie(sources || []);
 }
 
-function renderTimeline(data) {
+function applyTimelineRange() {
+    loadCharts();
+}
+function resetTimelineRange() {
+    document.getElementById('tl-start').value = '';
+    document.getElementById('tl-end').value = '';
+    loadCharts();
+}
     const ctx = document.getElementById('chart-timeline');
     if (!ctx) return;
 
