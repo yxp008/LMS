@@ -506,6 +506,8 @@ function resetTimelineRange() {
     document.getElementById('tl-end').value = '';
     loadCharts();
 }
+
+function renderTimeline(data) {
     const ctx = document.getElementById('chart-timeline');
     if (!ctx) return;
 
