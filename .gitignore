@@ -54,3 +54,4 @@ frontend/smtp_config.json
 
 # 数据库设计文档（二进制）
 database_design/*.docx
+collector/elk_logs/incoming/
