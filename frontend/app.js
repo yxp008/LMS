@@ -164,9 +164,15 @@ function renderLevelChart(data) {
     const ctx = document.getElementById('chart-levels');
     if (!ctx) return;
 
-    const labels = data.map(d => LEVEL_MAP[d.Level] || d.Level);
-    const values = data.map(d => parseInt(d.count));
-    const colors = data.map(d => LEVEL_COLOR[d.Level] || '#666');
+    // 归一化 Level 名称并合并
+    const merged = {};
+    data.forEach(d => {
+        const lv = LEVEL_MAP[d.Level] || d.Level;
+        merged[lv] = (merged[lv] || 0) + parseInt(d.count);
+    });
+    const labels = Object.keys(merged);
+    const values = labels.map(l => merged[l]);
+    const colors = labels.map((l, i) => LEVEL_COLOR[l] || ['#3498db','#e74c3c','#f39c12','#2ecc71','#9b59b6','#1abc9c'][i % 6]);
 
     charts['levels'] = new Chart(ctx, {
         type: 'doughnut',
@@ -456,15 +462,16 @@ function renderTimeline(data) {
     const timeMap = {};
     data.forEach(d => {
         const t = d.time_point;
+        const lv = LEVEL_MAP[d.Level] || d.Level;
         if (!timeMap[t]) timeMap[t] = {};
-        timeMap[t][d.Level] = parseInt(d.count);
+        timeMap[t][lv] = (timeMap[t][lv] || 0) + parseInt(d.count);
     });
 
     const times = Object.keys(timeMap).sort();
-    // 动态获取实际存在的所有 Level
-    const allLevels = [...new Set(data.map(d => d.Level))].sort();
+    // 动态获取实际存在的所有 Level（归一化后）
+    const allLevels = [...new Set(data.map(d => LEVEL_MAP[d.Level] || d.Level))].sort();
     const datasets = allLevels.map(level => ({
-        label: LEVEL_MAP[level] || level,
+        label: level,
         data: times.map(t => timeMap[t][level] || 0),
         backgroundColor: LEVEL_COLOR[level],
         borderColor: LEVEL_COLOR[level],
@@ -496,13 +503,14 @@ function renderHostChart(data) {
     const ctx = document.getElementById('chart-hosts');
     if (!ctx) return;
 
-    // 按主机聚合每个等级的计数
+    // 按主机聚合每个等级的计数（归一化 Level 名称）
     const hostLevels = {};
     const allLevels = new Set();
     data.forEach(d => {
+        const lv = LEVEL_MAP[d.Level] || d.Level;
         if (!hostLevels[d.Host]) hostLevels[d.Host] = {};
-        hostLevels[d.Host][d.Level] = (hostLevels[d.Host][d.Level] || 0) + parseInt(d.count);
-        allLevels.add(d.Level);
+        hostLevels[d.Host][lv] = (hostLevels[d.Host][lv] || 0) + parseInt(d.count);
+        allLevels.add(lv);
     });
     // 取前 10 主机
     const topHosts = Object.entries(hostLevels)
