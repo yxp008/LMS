@@ -27,34 +27,46 @@
 
 ## 环境准备
 
-### 依赖
+### 1. 安装 ClickHouse
 
-| 依赖 | 安装方式 |
-|---|---|
-| Go 1.18+ | `sudo apt install golang-go`（install.sh 自动安装）|
-| Vector 0.56 | `curl --proto '=https' -sSf https://sh.vector.dev \| bash` |
-| ClickHouse 26.6 | 二进制放入 `data/clickhouse_data/` |
-| Kafka 3.6 | 解压到 `~/kafka/`，设置 `log.dirs`，格式化存储 |
+```bash
+cd data/clickhouse_data
+curl https://clickhouse.com/ | sh
+```
 
-### 初始化数据库
+### 2. 安装 Kafka
+
+下载 Kafka 3.6 解压到 `~/kafka/`，配置 `config/kraft/server.properties` 中 `log.dirs` 指向持久目录，然后格式化存储：
+
+```bash
+~/kafka/bin/kafka-storage.sh format -t $(uuidgen) -c ~/kafka/config/kraft/server.properties
+```
+
+### 3. 安装 Vector
+
+```bash
+curl --proto '=https' -sSf https://sh.vector.dev | bash
+```
+
+### 4. 初始化数据库
 
 ```bash
 # 启动 ClickHouse
-bash start.sh  # 按 Ctrl+C 中断（仅需启动 ClickHouse）
+cd data/clickhouse_data && ./clickhouse server --daemon
 
-# 创建数据库和表
-clickhouse-client < database_design/sql/LMS_Logs.sql
-clickhouse-client < database_design/sql/LMS_Collectors.sql
-clickhouse-client < database_design/sql/LMS_AlertRules.sql
-clickhouse-client < database_design/sql/LMS_AlertTriggers.sql
+# 创建数据库
+curl -s 'http://localhost:8123/' -d 'CREATE DATABASE IF NOT EXISTS LMS'
 
-# 或通过 HTTP
+# 创建四张表（LMS_Logs / LMS_Collectors / LMS_AlertRules / LMS_AlertTriggers）
 for f in database_design/sql/*.sql; do
     curl -s 'http://localhost:8123/' -d "$(cat $f)"
 done
 ```
 
-> **注意**：`LMS_Logs` 表使用了 `storage_policy = 'hot_warm_cold'` 三级存储策略，需在 ClickHouse 配置中定义。`start.sh` 启动时自动从 `config_minimal.xml` 生成，无需手动配置。
+> **注意**：`LMS_Logs` 表使用了 `storage_policy = 'hot_warm_cold'` 三级存储策略，需在 ClickHouse 配置中定义。`start.sh` 启动时自动从 `config_minimal.xml` 生成配置并替换路径占位符，无需手动配置。需提前创建温/冷存储目录：
+> ```bash
+> mkdir -p data/clickhouse_data/warm data/clickhouse_data/cold
+> ```
 
 ### 一键安装
 
