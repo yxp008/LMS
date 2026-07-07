@@ -1,6 +1,0 @@
-{
-  "linux_system_logs": false,
-  "network_device_logs": false,
-  "elk_file_logs": true,
-  "elk_file_path": "/home/yxp/LMS_mimo/collector/elk_logs/incoming/"
-}

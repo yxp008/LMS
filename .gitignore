@@ -46,6 +46,9 @@ collector/elk_logs/go.mod
 *:Zone.Identifier
 Thumbs.db
 
+# 运行时配置（首次启动自动生成）
+collector/collection_prefs.json
+
 # 凭据
 frontend/smtp_config.json
 
