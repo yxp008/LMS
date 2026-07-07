@@ -535,7 +535,7 @@ function renderHostChart(data) {
             indexAxis: 'y',
             plugins: {
                 legend: { labels: { color: '#8899a6', font: { size: 11 } } },
-                tooltip: { mode: 'index', intersect: false }
+                tooltip: { mode: 'y', intersect: false }
             },
             scales: {
                 x: { stacked: true, ticks: { color: '#8899a6' }, grid: { color: 'rgba(42,58,74,0.5)' } },
