@@ -306,7 +306,7 @@ func apiSources(w http.ResponseWriter, r *http.Request) {
 
 func apiHosts(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get("detail") == "1" {
-		jsonResp(w, 200, cq(fmt.Sprintf("SELECT Host, Level, count() as count FROM %s.%s GROUP BY Host, Level ORDER BY count DESC LIMIT 100", database, table)))
+		jsonResp(w, 200, cq(fmt.Sprintf("SELECT Host, Level, count() as count FROM %s.%s GROUP BY Host, Level ORDER BY count DESC", database, table)))
 	} else {
 		jsonResp(w, 200, cq(fmt.Sprintf("SELECT Host, count() as count FROM %s.%s GROUP BY Host ORDER BY count DESC LIMIT 20", database, table)))
 	}
