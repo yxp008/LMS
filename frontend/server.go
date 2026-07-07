@@ -287,15 +287,7 @@ func apiLevels(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiTimeline(w http.ResponseWriter, r *http.Request) {
-	q := r.URL.Query()
-	start := q.Get("start")
-	end := q.Get("end")
-	if start != "" && end != "" {
-		interval := 1
-		jsonResp(w, 200, cq(fmt.Sprintf("SELECT toStartOfInterval(Timestamp, INTERVAL %d HOUR) as time_point, Level, count() as count FROM %s.%s WHERE Timestamp >= '%s' AND Timestamp <= '%s' GROUP BY time_point, Level ORDER BY time_point", interval, database, table, start, end)))
-		return
-	}
-	hours, _ := strconv.Atoi(q.Get("hours")); if hours < 1 { hours = 24 }
+	hours, _ := strconv.Atoi(r.URL.Query().Get("hours")); if hours < 1 { hours = 24 }
 	interval := hours / 24; if interval < 1 { interval = 1 }
 	jsonResp(w, 200, cq(fmt.Sprintf("SELECT toStartOfInterval(Timestamp, INTERVAL %d HOUR) as time_point, Level, count() as count FROM %s.%s WHERE Timestamp >= now() - INTERVAL %d HOUR GROUP BY time_point, Level ORDER BY time_point", interval, database, table, hours)))
 }
