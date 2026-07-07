@@ -54,13 +54,12 @@ curl --proto '=https' -sSf https://sh.vector.dev | bash
 # 启动 ClickHouse
 cd data/clickhouse_data && ./clickhouse server --daemon
 
-# 创建数据库
-curl -s 'http://localhost:8123/' -d 'CREATE DATABASE IF NOT EXISTS LMS'
-
-# 创建四张表（LMS_Logs / LMS_Collectors / LMS_AlertRules / LMS_AlertTriggers）
-for f in database_design/sql/*.sql; do
-    curl -s 'http://localhost:8123/' -d "$(cat $f)"
-done
+# 创建数据库和表
+clickhouse-client --query "CREATE DATABASE IF NOT EXISTS LMS"
+clickhouse-client --database LMS --multiquery < database_design/sql/LMS_Logs.sql
+clickhouse-client --database LMS --multiquery < database_design/sql/LMS_Collectors.sql
+clickhouse-client --database LMS --multiquery < database_design/sql/LMS_AlertRules.sql
+clickhouse-client --database LMS --multiquery < database_design/sql/LMS_AlertTriggers.sql
 ```
 
 > **注意**：`LMS_Logs` 表使用了 `storage_policy = 'hot_warm_cold'` 三级存储策略，需在 ClickHouse 配置中定义。`start.sh` 启动时自动从 `config_minimal.xml` 生成配置并替换路径占位符，无需手动配置。需提前创建温/冷存储目录：
