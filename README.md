@@ -25,12 +25,46 @@
 
 五层同级，采集层/处理层/查询层优先使用 Go 以保证效率。
 
+## 环境准备
+
+### 依赖
+
+| 依赖 | 安装方式 |
+|---|---|
+| Go 1.18+ | `sudo apt install golang-go`（install.sh 自动安装）|
+| Vector 0.56 | `curl --proto '=https' -sSf https://sh.vector.dev \| bash` |
+| ClickHouse 26.6 | 二进制放入 `data/clickhouse_data/` |
+| Kafka 3.6 | 解压到 `~/kafka/`，设置 `log.dirs`，格式化存储 |
+
+### 初始化数据库
+
+```bash
+# 启动 ClickHouse
+bash start.sh  # 按 Ctrl+C 中断（仅需启动 ClickHouse）
+
+# 创建数据库和表
+clickhouse-client < database_design/sql/LMS_Logs.sql
+clickhouse-client < database_design/sql/LMS_Collectors.sql
+clickhouse-client < database_design/sql/LMS_AlertRules.sql
+clickhouse-client < database_design/sql/LMS_AlertTriggers.sql
+
+# 或通过 HTTP
+for f in database_design/sql/*.sql; do
+    curl -s 'http://localhost:8123/' -d "$(cat $f)"
+done
+```
+
+> **注意**：`LMS_Logs` 表使用了 `storage_policy = 'hot_warm_cold'` 三级存储策略，需在 ClickHouse 配置中定义。`start.sh` 启动时自动从 `config_minimal.xml` 生成，无需手动配置。
+
+### 一键安装
+
+```bash
+bash install.sh
+```
+
 ## 快速开始
 
 ```bash
-# 首次使用：一键安装
-bash install.sh
-
 # 启动 / 停止
 bash start.sh
 bash stop.sh
@@ -117,6 +151,10 @@ LMS_mimo/
 │   ├── server.py                 # Python 原版（参考）
 │   ├── index.html / app.js / style.css
 ├── data/clickhouse_data/         # ClickHouse
+│   └── preprocessed_configs/
+│       └── config_minimal.xml    # ClickHouse 配置（含存储策略）
+├── database_design/
+│   └── sql/                      # 建表 SQL（4 张表）
 ├── kafka/data/                   # Kafka 持久化
 ├── install.sh                    # 一键安装
 ├── start.sh / stop.sh            # 启停脚本
