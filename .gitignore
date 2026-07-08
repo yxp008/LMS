@@ -43,6 +43,10 @@ Thumbs.db
 # 运行时配置（首次启动自动生成）
 collector/collection_prefs.json
 
+# 运行时配置（首次启动自动生成，含本地路径）
+collector/collection_prefs.json
+collector/vector_wsl.toml
+
 # 凭据
 frontend/smtp_config.json
 
