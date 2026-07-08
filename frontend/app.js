@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDashboard();
     initFilterListeners();
     initDatePickers();
-    // 服务端显示新增按钮，客户端隐藏
     if (!isCollectorMode) {
         const btn = document.getElementById('btn-add-collector');
         if (btn) btn.style.display = 'inline-block';
@@ -27,6 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         const label = document.getElementById('collector-nav-label');
         if (label) label.textContent = '采集器';
+        // 显示本机地址
+        const infoBox = document.getElementById('collector-self-info');
+        if (infoBox) infoBox.style.display = 'block';
+        const addrSpan = document.getElementById('self-address');
+        if (addrSpan) {
+            const host = window.location.hostname;
+            addrSpan.textContent = host + ':1514';
+        }
     }
 });
 

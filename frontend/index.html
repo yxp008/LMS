@@ -177,6 +177,10 @@
 
             <!-- 采集器页面 -->
             <div id="page-collectors" class="page">
+                <div id="collector-self-info" style="display:none;margin-bottom:12px;padding:10px 16px;background:rgba(29,161,242,0.08);border:1px solid var(--border-color);border-radius:var(--radius);font-size:13px;color:var(--text-secondary)">
+                    本机日志接收地址：<span id="self-address" style="color:var(--accent);font-weight:600;margin-left:8px;cursor:pointer" onclick="navigator.clipboard.writeText(this.textContent)"></span>
+                    <span style="margin-left:8px;font-size:11px">（点击复制，填入服务端采集器监控的新增弹窗）</span>
+                </div>
                 <div style="margin-bottom:16px;display:flex;gap:10px">
                     <button class="btn btn-primary" id="btn-add-collector" onclick="showAddCollector()" style="display:none">+ 新增日志采集器</button>
                 </div>
