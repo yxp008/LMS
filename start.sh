@@ -88,22 +88,38 @@ if curl -s "http://localhost:$FRONTEND_PORT/api/stats" > /dev/null 2>&1; then
 else
     fuser -k $FRONTEND_PORT/tcp 2>/dev/null
     sleep 1
-    nohup $PROJECT_ROOT/frontend/server > /tmp/lms_frontend.log 2>&1 &
+    nohup $PROJECT_ROOT/frontend/server > $PROJECT_ROOT/logs/frontend.log 2>&1 &
     disown
     for i in 1 2 3 4 5; do
         sleep 2
         if curl -s "http://localhost:$FRONTEND_PORT/api/stats" > /dev/null 2>&1; then
-            echo "  -> 前端服务启动成功"
+            echo "  -> 服务端启动成功（日志管理 :8080）"
             break
         fi
     done
     if ! curl -s "http://localhost:$FRONTEND_PORT/api/stats" > /dev/null 2>&1; then
-        echo "  -> 前端服务启动失败"
+        echo "  -> 服务端启动失败"
         exit 1
     fi
 fi
 
-# 5. 确认 Vector 已由 Go server 启动
+# 独立采集器管理服务
+echo ""
+echo "  启动采集器管理服务（:8081）..."
+if curl -s "http://localhost:8081/api/collection-prefs" > /dev/null 2>&1; then
+    echo "  -> 采集器管理已在运行"
+else
+    nohup $PROJECT_ROOT/frontend/server -collector > $PROJECT_ROOT/logs/collector.log 2>&1 &
+    disown
+    sleep 2
+    if curl -s "http://localhost:8081/api/collection-prefs" > /dev/null 2>&1; then
+        echo "  -> 采集器管理启动成功（:8081）"
+    else
+        echo "  -> 采集器管理启动失败"
+    fi
+fi
+
+# 5. 确认 Vector 已由采集器服务启动
 echo ""
 echo "[5/5] 确认 Vector..."
 sleep 2
@@ -117,8 +133,8 @@ echo ""
 echo "=========================================="
 echo "  系统已启动!"
 echo "  前端界面: http://localhost:$FRONTEND_PORT"
-echo "  ClickHouse: $CH_HTTP"
-echo "  Kafka: localhost:9092"
-echo "  Vector: syslog端口 1514 (UDP/TCP)"
-echo "  告警检查器: 后台运行中"
+echo "  服务端 (日志管理):  http://localhost:8080"
+echo "  采集器 (管理):      http://localhost:8081"
+echo "  ClickHouse:         $CH_HTTP"
+echo "  Kafka:              localhost:9092"
 echo "=========================================="

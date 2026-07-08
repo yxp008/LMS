@@ -34,11 +34,12 @@ if pgrep -f "kafka.Kafka" > /dev/null 2>&1; then
 fi
 echo "  -> Kafka 已停止"
 
-# 4. 停止前端服务（含告警goroutine）
+# 4. 停止前端服务
 echo ""
 echo "[4/5] 停止前端服务..."
 pkill -f "frontend/server" 2>/dev/null
 fuser -k 8080/tcp 2>/dev/null
+fuser -k 8081/tcp 2>/dev/null
 sleep 1
 echo "  -> 前端服务已停止"
 
