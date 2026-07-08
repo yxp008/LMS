@@ -682,10 +682,12 @@ async function loadCollectors() {
         const actionBtn = isCollectorMode
             ? `<button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button>`
             : `<span class="level-badge ${enabled ? 'level-1' : 'level-3'}">${enabled ? '已启用' : '已停用'}</span>`;
+        const address = c.Address || c.Collector_Address || '-';
         return `
         <tr>
             <td>${escapeHtml(c.Collector_ID)}</td>
             <td>${escapeHtml(c.Name)}</td>
+            <td>${escapeHtml(address)}</td>
             <td>${sourceTypes || '<span style="color:var(--text-secondary)">-</span>'}</td>
             <td><span class="level-badge ${enabled ? 'level-1' : 'level-3'}">${enabled ? '已启用' : '已停用'}</span></td>
             <td>${actionBtn}</td>
