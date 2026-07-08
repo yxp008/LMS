@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -490,7 +491,48 @@ func staticHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // ============ 路由 ============
-func router(w http.ResponseWriter, r *http.Request) {
+// ============ 采集器路由（8081） ============
+func collectorRouter(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if r.Method == "OPTIONS" { w.WriteHeader(200); return }
+
+	path := strings.Split(r.URL.Path, "?")[0]
+	if r.Method == "GET" {
+		switch path {
+		case "/api/collection-prefs": apiCollectionPrefsGet(w, r)
+		case "/api/collectors": apiCollectors(w, r)
+		default: staticHandler(w, r)
+		}
+		return
+	}
+	if r.Method == "POST" {
+		switch path {
+		case "/api/collection-prefs": apiCollectionPrefsPost(w, r)
+		case "/api/collectors": apiCollectorsPost(w, r)
+		default: http.NotFound(w, r)
+		}
+		return
+	}
+	staticHandler(w, r)
+}
+
+func apiCollectorsReadonly(w http.ResponseWriter, r *http.Request) {
+	results := cq(fmt.Sprintf("SELECT * FROM %s.LMS_Collectors ORDER BY Collector_ID", database))
+	prefs := loadPrefs()
+	for _, r := range results {
+		r["Source_Types"] = []map[string]interface{}{
+			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.LinuxSystemLogs},
+			{"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.NetworkDeviceLogs},
+			{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": prefs.ElkFileLogs},
+		}
+	}
+	jsonResp(w, 200, results)
+}
+
+// ============ 服务端路由（8080） ============
+func serverRouter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -604,6 +646,21 @@ func alertChecker() {
 
 // ============ 主程序 ============
 func main() {
+	collectorMode := flag.Bool("collector", false, "采集器管理模式")
+	flag.Parse()
+
+	if *collectorMode {
+		listenAddr = ":8081"
+		prefs := loadPrefs()
+		anyEnabled := prefs.LinuxSystemLogs || prefs.NetworkDeviceLogs || prefs.ElkFileLogs
+		if anyEnabled {
+			generateVectorConfig(prefs)
+			startVector()
+		}
+		log.Printf("[COLLECTOR] 采集器管理: http://localhost%s", listenAddr)
+		log.Fatal(http.ListenAndServe(listenAddr, http.HandlerFunc(collectorRouter)))
+	}
+
 	prefs := loadPrefs()
 	anyEnabled := prefs.LinuxSystemLogs || prefs.NetworkDeviceLogs || prefs.ElkFileLogs
 	if anyEnabled {
@@ -611,10 +668,9 @@ func main() {
 		startVector()
 	} else { log.Println("[SERVER] 所有采集类型已禁用，Vector 不启动") }
 
-	// 启动告警检查器
 	go alertChecker()
 
-	log.Printf("LMS 前端服务已启动: http://localhost%s", listenAddr)
+	log.Printf("[SERVER] 日志管理: http://localhost%s", listenAddr)
 	log.Printf("ClickHouse: %s", chURL)
-	log.Fatal(http.ListenAndServe(listenAddr, http.HandlerFunc(router)))
+	log.Fatal(http.ListenAndServe(listenAddr, http.HandlerFunc(serverRouter)))
 }
