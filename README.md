@@ -25,52 +25,111 @@
 
 五层同级，采集层/处理层/查询层优先使用 Go 以保证效率。
 
-## 环境准备
+## 分步安装指南
 
 ### 1. 安装 ClickHouse
 
 ```bash
-cd data/clickhouse_data
+cd LMS/data/clickhouse_data
 curl https://clickhouse.com/ | sh
 ```
 
-### 2. 安装 Kafka
-
-下载 Kafka 3.6 解压到 `~/kafka/`，配置 `config/kraft/server.properties` 中 `log.dirs` 指向持久目录，然后格式化存储：
+根据热温冷配置文件启动服务：
 
 ```bash
-~/kafka/bin/kafka-storage.sh format -t $(uuidgen) -c ~/kafka/config/kraft/server.properties
+./clickhouse server --config-file preprocessed_configs/config_minimal.xml
 ```
 
-### 3. 安装 Vector
+另开一个终端，启动客户端：
 
 ```bash
-curl --proto '=https' -sSf https://sh.vector.dev | bash
+./clickhouse client
 ```
 
-### 4. 初始化数据库
+在客户端中执行：
 
-```bash
-# 启动 ClickHouse
-cd data/clickhouse_data && ./clickhouse server --daemon
-
-# 创建数据库和表
-clickhouse-client --query "CREATE DATABASE IF NOT EXISTS LMS"
-clickhouse-client --database LMS --multiquery < database_design/sql/LMS_Logs.sql
-clickhouse-client --database LMS --multiquery < database_design/sql/LMS_Collectors.sql
-clickhouse-client --database LMS --multiquery < database_design/sql/LMS_AlertRules.sql
-clickhouse-client --database LMS --multiquery < database_design/sql/LMS_AlertTriggers.sql
+```sql
+SHOW DATABASES;
+CREATE DATABASE IF NOT EXISTS LMS;
+USE LMS;
 ```
 
-> **注意**：`LMS_Logs` 表使用了 `storage_policy = 'hot_warm_cold'` 三级存储策略，需在 ClickHouse 配置中定义。`start.sh` 启动时自动从 `config_minimal.xml` 生成配置并替换路径占位符，无需手动配置。需提前创建温/冷存储目录：
-> ```bash
-> mkdir -p data/clickhouse_data/warm data/clickhouse_data/cold
-> ```
+打开 `database_design/sql/` 下的 SQL 文件，依次复制内容建表：
 
-### 一键安装
+```sql
+-- 复制 LMS_Logs.sql 内容执行
+-- 复制 LMS_Collectors.sql 内容执行
+-- 复制 LMS_AlertRules.sql 内容执行
+-- 复制 LMS_AlertTriggers.sql 内容执行
+```
+
+验证表是否建立：
+
+```sql
+SHOW TABLES;
+```
+
+插入采集器默认记录：
+
+```sql
+INSERT INTO LMS.LMS_Collectors VALUES ('C001','Vector-WSL','1');
+```
+
+### 2. 下载 Vector
 
 ```bash
-bash install.sh
+curl --proto '=https' --tlsv1.2 -sSfL https://sh.vector.dev | bash
+export PATH="$HOME/.vector/bin:$PATH"
+```
+
+创建 Vector 运行时目录：
+
+```bash
+mkdir -p collector/vector_data
+```
+
+### 3. 下载 Kafka
+
+```bash
+wget https://mirrors.aliyun.com/apache/kafka/3.9.2/kafka_2.13-3.9.2.tgz
+# 解压后将文件夹放到用户根目录下 ~/kafka/
+```
+
+生成集群 ID 并格式化存储目录：
+
+```bash
+cd ~/kafka
+bin/kafka-storage.sh random-uuid        # 生成 UUID
+bin/kafka-storage.sh format -t <你的UUID> -c config/kraft/server.properties
+```
+
+启动 Kafka：
+
+```bash
+~/kafka/bin/kafka-server-start.sh config/kraft/server.properties
+```
+
+### 4. 启动处理层
+
+```bash
+processor/processor &
+```
+
+### 5. 启动查询层 + 可视化层
+
+```bash
+frontend/server &
+```
+
+Go server 启动时自动：生成 Vector 配置 → 启动 Vector → 启动告警 goroutine。
+
+访问 `http://localhost:8080`。
+
+### 一键安装（可选）
+
+```bash
+bash install.sh   # 编译 Go + 创建目录
+bash start.sh     # 启动全部服务
 ```
 
 ## 快速开始
