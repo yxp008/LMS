@@ -3,6 +3,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR"
+export LMS_PROJECT_ROOT="$PROJECT_ROOT"
 CH_BIN="$PROJECT_ROOT/data/clickhouse_data/clickhouse"
 CH_CFG="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config.xml"
 CH_CFG_SAFE="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config_minimal.xml"

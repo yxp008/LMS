@@ -35,16 +35,21 @@ var (
 )
 
 func getProjectRoot() string {
+	// 环境变量优先
+	if root := os.Getenv("LMS_PROJECT_ROOT"); root != "" {
+		return root
+	}
+	// 编译后二进制在 frontend/ 下，父目录即项目根
 	exe, _ := os.Executable()
-	d := filepath.Dir(exe)
-	// 检查是否是 go run 模式
+	d := filepath.Dir(filepath.Dir(exe))
 	if _, err := os.Stat(filepath.Join(d, "frontend", "server.go")); err == nil {
 		return d
 	}
-	// 编译后二进制在 frontend/ 下
-	if _, err := os.Stat(filepath.Join(filepath.Dir(d), "frontend", "server.go")); err == nil {
-		return filepath.Dir(d)
+	// 直接找二进制所在目录的父目录
+	if _, err := os.Stat(filepath.Join(filepath.Dir(exe), "..", "frontend", "server.go")); err == nil {
+		return filepath.Clean(filepath.Join(filepath.Dir(exe), ".."))
 	}
+	// 最后回退到当前工作目录
 	cwd, _ := os.Getwd()
 	return cwd
 }
@@ -59,8 +64,8 @@ type CollectionPrefs struct {
 
 func loadPrefs() CollectionPrefs {
 	prefs := CollectionPrefs{
-		LinuxSystemLogs: true, NetworkDeviceLogs: true,
-		ElkFileLogs: false,
+		LinuxSystemLogs: false, NetworkDeviceLogs: false,
+		ElkFileLogs: true,
 		ElkFilePath: filepath.Join(projectRoot, "collector/elk_logs/incoming/"),
 	}
 	data, err := os.ReadFile(prefsFile)
