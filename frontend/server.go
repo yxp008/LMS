@@ -339,7 +339,14 @@ func apiCollectorsPost(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&data)
 	action, _ := data["action"].(string)
-	if action == "update_status" {
+	if action == "create" {
+		cid, _ := data["Collector_ID"].(string)
+		name, _ := data["Name"].(string)
+		addr, _ := data["Address"].(string)
+		if cid == "" || name == "" { jsonResp(w, 400, map[string]string{"error": "missing fields"}); return }
+		cq(fmt.Sprintf("INSERT INTO %s.LMS_Collectors VALUES ('%s','%s','1','%s')", database, cid, name, addr))
+		jsonResp(w, 200, map[string]interface{}{"ok": true, "Collector_ID": cid})
+	} else if action == "update_status" {
 		cid, _ := data["Collector_ID"].(string)
 		status, _ := data["Status"].(string)
 		if cid == "" { jsonResp(w, 400, map[string]string{"error": "missing Collector_ID"}); return }

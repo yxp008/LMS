@@ -18,6 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDashboard();
     initFilterListeners();
     initDatePickers();
+    // 服务端显示新增按钮，客户端隐藏
+    if (!isCollectorMode) {
+        const btn = document.getElementById('btn-add-collector');
+        if (btn) btn.style.display = 'inline-block';
+        const label = document.getElementById('collector-nav-label');
+        if (label) label.textContent = '采集器监控';
+    } else {
+        const label = document.getElementById('collector-nav-label');
+        if (label) label.textContent = '采集器';
+    }
 });
 
 function initNavigation() {
@@ -662,6 +672,22 @@ function renderSourcePie(data) {
 const isCollectorMode = window.location.port === '8081';
 
 // ========== Collectors ==========
+function showAddCollector() {
+    document.getElementById('add-collector-modal').classList.remove('hidden');
+}
+
+async function addCollector() {
+    const name = document.getElementById('new-collector-name').value.trim();
+    const addr = document.getElementById('new-collector-addr').value.trim();
+    if (!name) return alert('请输入采集器名称');
+    const id = 'C' + String(Date.now()).slice(-6);
+    const result = await postAPI('/api/collectors', {
+        action: 'create', Collector_ID: id, Name: name, Address: addr
+    });
+    document.getElementById('add-collector-modal').classList.add('hidden');
+    if (result && result.ok) { document.getElementById('new-collector-name').value = ''; document.getElementById('new-collector-addr').value = ''; loadCollectors(); }
+}
+
 async function loadCollectors() {
     const data = await fetchAPI('/api/collectors');
     const tbody = document.getElementById('collectors-table-body');

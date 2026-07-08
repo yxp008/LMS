@@ -21,7 +21,7 @@
                 </li>
                 <li class="nav-item" data-page="collectors">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
-                    <span>采集器</span>
+                    <span id="collector-nav-label">采集器监控</span>
                 </li>
                 <li class="nav-item" data-page="alerts">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
@@ -177,6 +177,9 @@
 
             <!-- 采集器页面 -->
             <div id="page-collectors" class="page">
+                <div style="margin-bottom:16px;display:flex;gap:10px">
+                    <button class="btn btn-primary" id="btn-add-collector" onclick="showAddCollector()" style="display:none">+ 新增日志采集器</button>
+                </div>
                 <div class="table-container">
                     <table class="data-table">
                         <thead>
@@ -382,6 +385,24 @@
         <div class="modal-content" style="max-width:300px;text-align:center;padding:30px">
             <div class="loading-spinner"></div>
             <p id="collector-loading-text" style="margin-top:12px;color:var(--text-primary)">处理中...</p>
+        </div>
+    </div>
+
+    <div id="add-collector-modal" class="modal hidden">
+        <div class="modal-content" style="max-width:420px;padding:24px">
+            <h3 style="margin-bottom:16px">新增日志采集器</h3>
+            <div style="margin-bottom:12px">
+                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">采集器名称</label>
+                <input type="text" id="new-collector-name" placeholder="例：客户端A-采集器" style="width:100%;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px;box-sizing:border-box">
+            </div>
+            <div style="margin-bottom:16px">
+                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">接收地址（IP:端口）</label>
+                <input type="text" id="new-collector-addr" placeholder="例：192.168.1.100:1514" style="width:100%;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px;box-sizing:border-box">
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end">
+                <button class="btn" onclick="document.getElementById('add-collector-modal').classList.add('hidden')">取消</button>
+                <button class="btn btn-primary" onclick="addCollector()">确认新增</button>
+            </div>
         </div>
     </div>
 
