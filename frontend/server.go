@@ -346,6 +346,13 @@ func apiCollectorsPost(w http.ResponseWriter, r *http.Request) {
 		if cid == "" || name == "" { jsonResp(w, 400, map[string]string{"error": "missing fields"}); return }
 		cq(fmt.Sprintf("INSERT INTO %s.LMS_Collectors VALUES ('%s','%s','1','%s')", database, cid, name, addr))
 		jsonResp(w, 200, map[string]interface{}{"ok": true, "Collector_ID": cid})
+	} else if action == "delete" {
+		cid, _ := data["Collector_ID"].(string)
+		if cid == "" { jsonResp(w, 400, map[string]string{"error": "missing Collector_ID"}); return }
+		cq(fmt.Sprintf("ALTER TABLE %s.LMS_Collectors UPDATE Status = '0' WHERE Collector_ID = '%s'", database, cid))
+		cq(fmt.Sprintf("DELETE FROM %s.LMS_Collectors WHERE Collector_ID = '%s'", database, cid))
+		log.Printf("[SERVER] 采集器 %s 已断开并删除", cid)
+		jsonResp(w, 200, map[string]bool{"ok": true})
 	} else if action == "update_status" {
 		cid, _ := data["Collector_ID"].(string)
 		status, _ := data["Status"].(string)

@@ -714,7 +714,7 @@ async function loadCollectors() {
         }).join(' ');
         const actionBtn = isCollectorMode
             ? `<button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button>`
-            : `<span class="level-badge ${enabled ? 'level-1' : 'level-3'}">${enabled ? '已启用' : '已停用'}</span>`;
+            : `<button class="btn btn-sm" style="background:rgba(231,76,60,0.15);color:var(--error);border-color:rgba(231,76,60,0.3)" onclick="disconnectCollector('${escapeHtml(c.Collector_ID)}')">断开</button>`;
         const address = c.Address || c.Collector_Address || '-';
         return `
         <tr>
@@ -748,6 +748,13 @@ function toggleSourceType(type, enable) {
                 loadCollectors();
             }, 800);
         });
+    });
+}
+
+function disconnectCollector(id) {
+    if (!confirm('确定断开采集器 ' + id + ' 的连接并删除记录？')) return;
+    postAPI('/api/collectors', { action: 'delete', Collector_ID: id }).then(result => {
+        if (result && result.ok) loadCollectors();
     });
 }
 
