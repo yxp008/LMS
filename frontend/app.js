@@ -659,6 +659,8 @@ function renderSourcePie(data) {
     });
 }
 
+const isCollectorMode = window.location.port === '8081';
+
 // ========== Collectors ==========
 async function loadCollectors() {
     const data = await fetchAPI('/api/collectors');
@@ -671,16 +673,22 @@ async function loadCollectors() {
 
     tbody.innerHTML = data.map(c => {
         const enabled = c.Status === '1';
-        const sourceTypes = (c.Source_Types || []).map(s =>
-            `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}" onclick="toggleSourceType('${escapeHtml(s.key)}', ${!s.enabled})" title="点击${s.enabled ? '停用' : '启用'}${escapeHtml(s.name)}">${escapeHtml(s.name)}</span>`
-        ).join(' ');
+        const sourceTypes = (c.Source_Types || []).map(s => {
+            if (isCollectorMode) {
+                return `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}" onclick="toggleSourceType('${escapeHtml(s.key)}', ${!s.enabled})" title="点击${s.enabled ? '停用' : '启用'}${escapeHtml(s.name)}">${escapeHtml(s.name)}</span>`;
+            }
+            return `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}">${escapeHtml(s.name)}</span>`;
+        }).join(' ');
+        const actionBtn = isCollectorMode
+            ? `<button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button>`
+            : `<span class="level-badge ${enabled ? 'level-1' : 'level-3'}">${enabled ? '已启用' : '已停用'}</span>`;
         return `
         <tr>
             <td>${escapeHtml(c.Collector_ID)}</td>
             <td>${escapeHtml(c.Name)}</td>
             <td>${sourceTypes || '<span style="color:var(--text-secondary)">-</span>'}</td>
             <td><span class="level-badge ${enabled ? 'level-1' : 'level-3'}">${enabled ? '已启用' : '已停用'}</span></td>
-            <td><button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button></td>
+            <td>${actionBtn}</td>
         </tr>`;
     }).join('');
 }
