@@ -7,7 +7,7 @@ echo "=========================================="
 
 # 1. 停止 Vector 采集器
 echo ""
-echo "[1/6] 停止 Vector..."
+echo "[1/5] 停止 Vector..."
 pkill -f "vector --config" 2>/dev/null
 sleep 1
 if pgrep -f "vector --config" > /dev/null 2>&1; then
@@ -18,14 +18,14 @@ echo "  -> Vector 已停止"
 
 # 2. 停止 Processor
 echo ""
-echo "[2/6] 停止 Processor..."
+echo "[2/5] 停止 Processor..."
 pkill -f "processor/processor" 2>/dev/null
 sleep 1
 echo "  -> Processor 已停止"
 
 # 3. 停止 Kafka
 echo ""
-echo "[3/6] 停止 Kafka..."
+echo "[3/5] 停止 Kafka..."
 pkill -f "kafka.Kafka" 2>/dev/null
 sleep 2
 if pgrep -f "kafka.Kafka" > /dev/null 2>&1; then
@@ -34,24 +34,17 @@ if pgrep -f "kafka.Kafka" > /dev/null 2>&1; then
 fi
 echo "  -> Kafka 已停止"
 
-# 4. 停止前端服务
+# 4. 停止前端服务（含告警goroutine）
 echo ""
-echo "[4/6] 停止前端服务..."
+echo "[4/5] 停止前端服务..."
 pkill -f "frontend/server" 2>/dev/null
 fuser -k 8080/tcp 2>/dev/null
 sleep 1
 echo "  -> 前端服务已停止"
 
-# 4. 停止告警检查器
-echo ""
-echo "[5/6] 停止告警检查器..."
-pkill -f "alert_checker.py" 2>/dev/null
-sleep 1
-echo "  -> 告警检查器已停止"
-
 # 5. 停止 ClickHouse
 echo ""
-echo "[6/6] 停止 ClickHouse..."
+echo "[5/5] 停止 ClickHouse..."
 pkill -f "clickhouse server" 2>/dev/null
 pkill -f "clickhouse-watchdog" 2>/dev/null
 sleep 3
