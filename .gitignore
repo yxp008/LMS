@@ -29,12 +29,6 @@ collector/elk_logs/.processed.json
 collector/elk_logs/.reader.lock
 collector/vector_wsl.toml
 
-# 临时文件
-*.log
-*.err
-__pycache__/
-*.pyc
-
 # Go module
 processor/go.sum
 collector/elk_logs/go.sum
