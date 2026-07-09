@@ -419,7 +419,11 @@ func apiCollectionPrefsPost(w http.ResponseWriter, r *http.Request) {
 			if cid == "" { jsonResp(w, 400, map[string]string{"error": "missing collector_id"}); return }
 			os.Remove(collectorStateFile)
 			stopVector()
-			log.Printf("[COLLECTOR] 采集器 %s 已删除", cid)
+			serverURL := os.Getenv("LMS_SERVER_URL")
+			if serverURL == "" { serverURL = "http://localhost:8080" }
+			payload, _ := json.Marshal(map[string]interface{}{"action": "delete", "Collector_ID": cid})
+			http.Post(serverURL+"/api/collectors", "application/json", strings.NewReader(string(payload)))
+			log.Printf("[COLLECTOR] 采集器 %s 已删除并通知服务端 %s", cid, serverURL)
 			jsonResp(w, 200, map[string]bool{"ok": true})
 			return
 		}
