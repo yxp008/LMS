@@ -818,6 +818,21 @@ function saveCollectorEdit() {
     });
 }
 
+function showDeleteCollector() {
+    document.getElementById('delete-collector-id').value = '';
+    document.getElementById('delete-collector-modal').classList.remove('hidden');
+}
+
+function deleteCollector() {
+    var id = document.getElementById('delete-collector-id').value.trim();
+    if (!id) return alert('请输入采集器ID');
+    if (!confirm('确定删除采集器 ' + id + ' 吗？此操作不可恢复。')) return;
+    postAPI('/api/collection-prefs', { action: 'delete_collector', collector_id: id }).then(function(r) {
+        document.getElementById('delete-collector-modal').classList.add('hidden');
+        if (r && r.ok) { loadCollectors(); alert('采集器 ' + id + ' 已删除'); }
+    });
+}
+
 function updateKafkaAddr() { editCollectorTransAddr(); }
 
 function toggleCollector(id, newStatus) {

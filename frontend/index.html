@@ -189,6 +189,7 @@
             <div id="page-collectors" class="page">
                 <div id="collector-self-info" class="collector-toolbar" style="display:none;margin-bottom:12px">
                     <button class="btn btn-primary" id="btn-reg-collector" onclick="showRegCollector()">注册采集器</button>
+                    <button class="btn" style="background:rgba(231,76,60,0.12);color:var(--error);border-color:rgba(231,76,60,0.3);margin-left:8px" onclick="showDeleteCollector()">删除采集器</button>
                 </div>
                 <div style="margin-bottom:16px;display:flex;gap:10px">
                     <button class="btn btn-primary" id="btn-add-collector" onclick="showAddCollector()" style="display:none">+ 新增日志采集器</button>
@@ -260,6 +261,20 @@
             <div style="display:flex;gap:10px;justify-content:flex-end">
                 <button class="btn" onclick="document.getElementById('deepseek-modal').classList.add('hidden')">取消</button>
                 <button class="btn btn-primary" onclick="saveDeepSeekConfig()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-collector-modal" class="modal hidden">
+        <div class="modal-content" style="max-width:360px;padding:24px">
+            <h3 style="margin-bottom:16px">删除采集器</h3>
+            <div style="margin-bottom:16px">
+                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">采集器 ID</label>
+                <input type="text" id="delete-collector-id" placeholder="输入要删除的采集器ID" style="width:100%;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px;box-sizing:border-box">
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end">
+                <button class="btn" onclick="document.getElementById('delete-collector-modal').classList.add('hidden')">取消</button>
+                <button class="btn" style="background:rgba(231,76,60,0.15);color:var(--error);border-color:rgba(231,76,60,0.3)" onclick="deleteCollector()">确认删除</button>
             </div>
         </div>
     </div>
