@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"net/smtp"
 	"os"
@@ -388,6 +389,17 @@ func apiCollectionPrefsPost(w http.ResponseWriter, r *http.Request) {
 	if v, ok := data["elk_file_logs"].(bool); ok { prefs.ElkFileLogs = v }
 	if v, ok := data["elk_file_path"].(string); ok && v != "" { prefs.ElkFilePath = v }
 	// Kafka broker 地址更新
+	if v, ok := data["test_kafka"].(string); ok && v != "" {
+		// 测试Kafka连接
+		conn, err := net.DialTimeout("tcp", v, 3*time.Second)
+		if err != nil {
+			jsonResp(w, 200, map[string]interface{}{"ok": false, "error": err.Error()})
+		} else {
+			conn.Close()
+			jsonResp(w, 200, map[string]interface{}{"ok": true})
+		}
+		return
+	}
 	if v, ok := data["kafka_broker"].(string); ok && v != "" {
 		os.MkdirAll(filepath.Dir(prefsFile), 0755)
 		// 保存到 prefs 文件（扩展字段）

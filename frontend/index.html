@@ -178,9 +178,8 @@
             <!-- 采集器页面 -->
             <div id="page-collectors" class="page">
                 <div id="collector-self-info" style="display:none;margin-bottom:12px;padding:10px 16px;background:rgba(29,161,242,0.08);border:1px solid var(--border-color);border-radius:var(--radius);font-size:13px;color:var(--text-secondary)">
-                    Kafka 发送地址：<input type="text" id="collector-kafka-addr" value="localhost:9092" style="width:180px;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:3px 8px;border-radius:4px;font-size:12px;margin:0 8px">
-                    <button class="btn btn-sm" onclick="updateKafkaAddr()">保存</button>
-                    <span style="margin-left:8px;font-size:11px">（指向服务端 Kafka 的 IP:端口）</span>
+                    传输地址：<span id="self-addr-display" style="color:var(--accent);font-weight:600;margin:0 8px">localhost:9092</span>
+                    <button class="btn btn-sm" onclick="editCollectorTransAddr()">编辑传输地址</button>
                 </div>
                 <div style="margin-bottom:16px;display:flex;gap:10px">
                     <button class="btn btn-primary" id="btn-add-collector" onclick="showAddCollector()" style="display:none">+ 新增日志采集器</button>
@@ -191,10 +190,10 @@
                             <tr>
                                 <th>采集器ID</th>
                                 <th>采集器名称</th>
-                                <th>接收地址</th>
+                                <th>传输地址</th>
                                 <th>采集源</th>
                                 <th style="width:100px">状态</th>
-                                <th style="width:80px">操作</th>
+                                <th style="width:130px">操作</th>
                             </tr>
                         </thead>
                         <tbody id="collectors-table-body">
@@ -390,6 +389,28 @@
         <div class="modal-content" style="max-width:300px;text-align:center;padding:30px">
             <div class="loading-spinner"></div>
             <p id="collector-loading-text" style="margin-top:12px;color:var(--text-primary)">处理中...</p>
+        </div>
+    </div>
+
+    <div id="edit-collector-modal" class="modal hidden">
+        <div class="modal-content" style="max-width:420px;padding:24px">
+            <h3 style="margin-bottom:16px">编辑采集器</h3>
+            <div style="margin-bottom:12px">
+                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">传输地址（Kafka broker）</label>
+                <div style="display:flex;gap:8px">
+                    <input type="text" id="edit-trans-addr" style="flex:1;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px">
+                    <button class="btn btn-sm" onclick="testTransAddr()" style="white-space:nowrap">测试连接</button>
+                </div>
+                <span id="test-result" style="font-size:11px;margin-top:4px;display:block"></span>
+            </div>
+            <div style="margin-bottom:16px">
+                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:8px">采集源</label>
+                <div id="edit-source-types" style="display:flex;gap:12px"></div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end">
+                <button class="btn" onclick="document.getElementById('edit-collector-modal').classList.add('hidden')">取消</button>
+                <button class="btn btn-primary" onclick="saveCollectorEdit()">保存</button>
+            </div>
         </div>
     </div>
 

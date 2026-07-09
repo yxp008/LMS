@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDashboard();
     initFilterListeners();
     initDatePickers();
+	// 初始化编辑弹窗的采集源复选框
+	var es = document.getElementById("edit-source-types");
+	if(es){["linux_system_logs","network_device_logs","elk_file_logs"].forEach(function(k,i){var n=["Linux系统","网络设备","ELK文件"];es.innerHTML+="<label style=\"font-size:12px;cursor:pointer;margin-right:10px\"><input type=\"checkbox\" data-key=\""+k+"\"> "+n[i]+"</label>"})}
     if (!isCollectorMode) {
         const label = document.getElementById('collector-nav-label');
         if (label) label.textContent = '采集器监控';
@@ -705,8 +708,8 @@ async function loadCollectors() {
             }
             return `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}">${escapeHtml(s.name)}</span>`;
         }).join(' ');
-        const actionBtn = isCollectorMode
-            ? `<button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button>`
+        const actionBtns = isCollectorMode
+            ? `<button class="btn btn-sm" onclick='editCollectorTransAddr();(function(){var s="";(' + JSON.stringify(c.Source_Types || []) + ').forEach(function(t){var cb=document.querySelector("#edit-source-types input[data-key=\\\""+t.key+"\\\"]");if(cb)cb.checked=t.enabled});})()' style="margin-right:4px">编辑</button><button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button>`
             : `<button class="btn btn-sm" style="background:rgba(231,76,60,0.15);color:var(--error);border-color:rgba(231,76,60,0.3)" onclick="disconnectCollector('${escapeHtml(c.Collector_ID)}')">断开</button>`;
         const address = c.Address || c.Collector_Address || '-';
         return `
@@ -744,14 +747,40 @@ function toggleSourceType(type, enable) {
     });
 }
 
-function updateKafkaAddr() {
-    const addr = document.getElementById('collector-kafka-addr').value.trim();
+function editCollectorTransAddr() {
+    document.getElementById('edit-trans-addr').value = document.getElementById('self-addr-display').textContent;
+    document.getElementById('edit-collector-modal').classList.remove('hidden');
+}
+
+function testTransAddr() {
+    const addr = document.getElementById('edit-trans-addr').value.trim();
     if (!addr) return;
-    postAPI('/api/collection-prefs', { kafka_broker: addr }).then(r => {
-        if (r && r.ok) alert('采集器发送目标已更新为: ' + addr + '\nVector 已重启，采集器已重新注册到服务端');
-        else alert('更新失败');
+    const res = document.getElementById('test-result');
+    res.style.color = '#f39c12'; res.textContent = '测试中...';
+    postAPI('/api/collection-prefs', { test_kafka: addr }).then(r => {
+        if (r && r.ok) { res.style.color = '#2ecc71'; res.textContent = '✓ 连接成功'; }
+        else { res.style.color = '#e74c3c'; res.textContent = '✗ ' + (r ? r.error : '连接失败'); }
     });
 }
+
+function saveCollectorEdit() {
+    const addr = document.getElementById('edit-trans-addr').value.trim();
+    if (!addr) return;
+    const prefs = {};
+    document.querySelectorAll('#edit-source-types input').forEach(cb => {
+        prefs[cb.dataset.key] = cb.checked;
+    });
+    prefs.kafka_broker = addr;
+    postAPI('/api/collection-prefs', prefs).then(r => {
+        if (r && r.ok) {
+            document.getElementById('self-addr-display').textContent = addr;
+            document.getElementById('edit-collector-modal').classList.add('hidden');
+            loadCollectors();
+        }
+    });
+}
+
+function updateKafkaAddr() { editCollectorTransAddr(); }
 
 function disconnectCollector(id) {
     if (!confirm('确定断开采集器 ' + id + ' 的连接并删除记录？')) return;
