@@ -19,8 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initFilterListeners();
     initDatePickers();
     if (!isCollectorMode) {
-        const btn = document.getElementById('btn-add-collector');
-        if (btn) btn.style.display = 'inline-block';
         const label = document.getElementById('collector-nav-label');
         if (label) label.textContent = '采集器监控';
     } else {
@@ -29,11 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 显示本机地址
         const infoBox = document.getElementById('collector-self-info');
         if (infoBox) infoBox.style.display = 'block';
-        const addrSpan = document.getElementById('self-address');
-        if (addrSpan) {
-            const host = window.location.hostname;
-            addrSpan.textContent = host + ':1514';
-        }
     }
 });
 
@@ -748,6 +741,16 @@ function toggleSourceType(type, enable) {
                 loadCollectors();
             }, 800);
         });
+    });
+}
+
+function updateKafkaAddr() {
+    const addr = document.getElementById('collector-kafka-addr').value.trim();
+    if (!addr) return;
+    fetchAPI('/api/collection-prefs').then(prefs => {
+        if (!prefs) return;
+        prefs.kafka_addr = addr;
+        postAPI('/api/collection-prefs', prefs).then(() => alert('Kafka 地址已保存: ' + addr));
     });
 }
 

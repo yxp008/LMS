@@ -568,13 +568,17 @@ func collectorRouter(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiCollectorsReadonly(w http.ResponseWriter, r *http.Request) {
+	// 返回服务端已注册的采集器（客户端启动时主动注册）
 	results := cq(fmt.Sprintf("SELECT * FROM %s.LMS_Collectors ORDER BY Collector_ID", database))
+	if results == nil { results = make([]map[string]interface{}, 0) }
 	prefs := loadPrefs()
 	for _, r := range results {
-		r["Source_Types"] = []map[string]interface{}{
-			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.LinuxSystemLogs},
-			{"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.NetworkDeviceLogs},
-			{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": prefs.ElkFileLogs},
+		if r["Source_Types"] == nil {
+			r["Source_Types"] = []map[string]interface{}{
+				{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.LinuxSystemLogs},
+				{"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.NetworkDeviceLogs},
+				{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": prefs.ElkFileLogs},
+			}
 		}
 	}
 	jsonResp(w, 200, results)
@@ -598,7 +602,7 @@ func serverRouter(w http.ResponseWriter, r *http.Request) {
 		case "/api/timeline": apiTimeline(w, r)
 		case "/api/sources": apiSources(w, r)
 		case "/api/hosts": apiHosts(w, r)
-		case "/api/collectors": apiCollectors(w, r)
+		case "/api/collectors": apiCollectorsReadonly(w, r)
 		case "/api/collection-prefs": apiCollectionPrefsGet(w, r)
 		case "/api/alert-rules": apiAlertRules(w, r)
 		case "/api/smtp-config": apiSMTPConfigGet(w, r)
