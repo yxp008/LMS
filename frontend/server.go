@@ -88,12 +88,31 @@ func loadPrefs() CollectionPrefs {
 
 func savePrefs(prefs CollectionPrefs) {
 	os.MkdirAll(filepath.Dir(prefsFile), 0755)
-	data, _ := json.MarshalIndent(prefs, "", "  ")
+	existing := map[string]interface{}{}
+	if d, e := os.ReadFile(prefsFile); e == nil { json.Unmarshal(d, &existing) }
+	allData := map[string]interface{}{
+		"linux_system_logs": prefs.LinuxSystemLogs, "network_device_logs": prefs.NetworkDeviceLogs,
+		"elk_file_logs": prefs.ElkFileLogs, "elk_file_path": prefs.ElkFilePath,
+	}
+	if v, ok := existing["kafka_broker"]; ok { allData["kafka_broker"] = v }
+	data, _ := json.MarshalIndent(allData, "", "  ")
 	os.WriteFile(prefsFile, data, 0644)
 }
 
 // ============ Vector 配置生成 ============
 func generateVectorConfig(prefs CollectionPrefs) {
+	generateVectorConfigCore(prefs)
+	// 应用已保存的 Kafka broker
+	allData := map[string]interface{}{}
+	if d, e := os.ReadFile(prefsFile); e == nil { json.Unmarshal(d, &allData) }
+	if broker, ok := allData["kafka_broker"].(string); ok && broker != "" {
+		cfgData, _ := os.ReadFile(vectorCfg)
+		cfg := strings.ReplaceAll(string(cfgData), "localhost:9092", broker)
+		os.WriteFile(vectorCfg, []byte(cfg), 0644)
+	}
+}
+
+func generateVectorConfigCore(prefs CollectionPrefs) {
 	text, err := os.ReadFile(vectorTpl)
 	if err != nil {
 		log.Printf("[SERVER] 读取模板失败: %v", err)
