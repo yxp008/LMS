@@ -33,6 +33,8 @@ var (
 	vectorLog     = "/tmp/vector.log"
 	smtpCfgFile   = filepath.Join(frontendDir, "smtp_config.json")
 	listenAddr    = ":8080"
+	collectorStateFile = filepath.Join(projectRoot, "collector", "collector_state.json")
+
 )
 
 func getProjectRoot() string {
@@ -505,6 +507,39 @@ func staticHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // ============ 路由 ============
+// ============ 客户端本地存储 API（不依赖 ClickHouse） ============
+func apiCollectorsLocal(w http.ResponseWriter, r *http.Request) {
+	cs := loadCollectorState()
+	prefs := loadPrefs()
+	anyEnabled := prefs.LinuxSystemLogs || prefs.NetworkDeviceLogs || prefs.ElkFileLogs
+	actualStatus := "0"
+	if anyEnabled && vectorIsRunning() { actualStatus = "1" }
+	result := map[string]interface{}{
+		"Collector_ID": cs.CollectorID, "Name": cs.Name, "Status": actualStatus, "Address": cs.Address,
+		"Source_Types": []map[string]interface{}{
+			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.LinuxSystemLogs},
+			{"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.NetworkDeviceLogs},
+			{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": prefs.ElkFileLogs},
+		},
+	}
+	jsonResp(w, 200, []map[string]interface{}{result})
+}
+
+func apiCollectorsLocalPost(w http.ResponseWriter, r *http.Request) {
+	var data map[string]interface{}
+	json.NewDecoder(r.Body).Decode(&data)
+	action, _ := data["action"].(string)
+	if action == "update_status" {
+		status, _ := data["Status"].(string)
+		if status == "0" { stopVector() } else {
+			prefs := loadPrefs(); generateVectorConfig(prefs); startVector()
+		}
+		jsonResp(w, 200, map[string]bool{"ok": true})
+	} else {
+		jsonResp(w, 400, map[string]string{"error": "unknown action"})
+	}
+}
+
 // ============ 采集器路由（8081） ============
 func collectorRouter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -516,7 +551,7 @@ func collectorRouter(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		switch path {
 		case "/api/collection-prefs": apiCollectionPrefsGet(w, r)
-		case "/api/collectors": apiCollectors(w, r)
+		case "/api/collectors": apiCollectorsLocal(w, r)
 		default: staticHandler(w, r)
 		}
 		return
@@ -524,7 +559,7 @@ func collectorRouter(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		switch path {
 		case "/api/collection-prefs": apiCollectionPrefsPost(w, r)
-		case "/api/collectors": apiCollectorsPost(w, r)
+		case "/api/collectors": apiCollectorsLocalPost(w, r)
 		default: http.NotFound(w, r)
 		}
 		return
@@ -665,6 +700,9 @@ func main() {
 
 	if *collectorMode {
 		listenAddr = ":8081"
+		// 确保本地状态文件存在
+		loadCollectorState()
+		saveCollectorState(loadCollectorState())
 		prefs := loadPrefs()
 		anyEnabled := prefs.LinuxSystemLogs || prefs.NetworkDeviceLogs || prefs.ElkFileLogs
 		if anyEnabled {
