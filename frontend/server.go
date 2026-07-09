@@ -412,6 +412,10 @@ func apiCollectionPrefsPost(w http.ResponseWriter, r *http.Request) {
 		allData["elk_file_path"] = prefs.ElkFilePath
 		b, _ := json.MarshalIndent(allData, "", "  ")
 		os.WriteFile(prefsFile, b, 0644)
+		// 同步传输地址到采集器状态文件
+		cs := loadCollectorState()
+		cs.Address = v
+		saveCollectorState(cs)
 		// 重新生成 Vector 配置时替换 Kafka 地址
 		generateVectorConfigWithBroker(prefs, v)
 		restartVector(prefs)
@@ -553,9 +557,15 @@ func staticHandler(w http.ResponseWriter, r *http.Request) {
 func apiCollectorsLocal(w http.ResponseWriter, r *http.Request) {
 	cs := loadCollectorState()
 	prefs := loadPrefs()
+	// 读取 kafka_broker 作为传输地址
+	if cs.Address == "" {
+		allData := map[string]interface{}{}
+		if d, e := os.ReadFile(prefsFile); e == nil { json.Unmarshal(d, &allData) }
+		if a, ok := allData["kafka_broker"].(string); ok { cs.Address = a }
+	}
 	anyEnabled := prefs.LinuxSystemLogs || prefs.NetworkDeviceLogs || prefs.ElkFileLogs
 	actualStatus := "0"
-	if anyEnabled && vectorIsRunning() { actualStatus = "1" }
+	if anyEnabled { actualStatus = "1" }
 	result := map[string]interface{}{
 		"Collector_ID": cs.CollectorID, "Name": cs.Name, "Status": actualStatus, "Address": cs.Address,
 		"Source_Types": []map[string]interface{}{
@@ -598,14 +608,19 @@ func registerWithServer() {
 			{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": prefs.ElkFileLogs},
 		},
 	})
-	resp, err := http.Post(serverURL+"/api/collectors", "application/json", strings.NewReader(string(payload)))
-	if err != nil {
-		log.Printf("[COLLECTOR] 服务端注册失败: %v", err)
-		return
+	for i := 0; i < 5; i++ {
+		resp, err := http.Post(serverURL+"/api/collectors", "application/json", strings.NewReader(string(payload)))
+		if err == nil {
+			defer resp.Body.Close()
+			body, _ := io.ReadAll(resp.Body)
+			log.Printf("[COLLECTOR] 已向 %s 注册: %s", serverURL, string(body))
+			return
+		}
+		log.Printf("[COLLECTOR] 注册重试 %d/5: %v", i+1, err)
+		time.Sleep(3 * time.Second)
 	}
-	defer resp.Body.Close()
-	body, _ := io.ReadAll(resp.Body)
-	log.Printf("[COLLECTOR] 已向 %s 注册: %s", serverURL, string(body))
+	log.Printf("[COLLECTOR] 服务端注册失败（已重试5次）")
+	
 }
 
 func collectorRouter(w http.ResponseWriter, r *http.Request) {

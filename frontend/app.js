@@ -711,6 +711,16 @@ async function loadCollectors() {
         return;
     }
 
+    if (isCollectorMode) {
+        var regBtn = document.getElementById('btn-reg-collector');
+        if (regBtn) {
+            regBtn.disabled = data.length > 0;
+            regBtn.style.opacity = data.length > 0 ? '0.5' : '1';
+            regBtn.title = data.length > 0 ? '已存在采集器，请使用编辑功能' : '注册新采集器';
+        }
+        var addBtn = document.getElementById('btn-add-collector');
+        if (addBtn) addBtn.style.display = 'none';
+    }
     tbody.innerHTML = data.map(c => {
         const enabled = c.Status === '1';
         const sourceTypes = (c.Source_Types || []).map(s => {
@@ -797,12 +807,14 @@ function saveCollectorEdit() {
         prefs[cb.dataset.key] = cb.checked;
     });
     prefs.kafka_broker = addr;
-    // 也保存到 collector state
+    document.getElementById('collector-loading-text').textContent = '正在保存采集器配置...';
+    document.getElementById('collector-loading-modal').classList.remove('hidden');
+    document.getElementById('edit-collector-modal').classList.add('hidden');
     postAPI('/api/collection-prefs', prefs).then(function(r) {
-        if (r && r.ok) {
-            document.getElementById('edit-collector-modal').classList.add('hidden');
-            loadCollectors();
-        }
+        setTimeout(function() {
+            document.getElementById('collector-loading-modal').classList.add('hidden');
+            if (r && r.ok) loadCollectors();
+        }, 800);
     });
 }
 
