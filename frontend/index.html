@@ -236,6 +236,24 @@
         </main>
     </div>
 
+    <div id="deepseek-modal" class="modal hidden">
+        <div class="modal-content" style="max-width:420px;padding:24px">
+            <h3 style="margin-bottom:16px">DeepSeek API 配置</h3>
+            <div style="margin-bottom:12px">
+                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">API Key</label>
+                <input type="password" id="deepseek-key" placeholder="sk-..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px;box-sizing:border-box">
+            </div>
+            <div style="margin-bottom:16px">
+                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">API 端点</label>
+                <input type="text" id="deepseek-url" value="https://api.deepseek.com/v1/chat/completions" style="width:100%;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px;box-sizing:border-box">
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end">
+                <button class="btn" onclick="document.getElementById('deepseek-modal').classList.add('hidden')">取消</button>
+                <button class="btn btn-primary" onclick="saveDeepSeekConfig()">保存</button>
+            </div>
+        </div>
+    </div>
+
     <div id="log-detail-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">

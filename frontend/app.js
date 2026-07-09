@@ -1127,6 +1127,93 @@ async function testSmtpConnection() {
 }
 
 // ========== Utilities ==========
+// ========== AI 分析 (DeepSeek) ==========
+function configureDeepSeek() {
+    document.getElementById('deepseek-modal').classList.remove('hidden');
+    var key = localStorage.getItem('deepseek_key');
+    if (key) document.getElementById('deepseek-key').value = key;
+    var url = localStorage.getItem('deepseek_url');
+    if (url) document.getElementById('deepseek-url').value = url;
+}
+
+function saveDeepSeekConfig() {
+    var key = document.getElementById('deepseek-key').value.trim();
+    var url = document.getElementById('deepseek-url').value.trim();
+    if (!key) { alert('请输入 API Key'); return; }
+    localStorage.setItem('deepseek_key', key);
+    localStorage.setItem('deepseek_url', url || 'https://api.deepseek.com/v1/chat/completions');
+    document.getElementById('deepseek-modal').classList.add('hidden');
+    alert('DeepSeek 配置已保存');
+}
+
+async function runAIAnalysis() {
+    var key = localStorage.getItem('deepseek_key');
+    var url = localStorage.getItem('deepseek_url') || 'https://api.deepseek.com/v1/chat/completions';
+    if (!key) { alert('请先配置 DeepSeek API Key'); return; }
+
+    var status = document.getElementById('ai-status');
+    var result = document.getElementById('ai-result');
+    status.textContent = '正在分析...';
+    result.textContent = '';
+
+    // 收集图表数据
+    var summary = [];
+    try {
+        var timeline = await fetchAPI('/api/timeline?hours=24');
+        var hosts = await fetchAPI('/api/hosts?detail=1');
+        var sources = await fetchAPI('/api/sources');
+        var levels = await fetchAPI('/api/levels');
+
+        summary.push('=== 日志时间线(近24h) ===');
+        var timeTotal = 0, timeLevels = {};
+        (timeline||[]).forEach(function(d) {
+            var c = parseInt(d.count); timeTotal += c;
+            timeLevels[d.Level] = (timeLevels[d.Level]||0) + c;
+        });
+        summary.push('总日志数: ' + timeTotal);
+        summary.push('按等级: ' + JSON.stringify(timeLevels));
+
+        summary.push('\n=== 主机排名 ===');
+        var hostTotal = {};
+        (hosts||[]).forEach(function(d) { hostTotal[d.Host] = (hostTotal[d.Host]||0) + parseInt(d.count); });
+        var top5 = Object.entries(hostTotal).sort(function(a,b){return b[1]-a[1]}).slice(0,5);
+        top5.forEach(function(h){ summary.push(h[0] + ': ' + h[1] + '条'); });
+
+        summary.push('\n=== 来源分布 ===');
+        (sources||[]).forEach(function(s){ summary.push(s.Source_Type + ': ' + s.count + '条'); });
+
+        summary.push('\n=== 等级分布 ===');
+        (levels||[]).forEach(function(l){ summary.push(l.Level + ': ' + l.count + '条'); });
+    } catch(e) { summary.push('数据获取失败'); }
+
+    // 调用 DeepSeek API
+    try {
+        var resp = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+            body: JSON.stringify({
+                model: 'deepseek-chat',
+                messages: [
+                    {role:'system', content:'你是日志分析专家。根据提供的日志数据给出简洁分析：异常趋势、安全风险、性能瓶颈、优化建议。中文回答，200字以内。'},
+                    {role:'user', content: summary.join('\n')}
+                ],
+                max_tokens: 500, temperature: 0.7
+            })
+        });
+        var data = await resp.json();
+        if (data.choices && data.choices[0]) {
+            result.textContent = data.choices[0].message.content;
+            status.textContent = '分析完成';
+        } else {
+            result.textContent = 'API 返回异常: ' + JSON.stringify(data);
+            status.textContent = '分析失败';
+        }
+    } catch(e) {
+        result.textContent = '请求失败: ' + e.message;
+        status.textContent = '网络错误';
+    }
+}
+
 function formatNum(n) {
     if (n === null || n === undefined) return '0';
     n = parseInt(n);
