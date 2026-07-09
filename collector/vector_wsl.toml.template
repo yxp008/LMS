@@ -15,6 +15,13 @@ data_dir = "__PROJECT_ROOT__/collector/vector_data"
 [sources.journald]
 type = "journald"
 current_boot_only = true
+# --- Kafka 缓冲 ---
+[sinks.kafka_journald_out]
+type = "kafka"
+inputs = ["cleanup_journald"]
+bootstrap_servers = "localhost:9092"
+topic = "lms_elk_logs"
+encoding.codec = "json"
 # ===== END COLLECTION =====
 
 # ===== COLLECTION: network_device_logs =====
@@ -221,6 +228,14 @@ del(.Tags.host)
 del(.Tags.source_ip)
 del(.Tags.source)
 '''
+
+# --- Kafka 缓冲 ---
+[sinks.kafka_syslog_out]
+type = "kafka"
+inputs = ["cleanup_syslog"]
+bootstrap_servers = "localhost:9092"
+topic = "lms_elk_logs"
+encoding.codec = "json"
 # ===== END COLLECTION =====
 
 # ===== COLLECTION: elk_file_logs =====

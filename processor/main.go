@@ -125,6 +125,14 @@ func parseTimestamp(src map[string]interface{}) time.Time {
 	return time.Now()
 }
 
+func getTagsJSON(raw map[string]interface{}) string {
+	if tags, ok := raw["Tags"]; ok {
+		b, _ := json.Marshal(tags)
+		return string(b)
+	}
+	return "{}"
+}
+
 func parseLevel(src map[string]interface{}) string {
 	for _, k := range []string{"level", "severity", "log_level", "Level"} {
 		if v, ok := src[k]; ok {
@@ -274,6 +282,24 @@ func main() {
 
 		var raw map[string]interface{}
 		if err := json.Unmarshal(msg.Value, &raw); err != nil {
+			continue
+		}
+
+		// 快速路径：Vector 已处理过的事件（journald/syslog）
+		if _, ok := raw["Source_Type"]; ok {
+			ts := time.Now()
+			batch = append(batch, map[string]interface{}{
+				"Log_ID":      generateLogID(),
+				"Timestamp":   ts.Format("2006-01-02 15:04:05"),
+				"Level":       fmt.Sprint(raw["Level"]),
+				"Host":        fmt.Sprint(raw["Host"]),
+				"Source_Type": fmt.Sprint(raw["Source_Type"]),
+				"Message":     fmt.Sprint(raw["Message"]),
+				"Tags":        json.RawMessage(getTagsJSON(raw)),
+				"Collector_ID": getCollectorID(raw),
+			})
+			count++
+			if len(batch) >= flushSize { flush() }
 			continue
 		}
 
