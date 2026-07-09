@@ -458,7 +458,6 @@ func apiCollectionPrefsPost(w http.ResponseWriter, r *http.Request) {
 		generateVectorConfigWithBroker(prefs, v)
 		stopVector()
 		startVector()
-		go registerWithServer()
 		jsonResp(w, 200, map[string]interface{}{"ok": true})
 		return
 	}
