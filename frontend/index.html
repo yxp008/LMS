@@ -192,7 +192,6 @@
                     <button class="btn" style="background:rgba(231,76,60,0.12);color:var(--error);border-color:rgba(231,76,60,0.3);margin-left:8px" onclick="showDeleteCollector()">删除采集器</button>
                 </div>
                 <div style="margin-bottom:16px;display:flex;gap:10px">
-                    <button class="btn btn-primary" id="btn-add-collector" onclick="showAddCollector()" style="display:none">+ 新增日志采集器</button>
                 </div>
                 <div class="table-container">
                     <table class="data-table">
@@ -452,24 +451,6 @@
             <div style="display:flex;gap:10px;justify-content:flex-end">
                 <button class="btn" onclick="document.getElementById('edit-collector-modal').classList.add('hidden')">取消</button>
                 <button class="btn btn-primary" onclick="saveCollectorEdit()">保存</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="add-collector-modal" class="modal hidden">
-        <div class="modal-content" style="max-width:420px;padding:24px">
-            <h3 style="margin-bottom:16px">新增日志采集器</h3>
-            <div style="margin-bottom:12px">
-                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">采集器名称</label>
-                <input type="text" id="new-collector-name" placeholder="例：客户端A-采集器" style="width:100%;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px;box-sizing:border-box">
-            </div>
-            <div style="margin-bottom:16px">
-                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">接收地址（IP:端口）</label>
-                <input type="text" id="new-collector-addr" placeholder="例：192.168.1.100:1514" style="width:100%;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px;box-sizing:border-box">
-            </div>
-            <div style="display:flex;gap:10px;justify-content:flex-end">
-                <button class="btn" onclick="document.getElementById('add-collector-modal').classList.add('hidden')">取消</button>
-                <button class="btn btn-primary" onclick="addCollector()">确认新增</button>
             </div>
         </div>
     </div>

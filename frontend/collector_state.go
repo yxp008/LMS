@@ -26,18 +26,13 @@ func generateCollectorID() string {
 func loadCollectorState() CollectorState {
 	data, err := os.ReadFile(collectorStateFile)
 	if err != nil {
-		// 首次运行：自动生成唯一ID
-		cs := CollectorState{CollectorID: generateCollectorID(), Name: "Vector-WSL", Status: "1", Address: ""}
-		saveCollectorState(cs)
-		return cs
+		return CollectorState{}
 	}
 	var loaded CollectorState
 	if json.Unmarshal(data, &loaded) == nil {
 		return loaded
 	}
-	cs := CollectorState{CollectorID: generateCollectorID(), Name: "Vector-WSL", Status: "1", Address: ""}
-	saveCollectorState(cs)
-	return cs
+	return CollectorState{}
 }
 
 func saveCollectorState(cs CollectorState) {

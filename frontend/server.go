@@ -596,8 +596,11 @@ func apiCollectorsLocal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cs := loadCollectorState()
+	if cs.CollectorID == "" {
+		jsonResp(w, 200, []map[string]interface{}{})
+		return
+	}
 	prefs := loadPrefs()
-	// 读取 kafka_broker 作为传输地址
 	if cs.Address == "" {
 		allData := map[string]interface{}{}
 		if d, e := os.ReadFile(prefsFile); e == nil { json.Unmarshal(d, &allData) }
@@ -621,7 +624,19 @@ func apiCollectorsLocalPost(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&data)
 	action, _ := data["action"].(string)
-	if action == "update_status" {
+	if action == "register" {
+		name, _ := data["Name"].(string)
+		addr, _ := data["Address"].(string)
+		if name == "" { name = "Vector-WSL" }
+		cs := CollectorState{CollectorID: generateCollectorID(), Name: name, Status: "1", Address: addr}
+		saveCollectorState(cs)
+		// 生成配置并启动 Vector
+		prefs := loadPrefs()
+		generateVectorConfig(prefs)
+		startVector()
+		go registerWithServer()
+		jsonResp(w, 200, map[string]interface{}{"ok": true, "Collector_ID": cs.CollectorID})
+	} else if action == "update_status" {
 		status, _ := data["Status"].(string)
 		if status == "0" { stopVector() } else {
 			prefs := loadPrefs(); generateVectorConfig(prefs); startVector()

@@ -686,22 +686,6 @@ function renderSourcePie(data) {
 const isCollectorMode = window.location.port === '8081';
 
 // ========== Collectors ==========
-function showAddCollector() {
-    document.getElementById('add-collector-modal').classList.remove('hidden');
-}
-
-async function addCollector() {
-    const name = document.getElementById('new-collector-name').value.trim();
-    const addr = document.getElementById('new-collector-addr').value.trim();
-    if (!name) return alert('请输入采集器名称');
-    const id = 'C' + String(Date.now()).slice(-6);
-    const result = await postAPI('/api/collectors', {
-        action: 'create', Collector_ID: id, Name: name, Address: addr
-    });
-    document.getElementById('add-collector-modal').classList.add('hidden');
-    if (result && result.ok) { document.getElementById('new-collector-name').value = ''; document.getElementById('new-collector-addr').value = ''; loadCollectors(); }
-}
-
 async function loadCollectors() {
     const data = await fetchAPI('/api/collectors');
     const tbody = document.getElementById('collectors-table-body');
@@ -768,10 +752,25 @@ function toggleSourceType(type, enable) {
     });
 }
 
+var isNewRegistration = false;
+
 function showRegCollector() {
+    isNewRegistration = true;
     document.getElementById('edit-trans-addr').value = 'localhost:9092';
     document.querySelector('#edit-collector-modal h3').textContent = '注册采集器';
     document.querySelectorAll('#edit-source-types input').forEach(cb => cb.checked = true);
+    document.getElementById('edit-collector-modal').classList.remove('hidden');
+}
+
+function editCollectorRow(c) {
+    isNewRegistration = false;
+    document.getElementById('edit-trans-addr').value = c.Address || 'localhost:9092';
+    document.querySelector('#edit-collector-modal h3').textContent = '编辑采集器';
+    var sources = c.Source_Types || [];
+    sources.forEach(function(s) {
+        var cb = document.querySelector('#edit-source-types input[data-key="' + s.key + '"]');
+        if (cb) cb.checked = s.enabled;
+    });
     document.getElementById('edit-collector-modal').classList.remove('hidden');
 }
 
@@ -807,15 +806,32 @@ function saveCollectorEdit() {
         prefs[cb.dataset.key] = cb.checked;
     });
     prefs.kafka_broker = addr;
-    document.getElementById('collector-loading-text').textContent = '正在保存采集器配置...';
+    document.getElementById('collector-loading-text').textContent = isNewRegistration ? '正在注册采集器...' : '正在保存采集器配置...';
     document.getElementById('collector-loading-modal').classList.remove('hidden');
     document.getElementById('edit-collector-modal').classList.add('hidden');
-    postAPI('/api/collection-prefs', prefs).then(function(r) {
-        setTimeout(function() {
-            document.getElementById('collector-loading-modal').classList.add('hidden');
-            if (r && r.ok) loadCollectors();
-        }, 800);
-    });
+
+    if (isNewRegistration) {
+        postAPI('/api/collectors', { action: 'register', Name: 'Vector-WSL', Address: addr }).then(function(r) {
+            if (r && r.ok) {
+                // 保存采集源偏好
+                postAPI('/api/collection-prefs', prefs).then(function() {
+                    setTimeout(function() {
+                        document.getElementById('collector-loading-modal').classList.add('hidden');
+                        loadCollectors();
+                    }, 800);
+                });
+            } else {
+                document.getElementById('collector-loading-modal').classList.add('hidden');
+            }
+        });
+    } else {
+        postAPI('/api/collection-prefs', prefs).then(function(r) {
+            setTimeout(function() {
+                document.getElementById('collector-loading-modal').classList.add('hidden');
+                if (r && r.ok) loadCollectors();
+            }, 800);
+        });
+    }
 }
 
 function showDeleteCollector() {
