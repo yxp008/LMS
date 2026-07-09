@@ -395,6 +395,15 @@ func apiCollectionPrefsPost(w http.ResponseWriter, r *http.Request) {
 	if v, ok := data["elk_file_logs"].(bool); ok { prefs.ElkFileLogs = v }
 	if v, ok := data["elk_file_path"].(string); ok && v != "" { prefs.ElkFilePath = v }
 	// Kafka broker 地址更新
+		if action, ok := data["action"].(string); ok && action == "delete_collector" {
+			cid, _ := data["collector_id"].(string)
+			if cid == "" { jsonResp(w, 400, map[string]string{"error": "missing collector_id"}); return }
+			os.Remove(collectorStateFile)
+			stopVector()
+			log.Printf("[COLLECTOR] 采集器 %s 已删除", cid)
+			jsonResp(w, 200, map[string]bool{"ok": true})
+			return
+		}
 	if v, ok := data["test_kafka"].(string); ok && v != "" {
 		// 测试Kafka连接
 		conn, err := net.DialTimeout("tcp", v, 3*time.Second)
