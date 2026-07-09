@@ -357,7 +357,12 @@ func apiCollectorsPost(w http.ResponseWriter, r *http.Request) {
 		name, _ := data["Name"].(string)
 		addr, _ := data["Address"].(string)
 		if cid == "" || name == "" { jsonResp(w, 400, map[string]string{"error": "missing fields"}); return }
-		cq(fmt.Sprintf("INSERT INTO %s.LMS_Collectors VALUES ('%s','%s','1','%s')", database, cid, name, addr))
+		existing := cq(fmt.Sprintf("SELECT 1 FROM %s.LMS_Collectors WHERE Collector_ID = '%s'", database, cid))
+		if len(existing) > 0 {
+			cq(fmt.Sprintf("ALTER TABLE %s.LMS_Collectors UPDATE Name = '%s', Address = '%s', Status = '1' WHERE Collector_ID = '%s'", database, name, addr, cid))
+		} else {
+			cq(fmt.Sprintf("INSERT INTO %s.LMS_Collectors VALUES ('%s','%s','1','%s')", database, cid, name, addr))
+		}
 		jsonResp(w, 200, map[string]interface{}{"ok": true, "Collector_ID": cid})
 	} else if action == "delete" {
 		cid, _ := data["Collector_ID"].(string)
