@@ -27,9 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         const label = document.getElementById('collector-nav-label');
         if (label) label.textContent = '采集器';
-        // 显示本机地址
-        const infoBox = document.getElementById('collector-self-info');
-        if (infoBox) infoBox.style.display = 'block';
+        // 客户端只显示采集器页面，隐藏其他导航
+        document.querySelectorAll('.nav-item').forEach(item => {
+            if (item.dataset.page !== 'collectors') item.style.display = 'none';
+        });
+        // 直接加载采集器
+        loadCollectors();
+        document.getElementById('page-title').textContent = '采集器';
     }
 });
 
@@ -709,7 +713,7 @@ async function loadCollectors() {
             return `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}">${escapeHtml(s.name)}</span>`;
         }).join(' ');
         const actionBtns = isCollectorMode
-            ? `<button class="btn btn-sm" onclick='editCollectorTransAddr();(function(){var s="";(' + JSON.stringify(c.Source_Types || []) + ').forEach(function(t){var cb=document.querySelector("#edit-source-types input[data-key=\\\""+t.key+"\\\"]");if(cb)cb.checked=t.enabled});})()' style="margin-right:4px">编辑</button><button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button>`
+            ? `<button class="btn btn-sm" onclick='editCollectorRow(${JSON.stringify(c).replace(/'/g,"&#39;")})' style="margin-right:4px">编辑</button><button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button>`
             : `<button class="btn btn-sm" style="background:rgba(231,76,60,0.15);color:var(--error);border-color:rgba(231,76,60,0.3)" onclick="disconnectCollector('${escapeHtml(c.Collector_ID)}')">断开</button>`;
         const address = c.Address || c.Collector_Address || '-';
         return `
@@ -747,10 +751,25 @@ function toggleSourceType(type, enable) {
     });
 }
 
-function editCollectorTransAddr() {
-    document.getElementById('edit-trans-addr').value = document.getElementById('self-addr-display').textContent;
+function showRegCollector() {
+    document.getElementById('edit-trans-addr').value = 'localhost:9092';
+    document.querySelector('#edit-collector-modal h3').textContent = '注册采集器';
+    document.querySelectorAll('#edit-source-types input').forEach(cb => cb.checked = true);
     document.getElementById('edit-collector-modal').classList.remove('hidden');
 }
+
+function editCollectorRow(c) {
+    document.getElementById('edit-trans-addr').value = c.Address || 'localhost:9092';
+    document.querySelector('#edit-collector-modal h3').textContent = '编辑采集器';
+    var sources = c.Source_Types || [];
+    sources.forEach(function(s) {
+        var cb = document.querySelector('#edit-source-types input[data-key="' + s.key + '"]');
+        if (cb) cb.checked = s.enabled;
+    });
+    document.getElementById('edit-collector-modal').classList.remove('hidden');
+}
+
+function editCollectorTransAddr() { editCollectorRow({Address: 'localhost:9092', Source_Types: []}); }
 
 function testTransAddr() {
     const addr = document.getElementById('edit-trans-addr').value.trim();
@@ -766,14 +785,14 @@ function testTransAddr() {
 function saveCollectorEdit() {
     const addr = document.getElementById('edit-trans-addr').value.trim();
     if (!addr) return;
-    const prefs = {};
-    document.querySelectorAll('#edit-source-types input').forEach(cb => {
+    var prefs = {};
+    document.querySelectorAll('#edit-source-types input').forEach(function(cb) {
         prefs[cb.dataset.key] = cb.checked;
     });
     prefs.kafka_broker = addr;
-    postAPI('/api/collection-prefs', prefs).then(r => {
+    // 也保存到 collector state
+    postAPI('/api/collection-prefs', prefs).then(function(r) {
         if (r && r.ok) {
-            document.getElementById('self-addr-display').textContent = addr;
             document.getElementById('edit-collector-modal').classList.add('hidden');
             loadCollectors();
         }

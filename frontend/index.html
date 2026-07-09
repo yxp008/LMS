@@ -177,9 +177,8 @@
 
             <!-- 采集器页面 -->
             <div id="page-collectors" class="page">
-                <div id="collector-self-info" style="display:none;margin-bottom:12px;padding:10px 16px;background:rgba(29,161,242,0.08);border:1px solid var(--border-color);border-radius:var(--radius);font-size:13px;color:var(--text-secondary)">
-                    传输地址：<span id="self-addr-display" style="color:var(--accent);font-weight:600;margin:0 8px">localhost:9092</span>
-                    <button class="btn btn-sm" onclick="editCollectorTransAddr()">编辑传输地址</button>
+                <div id="collector-self-info" class="collector-toolbar" style="display:none;margin-bottom:12px">
+                    <button class="btn btn-primary" id="btn-reg-collector" onclick="showRegCollector()">注册采集器</button>
                 </div>
                 <div style="margin-bottom:16px;display:flex;gap:10px">
                     <button class="btn btn-primary" id="btn-add-collector" onclick="showAddCollector()" style="display:none">+ 新增日志采集器</button>
