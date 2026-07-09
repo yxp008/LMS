@@ -1,7 +1,7 @@
 #!/bin/bash
 # LMS 客户端部署启动脚本
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_ROOT="$SCRIPT_DIR"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 export LMS_PROJECT_ROOT="$PROJECT_ROOT"
 
 echo "========================================"
