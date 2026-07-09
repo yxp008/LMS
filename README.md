@@ -1,240 +1,109 @@
 # LMS 日志管理系统
 
-> V3.4 — 五层架构，Go 全栈（采集/处理/查询），Kafka 缓冲，三级存储
+> V4.0 — 五层架构，Go 全栈，Kafka 缓冲，三级存储，客户端/服务端分离部署
 
 集日志采集、存储、查询、分析、可视化、告警于一体的集中式日志管理系统。
 
 ## 架构
 
 ```
-┌── 采集层 ──┐    ┌── 处理层 ──┐    ┌──── 存储层 ────┐
-│Vector+Go   │    │Go Processor│    │  ClickHouse    │
-│NDJSON→Kafka│──►│脱敏+解析+写入│──►│ SSD→HDD→MinIO │
-└────────────┘    └────────────┘    └───────┬────────┘
-                                            │
-                           ┌── 查询层 ──────┘
-                           │日志API + 告警轮询
-                           │server.go (Go) + goroutine
-                           └───────┬────────┘
-                                   │
-                           ┌── 可视化层 ───┐
-                           │  浏览器 SPA    │
-                           │ 仪表盘/查询/告警│
-                           └───────────────┘
-```
-
-五层同级，采集层/处理层/查询层优先使用 Go 以保证效率。
-
-## 分步安装指南
-
-### 1. 安装 ClickHouse
-
-```bash
-cd LMS/data/clickhouse_data
-curl https://clickhouse.com/ | sh
-```
-
-根据热温冷配置文件启动服务：
-
-```bash
-./clickhouse server --config-file preprocessed_configs/config_minimal.xml
-```
-
-另开一个终端，启动客户端：
-
-```bash
-./clickhouse client
-```
-
-在客户端中执行：
-
-```sql
-SHOW DATABASES;
-CREATE DATABASE IF NOT EXISTS LMS;
-USE LMS;
-```
-
-打开 `database_design/sql/` 下的 SQL 文件，依次复制内容建表：
-
-```sql
--- 复制 LMS_Logs.sql 内容执行
--- 复制 LMS_Collectors.sql 内容执行
--- 复制 LMS_AlertRules.sql 内容执行
--- 复制 LMS_AlertTriggers.sql 内容执行
-```
-
-验证表是否建立：
-
-```sql
-SHOW TABLES;
-```
-
-插入采集器默认记录：
-
-```sql
-INSERT INTO LMS.LMS_Collectors VALUES ('C001','Vector-WSL','1');
-```
-
-### 2. 下载 Vector
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSfL https://sh.vector.dev | bash
-export PATH="$HOME/.vector/bin:$PATH"
-```
-
-创建 Vector 运行时目录：
-
-```bash
-mkdir -p collector/vector_data
-```
-
-### 3. 下载 Kafka
-
-```bash
-wget https://mirrors.aliyun.com/apache/kafka/3.9.2/kafka_2.13-3.9.2.tgz
-# 解压后将文件夹放到用户根目录下 ~/kafka/
-```
-
-生成集群 ID 并格式化存储目录：
-
-```bash
-cd ~/kafka
-bin/kafka-storage.sh random-uuid        # 生成 UUID
-bin/kafka-storage.sh format -t <你的UUID> -c config/kraft/server.properties
-```
-
-启动 Kafka：
-
-```bash
-~/kafka/bin/kafka-server-start.sh config/kraft/server.properties
-```
-
-### 4. 启动处理层
-
-```bash
-processor/processor &
-```
-
-### 5. 启动查询层 + 可视化层
-
-```bash
-frontend/server &
-```
-
-Go server 启动时自动：生成 Vector 配置 → 启动 Vector → 启动告警 goroutine。
-
-访问 `http://localhost:8080`。
-
-### 一键安装（可选）
-
-```bash
-bash install.sh   # 编译 Go + 创建目录
-bash start.sh     # 启动全部服务
+客户端 (电脑A)                       服务端 (电脑B)
+┌──────────────────┐               ┌──────────────────────────┐
+│ 采集层           │               │        采集器监控(只读)    │
+│ Vector(file)     │──Kafka:9092──►│ 处理层                   │
+│ Go server        │               │ Processor(Go)            │
+│   -collector     │──注册:8080──►│         ↓                │
+│     :8081        │               │ 存储层                   │
+│                  │               │ ClickHouse(SSD→HDD→MinIO)│
+└──────────────────┘               │         ↓                │
+                                   │ 查询层                   │
+                                   │ Go server(:8080)+告警     │
+                                   │         ↓                │
+                                   │ 可视化层                 │
+                                   │ 浏览器 SPA               │
+                                   └──────────────────────────┘
 ```
 
 ## 快速开始
 
 ```bash
-# 启动 / 停止
+# 首次安装
+bash install.sh
+
+# 修改 config.env 自定义端口（可选）
+
+# 启动
 bash start.sh
-bash stop.sh
 
 # 访问
-http://localhost:8080
+服务端: http://localhost:8080
+采集器: http://localhost:8081
 ```
 
-## 安装
+## 分离部署
+
+**客户端（采集器）**：`bash deploy/client/start.sh`
+- 配置传输地址指向服务端 Kafka `服务端IP:9092`
+- 设环境变量 `LMS_SERVER_URL=http://服务端IP:8080` 自动注册
+
+**服务端（日志管理）**：`bash deploy/server/start.sh`
+- 需要 ClickHouse + Kafka + Processor
+
+详见 `deploy/README.md`
+
+## 配置
+
+所有端口通过 `config.env` 修改：
 
 ```bash
-bash install.sh
+SERVER_PORT=8080        # 服务端
+COLLECTOR_PORT=8081     # 采集器
+CLICKHOUSE_PORT=8123
+KAFKA_PORT=9092
+KAFKA_HOME=$HOME/kafka
+SYSLOG_PORT=1514
 ```
-
-脚本自动完成：Go 编译器安装、processor 和 reader 编译、默认配置生成。
-
-**环境依赖（需手动准备）：**
-
-| 依赖 | 路径 |
-|---|---|
-| Vector 0.56 | `~/.vector/bin/vector` |
-| ClickHouse 26.6 | `data/clickhouse_data/clickhouse` |
-| Kafka 3.6 | `~/kafka/` |
-| Go 1.18+ | 脚本自动安装 |
-
-**卸载：** `bash stop.sh` → `rm -rf LMS_mimo`
 
 ## 组件
 
-| 组件 | 技术栈 | 说明 |
+| 层级 | 技术栈 | 说明 |
 |---|---|---|
 | 采集层 | Vector + Go | file 源读取 NDJSON，发往 Kafka |
-| 消息队列 | Kafka 3.6 (KRaft) | 6 分区 zstd 压缩，topic: lms_elk_logs |
-| 处理层 | Go | Kafka 消费 → 正则脱敏 → 字段解析 → 批量写入 |
-| 存储层 | ClickHouse 26.6 | 列式 OLAP，三级存储：SSD(热)→HDD(温)→MinIO(冷) |
-| 查询层 | Go | HTTP REST API（16 端点）+ 告警轮询 goroutine |
-| 可视化层 | Vanilla JS + Chart.js | SPA，自定义日历组件 |
+| 消息队列 | Kafka 3.6 (KRaft) | 6 分区 zstd 压缩 |
+| 处理层 | Go Processor | Kafka → 脱敏 → 解析 → ClickHouse |
+| 存储层 | ClickHouse 26.6 | SSD(0-7d)→HDD(7-30d)→MinIO(30-180d) |
+| 查询层 | Go server | REST API + 告警 goroutine |
+| 可视化层 | Vanilla JS | SPA，自定义日历，零 CDN 依赖 |
 
-## ELK 日志采集流程
+## ELK 日志采集
 
 1. 将 NDJSON 文件放入 `collector/elk_logs/incoming/`
-2. Vector 自动检测并发往 Kafka `lms_elk_logs`
-3. Go Processor 消费 → 正则脱敏 → 字段映射 → 批量写入 ClickHouse
-4. 前端来源选择「ELK本地日志文件」查看
+2. Vector 自动检测 → Kafka → Processor → ClickHouse
+3. 前端来源选择「ELK本地日志文件」
 
-JSON 数组格式需先用 Go reader 转换：
-```bash
-collector/elk_logs/reader input.json > collector/elk_logs/incoming/output.ndjson
-```
-
-## 脱敏规则
-
-`processor/rules.json` 中配置，当前支持手机号和身份证号脱敏：
-
-```
-13812345678 → 138****5678
-320106199001011234 → 320106199****11234
-```
-
-## 前端特性
-
-- 自定义日历日期选择器（零依赖）
-- 筛选器选择后自动触发查询
-- 分页跳转输入框
-- 日志级别动态加载，保留各源原始等级名称
-- 来源/主机筛选
-- 查询结果计数显示
+JSON 数组转换：`collector/elk_logs/reader input.json > output.ndjson`
 
 ## 目录结构
 
 ```
-LMS_mimo/
-├── collector/                    # 采集层（可独立部署）
-│   ├── vector_wsl.toml.template  # Vector 配置模板
-│   ├── collection_prefs.json     # 采集源开关
-│   └── elk_logs/
-│       ├── reader.go             # JSON→NDJSON 转换工具
-│       └── incoming/             # 日志投放目录
-├── processor/                    # 处理层（Go）
-│   ├── main.go                   # Kafka→脱敏→ClickHouse
-│   └── rules.json                # 脱敏规则
-├── frontend/                     # 查询层 + 可视化层
-│   ├── server.go                 # Go Web 服务 + 告警 (编译为 server)
-│   ├── server.py                 # Python 原版（参考）
-│   ├── index.html / app.js / style.css
-├── data/clickhouse_data/         # ClickHouse
-│   └── preprocessed_configs/
-│       └── config_minimal.xml    # ClickHouse 配置（含存储策略）
-├── database_design/
-│   └── sql/                      # 建表 SQL（4 张表）
-├── kafka/data/                   # Kafka 持久化
-├── install.sh                    # 一键安装
-├── start.sh / stop.sh            # 启停脚本
-├── README.md
-└── CLAUDE.md                     # 开发指南
+LMS/
+├── collector/              # 采集层
+│   ├── vector_wsl.toml.template
+│   ├── elk_logs/incoming/  # 日志投放
+│   └── collector_state.json # 客户端本地状态
+├── processor/              # 处理层 (Go)
+├── frontend/               # 查询层 + 可视化层
+│   ├── server.go           # Go 服务 (-collector 切换模式)
+│   └── index.html / app.js / style.css
+├── data/clickhouse_data/   # 存储层
+├── kafka/                  # 消息队列
+├── deploy/                 # 分离部署脚本
+│   ├── client/start.sh
+│   └── server/start.sh
+├── config.env              # 端口配置
+├── install.sh / start.sh / stop.sh
+└── README.md
 ```
-
-## 移植
-
-`bash install.sh && bash start.sh` 即可在新机器运行。所有路径基于 `${PROJECT_ROOT}` 自动计算，无需修改代码。
 
 ## 许可证
 
