@@ -571,6 +571,11 @@ func staticHandler(w http.ResponseWriter, r *http.Request) {
 // ============ 路由 ============
 // ============ 客户端本地存储 API（不依赖 ClickHouse） ============
 func apiCollectorsLocal(w http.ResponseWriter, r *http.Request) {
+	// 状态文件不存在时返回空（采集器已删除）
+	if _, err := os.Stat(collectorStateFile); err != nil {
+		jsonResp(w, 200, []map[string]interface{}{})
+		return
+	}
 	cs := loadCollectorState()
 	prefs := loadPrefs()
 	// 读取 kafka_broker 作为传输地址
