@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"encoding/binary"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -23,20 +24,25 @@ import (
 var (
 	projectRoot   = getProjectRoot()
 	frontendDir   = filepath.Join(projectRoot, "frontend")
-	chURL         = "http://localhost:8123"
+	chURL         = getEnvDefault("LMS_CLICKHOUSE_URL", "http://localhost:8123")
 	database      = "LMS"
 	table         = "LMS_Logs"
 	prefsFile     = filepath.Join(projectRoot, "collector", "collection_prefs.json")
 	vectorTpl     = filepath.Join(projectRoot, "collector", "vector_wsl.toml.template")
 	vectorCfg     = filepath.Join(projectRoot, "collector", "vector_wsl.toml")
-	vectorBin     = filepath.Join(os.Getenv("HOME"), ".vector", "bin", "vector")
+	vectorBin     = getEnvDefault("LMS_VECTOR_BIN", filepath.Join(os.Getenv("HOME"), ".vector", "bin", "vector"))
 	vectorPID     = "/tmp/vector.pid"
 	vectorLog     = "/tmp/vector.log"
 	smtpCfgFile   = filepath.Join(frontendDir, "smtp_config.json")
-	listenAddr    = ":8080"
+	listenAddr    = ":" + getEnvDefault("LMS_SERVER_PORT", "8080")
 	collectorStateFile = filepath.Join(projectRoot, "collector", "collector_state.json")
-
+	isCollector     bool
 )
+
+func getEnvDefault(key, fallback string) string {
+	if v := os.Getenv(key); v != "" { return v }
+	return fallback
+}
 
 func getProjectRoot() string {
 	// 环境变量优先
@@ -230,7 +236,9 @@ func startVector() {
 		realPID = fmt.Sprintf("%d", cmd.Process.Pid)
 	}
 	os.WriteFile(vectorPID, []byte(realPID), 0644)
-	cq(`ALTER TABLE `+database+`.LMS_Collectors UPDATE Status = '1' WHERE 1=1`)
+	if !isCollector {
+		cq(`ALTER TABLE `+database+`.LMS_Collectors UPDATE Status = '1' WHERE 1=1`)
+	}
 	log.Printf("[SERVER] Vector 已启用, PID=%s", realPID)
 }
 
@@ -246,6 +254,50 @@ func restartVector(prefs CollectionPrefs) {
 		log.Println("[SERVER] 所有采集类型已禁用，Vector 不启动")
 	}
 }
+
+// ============ Kafka 连接测试 ============
+func testKafkaBroker(addr string) (bool, error) {
+	conn, err := net.DialTimeout("tcp", addr, 3*time.Second)
+	if err != nil {
+		return false, fmt.Errorf("无法连接: %v", err)
+	}
+	defer conn.Close()
+
+	// 构建 Kafka ApiVersions 请求 (API key=18, version=0)
+	// 消息格式: [4B length][2B api_key][2B api_version][4B correlation_id][client_id string]
+	correlationID := int32(12345)
+	clientID := "lms-test"
+	msgLen := int32(2 + 2 + 4 + 2 + len(clientID)) // api_key + api_version + correlation_id + client_id_len + client_id
+	buf := make([]byte, 4+msgLen)
+	binary.BigEndian.PutUint32(buf[0:4], uint32(msgLen))
+	binary.BigEndian.PutUint16(buf[4:6], 18) // ApiVersions
+	binary.BigEndian.PutUint16(buf[6:8], 0)  // version 0
+	binary.BigEndian.PutUint32(buf[8:12], uint32(correlationID))
+	binary.BigEndian.PutUint16(buf[12:14], uint16(len(clientID)))
+	copy(buf[14:], clientID)
+
+	if _, err := conn.Write(buf); err != nil {
+		return false, fmt.Errorf("发送请求失败: %v", err)
+	}
+
+	conn.SetReadDeadline(time.Now().Add(3 * time.Second))
+
+	// 读取响应: [4B length][4B correlation_id]
+	resp := make([]byte, 8)
+	if _, err := io.ReadFull(conn, resp); err != nil {
+		return false, fmt.Errorf("不是Kafka broker (无响应)")
+	}
+
+	respCorrID := int32(binary.BigEndian.Uint32(resp[4:8]))
+	if respCorrID != correlationID {
+		return false, fmt.Errorf("不是Kafka broker (correlation_id不匹配)")
+	}
+
+	return true, nil
+}
+
+// ============ 辅助函数 ============
+func escSQL(s string) string { return strings.ReplaceAll(s, "'", "''") }
 
 // ============ ClickHouse 查询 ============
 func cq(sql string) []map[string]interface{} {
@@ -359,15 +411,22 @@ func apiCollectors(w http.ResponseWriter, r *http.Request) {
 	if anyEnabled && vectorIsRunning() { actualStatus = "1" }
 	for _, r := range results {
 		r["Status"] = actualStatus
+		// 从数据库读取采集源配置（客户端/服务端分离）
+		if stJSON, ok := r["Source_Types"].(string); ok && stJSON != "" && stJSON != "[]" {
+			var sourceTypes []map[string]interface{}
+			if json.Unmarshal([]byte(stJSON), &sourceTypes) == nil {
+				r["Source_Types"] = sourceTypes
+				continue
+			}
+		}
 		r["Source_Types"] = []map[string]interface{}{
-			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.LinuxSystemLogs},
-			{"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.NetworkDeviceLogs},
-			{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": prefs.ElkFileLogs},
+			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": false},
+			{"name": "网络设备日志", "key": "network_device_logs", "enabled": false},
+			{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": false},
 		}
 	}
 	jsonResp(w, 200, results)
 }
-
 func apiCollectorsPost(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&data)
@@ -376,12 +435,20 @@ func apiCollectorsPost(w http.ResponseWriter, r *http.Request) {
 		cid, _ := data["Collector_ID"].(string)
 		name, _ := data["Name"].(string)
 		addr, _ := data["Address"].(string)
+		srcHost, _ := data["Source_Host"].(string)
 		if cid == "" || name == "" { jsonResp(w, 400, map[string]string{"error": "missing fields"}); return }
+		// 序列化采集源配置
+		sourceTypesJSON := "[]"
+		if st, ok := data["Source_Types"]; ok {
+			if b, err := json.Marshal(st); err == nil {
+				sourceTypesJSON = string(b)
+			}
+		}
 		existing := cq(fmt.Sprintf("SELECT 1 FROM %s.LMS_Collectors WHERE Collector_ID = '%s'", database, cid))
 		if len(existing) > 0 {
-			cq(fmt.Sprintf("ALTER TABLE %s.LMS_Collectors UPDATE Name = '%s', Address = '%s', Status = '1' WHERE Collector_ID = '%s'", database, name, addr, cid))
+			cq(fmt.Sprintf("ALTER TABLE %s.LMS_Collectors UPDATE Name = '%s', Address = '%s', Source_Types = '%s', Source_Host = '%s', Status = '1' WHERE Collector_ID = '%s'", database, name, addr, escSQL(sourceTypesJSON), escSQL(srcHost), cid))
 		} else {
-			cq(fmt.Sprintf("INSERT INTO %s.LMS_Collectors VALUES ('%s','%s','1','%s')", database, cid, name, addr))
+			cq(fmt.Sprintf("INSERT INTO %s.LMS_Collectors VALUES ('%s','%s','1','%s','%s','%s')", database, cid, name, addr, escSQL(sourceTypesJSON), escSQL(srcHost)))
 		}
 		jsonResp(w, 200, map[string]interface{}{"ok": true, "Collector_ID": cid})
 	} else if action == "delete" {
@@ -428,13 +495,12 @@ func apiCollectionPrefsPost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	if v, ok := data["test_kafka"].(string); ok && v != "" {
-		// 测试Kafka连接
-		conn, err := net.DialTimeout("tcp", v, 3*time.Second)
+		// 测试Kafka连接 — 发送ApiVersions请求验证对方真的是Kafka broker
+		ok, err := testKafkaBroker(v)
 		if err != nil {
 			jsonResp(w, 200, map[string]interface{}{"ok": false, "error": err.Error()})
 		} else {
-			conn.Close()
-			jsonResp(w, 200, map[string]interface{}{"ok": true})
+			jsonResp(w, 200, map[string]interface{}{"ok": ok})
 		}
 		return
 	}
@@ -450,19 +516,29 @@ func apiCollectionPrefsPost(w http.ResponseWriter, r *http.Request) {
 		allData["elk_file_path"] = prefs.ElkFilePath
 		b, _ := json.MarshalIndent(allData, "", "  ")
 		os.WriteFile(prefsFile, b, 0644)
-		// 同步传输地址到采集器状态文件
+		// 同步到采集器状态文件
 		cs := loadCollectorState()
-		cs.Address = v
-		saveCollectorState(cs)
+		if cs.CollectorID != "" {
+			cs.Address = v
+			// 支持编辑采集器名称
+			if name, ok := data["collector_name"].(string); ok && name != "" {
+				cs.Name = name
+			}
+			saveCollectorState(cs)
+		}
 		// 重新生成 Vector 配置时替换 Kafka 地址
 		generateVectorConfigWithBroker(prefs, v)
 		stopVector()
 		startVector()
+		// 同步到服务端
+		go registerWithServer()
 		jsonResp(w, 200, map[string]interface{}{"ok": true})
 		return
 	}
 	savePrefs(prefs)
 	restartVector(prefs)
+	// 同步采集源变更到服务端
+	go registerWithServer()
 	any := prefs.LinuxSystemLogs || prefs.NetworkDeviceLogs || prefs.ElkFileLogs
 	jsonResp(w, 200, map[string]interface{}{"ok": true, "vector_running": any})
 }
@@ -613,7 +689,7 @@ func apiCollectorsLocal(w http.ResponseWriter, r *http.Request) {
 	actualStatus := "0"
 	if anyEnabled { actualStatus = "1" }
 	result := map[string]interface{}{
-		"Collector_ID": cs.CollectorID, "Name": cs.Name, "Status": actualStatus, "Address": cs.Address,
+		"Collector_ID": cs.CollectorID, "Name": cs.Name, "Status": actualStatus, "Address": cs.Address, "Source_Host": cs.SourceHost,
 		"Source_Types": []map[string]interface{}{
 			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.LinuxSystemLogs},
 			{"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.NetworkDeviceLogs},
@@ -631,7 +707,7 @@ func apiCollectorsLocalPost(w http.ResponseWriter, r *http.Request) {
 		name, _ := data["Name"].(string)
 		addr, _ := data["Address"].(string)
 		if name == "" { name = "Vector-WSL" }
-		cs := CollectorState{CollectorID: generateCollectorID(), Name: name, Status: "1", Address: addr}
+		cs := CollectorState{CollectorID: generateCollectorID(), Name: name, Status: "1", Address: addr, SourceHost: getLocalSourceHost()}
 		saveCollectorState(cs)
 		// 生成配置并启动 Vector
 		prefs := loadPrefs()
@@ -639,12 +715,6 @@ func apiCollectorsLocalPost(w http.ResponseWriter, r *http.Request) {
 		startVector()
 		go registerWithServer()
 		jsonResp(w, 200, map[string]interface{}{"ok": true, "Collector_ID": cs.CollectorID})
-	} else if action == "update_status" {
-		status, _ := data["Status"].(string)
-		if status == "0" { stopVector() } else {
-			prefs := loadPrefs(); generateVectorConfig(prefs); startVector()
-		}
-		jsonResp(w, 200, map[string]bool{"ok": true})
 	} else {
 		jsonResp(w, 400, map[string]string{"error": "unknown action"})
 	}
@@ -652,14 +722,13 @@ func apiCollectorsLocalPost(w http.ResponseWriter, r *http.Request) {
 
 // ============ 采集器路由（8081） ============
 func registerWithServer() {
-	serverURL := os.Getenv("LMS_SERVER_URL")
-	if serverURL == "" { serverURL = "http://localhost:8080" }
+	serverURL := getEnvDefault("LMS_SERVER_URL", "http://localhost:8080")
 	cs := loadCollectorState()
 	prefs := loadPrefs()
 	payload, _ := json.Marshal(map[string]interface{}{
 		"action": "create",
 		"Collector_ID": cs.CollectorID, "Name": cs.Name,
-		"Address": cs.Address,
+		"Address": cs.Address, "Source_Host": cs.SourceHost,
 		"Source_Types": []map[string]interface{}{
 			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.LinuxSystemLogs},
 			{"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.NetworkDeviceLogs},
@@ -709,16 +778,21 @@ func collectorRouter(w http.ResponseWriter, r *http.Request) {
 
 func apiCollectorsReadonly(w http.ResponseWriter, r *http.Request) {
 	// 返回服务端已注册的采集器（客户端启动时主动注册）
+	// 采集源数据从数据库读取，不再依赖本地 prefs 文件（客户端/服务端分离部署）
 	results := cq(fmt.Sprintf("SELECT * FROM %s.LMS_Collectors ORDER BY Collector_ID", database))
 	if results == nil { results = make([]map[string]interface{}, 0) }
-	prefs := loadPrefs()
 	for _, r := range results {
-		if r["Source_Types"] == nil {
-			r["Source_Types"] = []map[string]interface{}{
-				{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.LinuxSystemLogs},
-				{"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.NetworkDeviceLogs},
-				{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": prefs.ElkFileLogs},
+		if stJSON, ok := r["Source_Types"].(string); ok && stJSON != "" && stJSON != "[]" {
+			var sourceTypes []map[string]interface{}
+			if json.Unmarshal([]byte(stJSON), &sourceTypes) == nil {
+				r["Source_Types"] = sourceTypes
+				continue
 			}
+		}
+		r["Source_Types"] = []map[string]interface{}{
+			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": false},
+			{"name": "网络设备日志", "key": "network_device_logs", "enabled": false},
+			{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": false},
 		}
 	}
 	jsonResp(w, 200, results)

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LMS - 日志管理系统</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,12 +13,12 @@
         <nav class="sidebar">
             <div class="logo">
                 <div class="logo-icon">LMS</div>
-                <span>日志管理系统</span>
+                <span id="logo-title">日志管理系统</span>
             </div>
             <ul class="nav-menu">
                 <li class="nav-item active" data-page="logs">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-                    <span>日志查询</span>
+                    <span>日志管理</span>
                 </li>
                 <li class="nav-item" data-page="collectors">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
@@ -32,18 +33,19 @@
 
         <main class="main-content">
             <header class="header">
-                <h1 id="page-title">日志查询</h1>
+                <h1 id="page-title">日志管理</h1>
                 <div class="header-actions">
                     <span id="current-time"></span>
                 </div>
             </header>
 
-            <!-- 日志查询页面（含子Tab） -->
+            <!-- 日志管理页面（含子Tab） -->
             <div id="page-logs" class="page active">
                 <div class="sub-tabs">
                     <button class="sub-tab active" data-subtab="dashboard" onclick="switchSubTab('dashboard')">仪表盘</button>
                     <button class="sub-tab" data-subtab="logs" onclick="switchSubTab('logs')">日志查询</button>
                     <button class="sub-tab" data-subtab="charts" onclick="switchSubTab('charts')">可视化分析</button>
+                    <button class="sub-tab" data-subtab="ai" onclick="switchSubTab('ai')">AI 分析</button>
                 </div>
 
                 <!-- 仪表盘子页面 -->
@@ -174,15 +176,24 @@
                     </div>
                 </div>
 
-                    <!-- AI 分析 -->
-                    <div class="chart-card full-width" style="margin-top:16px">
-                        <h3>AI 分析 <span style="font-size:12px;color:var(--text-secondary);margin-left:10px"><button class="btn btn-sm" onclick="configureDeepSeek()">配置 DeepSeek API</button></span></h3>
-                        <div id="ai-result" style="font-size:13px;color:var(--text-secondary);min-height:60px;line-height:1.8">点击「开始分析」基于图表数据进行智能分析</div>
-                        <div style="margin-top:12px">
-                            <button class="btn btn-primary" onclick="runAIAnalysis()">开始分析</button>
-                            <span id="ai-status" style="font-size:12px;color:var(--text-secondary);margin-left:10px"></span>
+                <!-- AI 分析子页面 -->
+                <div id="subtab-ai" class="sub-content">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                        <button class="btn btn-sm" onclick="configureDeepSeek()">配置 API</button>
+                        <button class="btn btn-sm" onclick="clearAIChat()">清空对话</button>
+                        <span style="font-size:12px;color:var(--text-secondary)">基于 DeepSeek 的日志分析助手</span>
+                    </div>
+                    <div id="ai-chat-messages" class="ai-chat-messages">
+                        <div class="ai-msg ai-msg-bot">
+                            <div class="ai-msg-content">你好！我是日志分析助手，可以帮你分析日志数据、诊断问题。点击「分析数据」基于当前图表数据进行分析，或者直接向我提问。</div>
                         </div>
                     </div>
+                    <div class="ai-chat-input-row">
+                        <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="输入消息...按 Enter 发送" onkeydown="if(event.key==='Enter')sendAIMessage()">
+                        <button class="btn btn-primary" onclick="sendAIMessage()">发送</button>
+                        <button class="btn" onclick="runAIAnalysis()">分析数据</button>
+                    </div>
+                </div>
             </div>
 
             <!-- 采集器页面 -->
@@ -199,14 +210,15 @@
                             <tr>
                                 <th>采集器ID</th>
                                 <th>采集器名称</th>
-                                <th>传输地址</th>
+                                <th>来源地址</th>
+                                <th>kafka缓冲地址接口</th>
                                 <th>采集源</th>
                                 <th style="width:100px">状态</th>
                                 <th style="width:130px">操作</th>
                             </tr>
                         </thead>
                         <tbody id="collectors-table-body">
-                            <tr><td colspan="5" class="empty-state">暂无数据</td></tr>
+                            <tr><td colspan="7" class="empty-state">暂无数据</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -437,7 +449,11 @@
         <div class="modal-content" style="max-width:420px;padding:24px">
             <h3 style="margin-bottom:16px">编辑采集器</h3>
             <div style="margin-bottom:12px">
-                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">传输地址（Kafka broker）</label>
+                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">采集器名称</label>
+                <input type="text" id="edit-collector-name" style="width:100%;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px;box-sizing:border-box">
+            </div>
+            <div style="margin-bottom:12px">
+                <label style="color:var(--text-secondary);font-size:13px;display:block;margin-bottom:4px">kafka缓冲地址接口（Kafka broker）</label>
                 <div style="display:flex;gap:8px">
                     <input type="text" id="edit-trans-addr" style="flex:1;background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 12px;border-radius:4px;font-size:13px">
                     <button class="btn btn-sm" onclick="testTransAddr()" style="white-space:nowrap">测试连接</button>

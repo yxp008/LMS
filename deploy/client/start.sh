@@ -12,7 +12,7 @@ echo "========================================"
 if pgrep -f "server.*-collector" > /dev/null 2>&1; then
     echo "采集器服务已在运行"
 else
-    nohup $PROJECT_ROOT/server -collector > $PROJECT_ROOT/logs/collector.log 2>&1 &
+    nohup $PROJECT_ROOT/frontend/server -collector > $PROJECT_ROOT/logs/collector.log 2>&1 &
     sleep 3
     echo "采集器服务已启动: http://localhost:8081"
 fi

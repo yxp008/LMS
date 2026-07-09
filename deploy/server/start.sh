@@ -43,7 +43,7 @@ fi
 if curl -s "http://localhost:8080/api/stats" > /dev/null 2>&1; then
     echo "服务端 Web 已在运行"
 else
-    nohup $PROJECT_ROOT/server > $PROJECT_ROOT/logs/frontend.log 2>&1 &
+    nohup $PROJECT_ROOT/frontend/server > $PROJECT_ROOT/logs/frontend.log 2>&1 &
     sleep 3
     echo "服务端 Web 已启动: http://localhost:8080"
 fi

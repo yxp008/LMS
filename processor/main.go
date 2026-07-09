@@ -21,11 +21,16 @@ import (
 )
 
 // ============ 配置 ============
+func getEnvDefault(key, fallback string) string {
+	if v := os.Getenv(key); v != "" { return v }
+	return fallback
+}
+
 var (
-	broker      = "localhost:9092"
-	sourceTopic = "lms_elk_logs"
-	groupID     = "lms-processor"
-	chURL       = "http://localhost:8123"
+	broker      = getEnvDefault("LMS_KAFKA_BROKER", "localhost:9092")
+	sourceTopic = getEnvDefault("LMS_KAFKA_TOPIC", "lms_elk_logs")
+	groupID     = getEnvDefault("LMS_KAFKA_GROUP", "lms-processor")
+	chURL       = getEnvDefault("LMS_CLICKHOUSE_URL", "http://localhost:8123")
 	dbTable     = "LMS.LMS_Logs"
 	flushSize   = 200000
 	flushSecs   = 1

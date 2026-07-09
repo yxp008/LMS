@@ -119,7 +119,8 @@ fi
 
 # 生成 Vector 配置
 cd "$SCRIPT_DIR"
-python3 -c "import sys; sys.path.insert(0,'frontend'); import server; server.generate_vector_config(server.load_collection_prefs())" 2>/dev/null && echo "  -> vector_wsl.toml 已生成" || echo "  -> 跳过（server.py 尚未就绪）"
+# Vector 配置由 Go server 启动时自动生成，无需额外步骤
+echo "  -> Vector 配置将在服务启动时自动生成"
 
 mkdir -p "$SCRIPT_DIR/collector/vector_data" "$SCRIPT_DIR/logs"
 	echo "  -> 运行时目录已创建"

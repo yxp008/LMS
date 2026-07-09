@@ -21,7 +21,7 @@ CH_HTTP="http://localhost:$CLICKHOUSE_PORT"
 VECTOR_BIN="$HOME/.vector/bin/vector"
 VECTOR_CFG="$PROJECT_ROOT/collector/vector_wsl.toml"
 KAFKA_BIN="$KAFKA_HOME/bin/kafka-server-start.sh"
-KAFKA_CFG="$HOME/kafka/config/kraft/server.properties"
+KAFKA_CFG="$KAFKA_HOME/config/kraft/server.properties"
 PROCESSOR_BIN="$PROJECT_ROOT/processor/processor"
 FRONTEND_PORT=$SERVER_PORT
 

@@ -64,10 +64,55 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 | `collector/elk_logs/reader` | Go 编译的 JSON 数组 → NDJSON 转换工具 |
 | `processor/main.go` | Go 处理程序源码（Kafka 消费 → 脱敏 → ClickHouse） |
 | `processor/rules.json` | 脱敏正则规则配置 |
+| `frontend/collector_state.go` | 采集器本地状态（ID/名称/地址/来源） |
+| `collector/collector_state.json` | 采集器运行时状态持久化文件 |
+| `collector/collection_prefs.json` | 采集源开关 + Kafka broker 持久化 |
+| `config.env` | 统一配置文件（所有端口+地址） |
+
+### Collector_ID 生成规则
+
+- **生成时机**：客户端首次注册采集器时（非启动时）
+- **格式**：`C_<前6位hostname>_<8位随机hex>`，如 `C_LAPTOP_7d8ce52f`
+- **不可变性**：编辑采集器配置不会重新生成 ID
+- **Source_Host**：注册时自动获取 `hostname (IP)` 格式的来源地址，同步至服务端
+
+### AI 分析
+
+- 独立子标签页，与仪表盘/日志查询/可视化分析并列
+- 基于 DeepSeek API 的交互式对话
+- 前端 `localStorage` 存储 API Key，调用 `api.deepseek.com`
+- Markdown 格式回复（通过 marked.js 渲染）
+- 「分析数据」按钮：收集图表数据后自动分析
+- 不支持 AI 功能的采集器端不显示 AI 子标签
+
+
 | `processor/processor` | Go 编译的处理器二进制 |
 | `kafka/data/` | Kafka 持久化数据目录 |
 | `data/clickhouse_data/` | ClickHouse 二进制、数据和配置 |
 | `data/clickhouse_data/preprocessed_configs/config_minimal.xml` | ClickHouse 最小可用配置备份 |
+
+## 跨机器部署环境变量
+
+所有地址通过环境变量配置，支持客户端/服务端分离部署：
+
+| 变量 | 默认值 | 用途 |
+|---|---|---|
+| `LMS_PROJECT_ROOT` | 自动检测 | 项目根目录 |
+| `LMS_CLICKHOUSE_URL` | `http://localhost:8123` | ClickHouse HTTP 地址（处理器+服务端） |
+| `LMS_KAFKA_BROKER` | `localhost:9092` | Kafka broker 地址（处理器+采集器） |
+| `LMS_KAFKA_TOPIC` | `lms_elk_logs` | Kafka topic 名 |
+| `LMS_KAFKA_GROUP` | `lms-processor` | Kafka 消费者组 |
+| `LMS_SERVER_URL` | `http://localhost:8080` | 服务端地址（采集器注册目标） |
+| `LMS_VECTOR_BIN` | `$HOME/.vector/bin/vector` | Vector 二进制路径 |
+| `SERVER_PORT` | 8080 | 服务端 Web 端口 |
+| `COLLECTOR_PORT` | 8081 | 采集器管理端口 |
+
+**分离部署时**，在客户端机器的 `config.env` 中设置：
+```bash
+LMS_CLICKHOUSE_URL=http://<服务端IP>:8123
+LMS_KAFKA_BROKER=<服务端IP>:9092
+LMS_SERVER_URL=http://<服务端IP>:8080
+```
 
 ## 常用命令
 
@@ -152,7 +197,7 @@ pkill -x vector; sleep 2; nohup ~/.vector/bin/vector --config collector/vector_w
 6. 字段映射：host.ip → Host，syslog_message → Message，@timestamp → Timestamp
 7. 其余字段存入 Tags（JSON）
 8. Log_ID = L + 毫秒时间戳 + 4位随机数，每条日志唯一
-9. 批量写入 ClickHouse（50,000 条/批）
+9. 批量写入 ClickHouse（200,000 条/批）
 ```
 
 ### 脱敏规则

@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"net"
 	"os"
 	"path/filepath"
 )
@@ -13,6 +14,20 @@ type CollectorState struct {
 	Name        string `json:"Name"`
 	Status      string `json:"Status"`
 	Address     string `json:"Address"`
+	SourceHost  string `json:"Source_Host"`
+}
+
+func getLocalSourceHost() string {
+	host, _ := os.Hostname()
+	addrs, err := net.InterfaceAddrs()
+	if err == nil {
+		for _, addr := range addrs {
+			if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() && ipnet.IP.To4() != nil {
+				return host + " (" + ipnet.IP.String() + ")"
+			}
+		}
+	}
+	return host
 }
 
 func generateCollectorID() string {
@@ -30,6 +45,10 @@ func loadCollectorState() CollectorState {
 	}
 	var loaded CollectorState
 	if json.Unmarshal(data, &loaded) == nil {
+		// 保护：ID 为空时视为未注册
+		if loaded.CollectorID == "" {
+			return CollectorState{}
+		}
 		return loaded
 	}
 	return CollectorState{}

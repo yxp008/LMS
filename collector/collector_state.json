@@ -1,0 +1,7 @@
+{
+  "Collector_ID": "C_LAPTOP_173e6afa",
+  "Name": "测试采集器1",
+  "Status": "1",
+  "Address": "localhost:9092",
+  "Source_Host": "LAPTOP-2CVOKHL6 (10.255.255.254)"
+}

@@ -73,7 +73,7 @@ SYSLOG_PORT=1514
 | 处理层 | Go Processor | Kafka → 脱敏 → 解析 → ClickHouse |
 | 存储层 | ClickHouse 26.6 | SSD(0-7d)→HDD(7-30d)→MinIO(30-180d) |
 | 查询层 | Go server | REST API + 告警 goroutine |
-| 可视化层 | Vanilla JS | SPA，自定义日历，零 CDN 依赖 |
+| 可视化层 | Vanilla JS | SPA，自定义日历，Chart.js + marked.js CDN |
 
 ## ELK 日志采集
 

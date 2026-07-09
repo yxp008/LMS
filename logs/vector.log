@@ -1,0 +1,11 @@
+2026-07-08T06:43:46.853591Z  INFO vector::app: Log level is enabled. level="info"
+2026-07-08T06:43:46.856365Z  INFO vector::app: Loading configs. paths=["/home/yxp/LMS_mimo/collector/vector_wsl.toml"]
+2026-07-08T06:43:46.935909Z  INFO vector::topology::running: Running healthchecks.
+2026-07-08T06:43:46.936170Z  INFO vector: Vector has started. debug="false" version="0.56.0" arch="x86_64" revision="6817c02 2026-06-03 14:25:37.451398530"
+2026-07-08T06:43:46.936184Z  INFO vector::app: API is disabled, enable by setting `api.enabled` to `true` and use commands like `vector top`.
+2026-07-08T06:43:46.936349Z  INFO source{component_kind="source" component_id=elk_file component_type=file}: vector::sources::file: Starting file server. include=["/home/yxp/LMS_mimo/collector/elk_logs/incoming/*.ndjson"] exclude=[]
+2026-07-08T06:43:46.938664Z  INFO source{component_kind="source" component_id=journald component_type=journald}: vector::sources::journald: Starting journalctl.
+2026-07-08T06:43:46.941976Z  INFO vector::topology::builder: Healthcheck passed.
+2026-07-08T06:43:46.998200Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
+2026-07-08T06:43:47.290333Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Found new file to watch. file=/home/yxp/LMS_mimo/collector/elk_logs/incoming/export_data.ndjson
+2026-07-08T06:43:47.291556Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Internal log [Found new file to watch.] is being suppressed to avoid flooding.

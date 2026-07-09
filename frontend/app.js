@@ -24,9 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isCollectorMode) {
         const label = document.getElementById('collector-nav-label');
         if (label) label.textContent = '采集器监控';
+        const logoTitle = document.getElementById('logo-title');
+        if (logoTitle) logoTitle.textContent = '日志管理系统（服务端）';
     } else {
         const label = document.getElementById('collector-nav-label');
         if (label) label.textContent = '采集器';
+        const logoTitle = document.getElementById('logo-title');
+        if (logoTitle) logoTitle.textContent = '日志管理系统（客户端）';
         // 客户端只显示采集器页面，隐藏其他导航
         document.querySelectorAll('.nav-item').forEach(item => {
             if (item.dataset.page !== 'collectors') item.style.display = 'none';
@@ -54,7 +58,7 @@ function initNavigation() {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(`page-${page}`).classList.add('active');
 
-            const titles = { logs: '日志查询', collectors: '采集器', alerts: '告警规则' };
+            const titles = { logs: '日志管理', collectors: '采集器', alerts: '告警规则' };
             document.getElementById('page-title').textContent = titles[page] || '';
 
             if (page === 'logs') {
@@ -81,7 +85,7 @@ async function switchToLogsWithLevel(level) {
     document.querySelector('.nav-item[data-page="logs"]').classList.add('active');
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-logs').classList.add('active');
-    document.getElementById('page-title').textContent = '日志查询';
+    document.getElementById('page-title').textContent = '日志管理';
     switchSubTab('logs');
     // 等待筛选选项加载完成后再设置值和查询
     await loadFilterOptions();
@@ -111,6 +115,8 @@ function handleSubTabLoad(subtab) {
         startLogAutoRefresh();
     } else if (subtab === 'charts') {
         loadCharts();
+    } else if (subtab === 'ai') {
+        // AI 对话页无需特殊加载
     }
 }
 
@@ -709,18 +715,20 @@ async function loadCollectors() {
         const enabled = c.Status === '1';
         const sourceTypes = (c.Source_Types || []).map(s => {
             if (isCollectorMode) {
-                return `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}" onclick="toggleSourceType('${escapeHtml(s.key)}', ${!s.enabled})" title="点击${s.enabled ? '停用' : '启用'}${escapeHtml(s.name)}">${escapeHtml(s.name)}</span>`;
+                return `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}">${escapeHtml(s.name)}</span>`;
             }
             return `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}">${escapeHtml(s.name)}</span>`;
         }).join(' ');
         const actionBtn = isCollectorMode
-            ? `<button class="btn btn-sm" onclick='editCollectorRow(${JSON.stringify(c).replace(/'/g,"&#39;")})' style="margin-right:4px">编辑</button><button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button>`
+            ? `<button class="btn btn-sm" onclick='editCollectorRow(${JSON.stringify(c).replace(/'/g,"&#39;")})'>编辑</button>`
             : '';
         const address = c.Address || c.Collector_Address || '-';
+        const sourceHost = c.Source_Host || '-';
         return `
         <tr>
             <td>${escapeHtml(c.Collector_ID)}</td>
             <td>${escapeHtml(c.Name)}</td>
+            <td>${escapeHtml(sourceHost)}</td>
             <td>${escapeHtml(address)}</td>
             <td>${sourceTypes || '<span style="color:var(--text-secondary)">-</span>'}</td>
             <td><span class="level-badge ${enabled ? 'level-1' : 'level-3'}">${enabled ? '已启用' : '已停用'}</span></td>
@@ -729,33 +737,11 @@ async function loadCollectors() {
     }).join('');
 }
 
-function toggleSourceType(type, enable) {
-    const currentPrefs = {};
-    const tags = document.querySelectorAll('.source-tag');
-    tags.forEach(t => {
-        const cls = t.className;
-        currentPrefs[t.getAttribute('data-key') || t.textContent] = cls.includes('source-on');
-    });
-    // 从 API 获取当前状态再操作
-    fetchAPI('/api/collection-prefs').then(prefs => {
-        if (!prefs) return;
-        prefs[type] = enable;
-        const text = enable ? '正在启用采集源...' : '正在停用采集源...';
-        document.getElementById('collector-loading-text').textContent = text;
-        document.getElementById('collector-loading-modal').classList.remove('hidden');
-        postAPI('/api/collection-prefs', prefs).then(result => {
-            setTimeout(() => {
-                document.getElementById('collector-loading-modal').classList.add('hidden');
-                loadCollectors();
-            }, 800);
-        });
-    });
-}
-
 var isNewRegistration = false;
 
 function showRegCollector() {
     isNewRegistration = true;
+    document.getElementById('edit-collector-name').value = 'Vector-WSL';
     document.getElementById('edit-trans-addr').value = 'localhost:9092';
     document.querySelector('#edit-collector-modal h3').textContent = '注册采集器';
     document.querySelectorAll('#edit-source-types input').forEach(cb => cb.checked = true);
@@ -764,17 +750,7 @@ function showRegCollector() {
 
 function editCollectorRow(c) {
     isNewRegistration = false;
-    document.getElementById('edit-trans-addr').value = c.Address || 'localhost:9092';
-    document.querySelector('#edit-collector-modal h3').textContent = '编辑采集器';
-    var sources = c.Source_Types || [];
-    sources.forEach(function(s) {
-        var cb = document.querySelector('#edit-source-types input[data-key="' + s.key + '"]');
-        if (cb) cb.checked = s.enabled;
-    });
-    document.getElementById('edit-collector-modal').classList.remove('hidden');
-}
-
-function editCollectorRow(c) {
+    document.getElementById('edit-collector-name').value = c.Name || 'Vector-WSL';
     document.getElementById('edit-trans-addr').value = c.Address || 'localhost:9092';
     document.querySelector('#edit-collector-modal h3').textContent = '编辑采集器';
     var sources = c.Source_Types || [];
@@ -799,6 +775,7 @@ function testTransAddr() {
 }
 
 function saveCollectorEdit() {
+    const name = document.getElementById('edit-collector-name').value.trim() || 'Vector-WSL';
     const addr = document.getElementById('edit-trans-addr').value.trim();
     if (!addr) return;
     var prefs = {};
@@ -806,12 +783,13 @@ function saveCollectorEdit() {
         prefs[cb.dataset.key] = cb.checked;
     });
     prefs.kafka_broker = addr;
+    prefs.collector_name = name;
     document.getElementById('collector-loading-text').textContent = isNewRegistration ? '正在注册采集器...' : '正在保存采集器配置...';
     document.getElementById('collector-loading-modal').classList.remove('hidden');
     document.getElementById('edit-collector-modal').classList.add('hidden');
 
     if (isNewRegistration) {
-        postAPI('/api/collectors', { action: 'register', Name: 'Vector-WSL', Address: addr }).then(function(r) {
+        postAPI('/api/collectors', { action: 'register', Name: name, Address: addr }).then(function(r) {
             if (r && r.ok) {
                 // 保存采集源偏好
                 postAPI('/api/collection-prefs', prefs).then(function() {
@@ -855,18 +833,6 @@ function deleteCollector() {
 }
 
 function updateKafkaAddr() { editCollectorTransAddr(); }
-
-function toggleCollector(id, newStatus) {
-    const text = newStatus === '0' ? '采集器停用中...' : '采集器启用中...';
-    document.getElementById('collector-loading-text').textContent = text;
-    document.getElementById('collector-loading-modal').classList.remove('hidden');
-    postAPI('/api/collectors', { action: 'update_status', Collector_ID: id, Status: newStatus }).then(result => {
-        setTimeout(() => {
-            document.getElementById('collector-loading-modal').classList.add('hidden');
-            loadCollectors();
-        }, 800);
-    });
-}
 
 // ========== Alert Rules ==========
 async function loadAlertRules() {
@@ -1163,7 +1129,9 @@ async function testSmtpConnection() {
 }
 
 // ========== Utilities ==========
-// ========== AI 分析 (DeepSeek) ==========
+// ========== AI 对话 (DeepSeek) ==========
+var aiConversation = [];
+
 function configureDeepSeek() {
     document.getElementById('deepseek-modal').classList.remove('hidden');
     var key = localStorage.getItem('deepseek_key');
@@ -1182,15 +1150,83 @@ function saveDeepSeekConfig() {
     alert('DeepSeek 配置已保存');
 }
 
+function clearAIChat() {
+    aiConversation = [];
+    var container = document.getElementById('ai-chat-messages');
+    container.innerHTML = '<div class="ai-msg ai-msg-bot"><div class="ai-msg-content">你好！我是日志分析助手，可以帮你分析日志数据、诊断问题。点击「分析数据」基于当前图表数据进行分析，或者直接向我提问。</div></div>';
+}
+
+function addAIMessage(role, content) {
+    var container = document.getElementById('ai-chat-messages');
+    var div = document.createElement('div');
+    div.className = 'ai-msg ai-msg-' + (role === 'user' ? 'user' : 'bot');
+    if (role === 'bot' && typeof marked !== 'undefined') {
+        div.innerHTML = '<div class="ai-msg-content">' + marked.parse(content) + '</div>';
+    } else {
+        div.innerHTML = '<div class="ai-msg-content">' + escapeHtml(content).replace(/\n/g, '<br>') + '</div>';
+    }
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function addAILoading() {
+    var container = document.getElementById('ai-chat-messages');
+    var div = document.createElement('div');
+    div.className = 'ai-msg ai-msg-bot ai-msg-loading';
+    div.id = 'ai-loading-msg';
+    div.innerHTML = '<div class="ai-msg-content">正在思考...</div>';
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function removeAILoading() {
+    var el = document.getElementById('ai-loading-msg');
+    if (el) el.remove();
+}
+
+async function callDeepSeekAPI(messages) {
+    var key = localStorage.getItem('deepseek_key');
+    var url = localStorage.getItem('deepseek_url') || 'https://api.deepseek.com/v1/chat/completions';
+    if (!key) { alert('请先点击「配置 API」设置 DeepSeek API Key'); return null; }
+    try {
+        var resp = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+            body: JSON.stringify({ model: 'deepseek-chat', messages: messages, max_tokens: 800, temperature: 0.7 })
+        });
+        var data = await resp.json();
+        if (data.choices && data.choices[0]) return data.choices[0].message.content;
+        return 'API 返回异常: ' + JSON.stringify(data);
+    } catch(e) { return '请求失败: ' + e.message; }
+}
+
+async function sendAIMessage() {
+    var input = document.getElementById('ai-chat-input');
+    var text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+
+    addAIMessage('user', text);
+    aiConversation.push({ role: 'user', content: text });
+    addAILoading();
+    var reply = await callDeepSeekAPI([
+        { role: 'system', content: '你是日志分析专家，精通日志管理、故障排查、安全分析和性能优化。根据系统数据和用户问题提供专业分析。中文回答，条理清晰。' },
+        ...aiConversation
+    ]);
+    removeAILoading();
+    if (reply) {
+        addAIMessage('bot', reply);
+        aiConversation.push({ role: 'assistant', content: reply });
+    }
+}
+
 async function runAIAnalysis() {
     var key = localStorage.getItem('deepseek_key');
     var url = localStorage.getItem('deepseek_url') || 'https://api.deepseek.com/v1/chat/completions';
-    if (!key) { alert('请先配置 DeepSeek API Key'); return; }
+    if (!key) { alert('请先点击「配置 API」设置 DeepSeek API Key'); return; }
 
-    var status = document.getElementById('ai-status');
-    var result = document.getElementById('ai-result');
-    status.textContent = '正在分析...';
-    result.textContent = '';
+    addAIMessage('user', '[触发数据自动分析]');
+    addAILoading();
 
     // 收集图表数据
     var summary = [];
@@ -1208,45 +1244,25 @@ async function runAIAnalysis() {
         });
         summary.push('总日志数: ' + timeTotal);
         summary.push('按等级: ' + JSON.stringify(timeLevels));
-
-        summary.push('\n=== 主机排名 ===');
+        summary.push('=== 主机排名 ===');
         var hostTotal = {};
         (hosts||[]).forEach(function(d) { hostTotal[d.Host] = (hostTotal[d.Host]||0) + parseInt(d.count); });
         var top5 = Object.entries(hostTotal).sort(function(a,b){return b[1]-a[1]}).slice(0,5);
         top5.forEach(function(h){ summary.push(h[0] + ': ' + h[1] + '条'); });
-
-        summary.push('\n=== 来源分布 ===');
+        summary.push('=== 来源分布 ===');
         (sources||[]).forEach(function(s){ summary.push(s.Source_Type + ': ' + s.count + '条'); });
-
-        summary.push('\n=== 等级分布 ===');
+        summary.push('=== 等级分布 ===');
         (levels||[]).forEach(function(l){ summary.push(l.Level + ': ' + l.count + '条'); });
     } catch(e) { summary.push('数据获取失败'); }
 
-    // 调用 DeepSeek API
-    try {
-        var resp = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
-            body: JSON.stringify({
-                model: 'deepseek-chat',
-                messages: [
-                    {role:'system', content:'你是日志分析专家。根据提供的日志数据给出简洁分析：异常趋势、安全风险、性能瓶颈、优化建议。中文回答，200字以内。'},
-                    {role:'user', content: summary.join('\n')}
-                ],
-                max_tokens: 500, temperature: 0.7
-            })
-        });
-        var data = await resp.json();
-        if (data.choices && data.choices[0]) {
-            result.textContent = data.choices[0].message.content;
-            status.textContent = '分析完成';
-        } else {
-            result.textContent = 'API 返回异常: ' + JSON.stringify(data);
-            status.textContent = '分析失败';
-        }
-    } catch(e) {
-        result.textContent = '请求失败: ' + e.message;
-        status.textContent = '网络错误';
+    var reply = await callDeepSeekAPI([
+        { role: 'system', content: '你是日志分析专家。根据提供的日志数据给出简洁分析：异常趋势、安全风险、性能瓶颈、优化建议。中文回答，300字以内。' },
+        { role: 'user', content: summary.join('\n') }
+    ]);
+    removeAILoading();
+    if (reply) {
+        addAIMessage('bot', reply);
+        aiConversation.push({ role: 'assistant', content: reply });
     }
 }
 
