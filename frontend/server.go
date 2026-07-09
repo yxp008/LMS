@@ -418,7 +418,8 @@ func apiCollectionPrefsPost(w http.ResponseWriter, r *http.Request) {
 		saveCollectorState(cs)
 		// 重新生成 Vector 配置时替换 Kafka 地址
 		generateVectorConfigWithBroker(prefs, v)
-		restartVector(prefs)
+		stopVector()
+		startVector()
 		go registerWithServer()
 		jsonResp(w, 200, map[string]interface{}{"ok": true})
 		return
