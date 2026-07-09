@@ -30,10 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // 客户端只显示采集器页面，隐藏其他导航
         document.querySelectorAll('.nav-item').forEach(item => {
             if (item.dataset.page !== 'collectors') item.style.display = 'none';
+            else item.classList.add('active');
         });
-        // 直接加载采集器
-        loadCollectors();
+        // 切换到采集器页面
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        var cp = document.getElementById('page-collectors');
+        if (cp) cp.classList.add('active');
         document.getElementById('page-title').textContent = '采集器';
+        // 显示操作栏
+        var bar = document.getElementById('collector-self-info');
+        if (bar) bar.style.display = 'block';
+        loadCollectors();
     }
 });
 
@@ -712,7 +719,7 @@ async function loadCollectors() {
             }
             return `<span class="source-tag ${s.enabled ? 'source-on' : 'source-off'}">${escapeHtml(s.name)}</span>`;
         }).join(' ');
-        const actionBtns = isCollectorMode
+        const actionBtn = isCollectorMode
             ? `<button class="btn btn-sm" onclick='editCollectorRow(${JSON.stringify(c).replace(/'/g,"&#39;")})' style="margin-right:4px">编辑</button><button class="btn btn-sm ${enabled ? 'btn-danger' : 'btn-primary'}" onclick="toggleCollector('${escapeHtml(c.Collector_ID)}', '${enabled ? '0' : '1'}')">${enabled ? '停用' : '启用'}</button>`
             : `<button class="btn btn-sm" style="background:rgba(231,76,60,0.15);color:var(--error);border-color:rgba(231,76,60,0.3)" onclick="disconnectCollector('${escapeHtml(c.Collector_ID)}')">断开</button>`;
         const address = c.Address || c.Collector_Address || '-';
