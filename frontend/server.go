@@ -791,7 +791,7 @@ func main() {
 	flag.Parse()
 
 	if *collectorMode {
-		listenAddr = ":8081"
+		if p := os.Getenv("COLLECTOR_PORT"); p != "" { listenAddr = ":" + p } else { listenAddr = ":8081" }
 		loadCollectorState()
 		saveCollectorState(loadCollectorState())
 		prefs := loadPrefs()
@@ -813,6 +813,7 @@ func main() {
 		startVector()
 	} else { log.Println("[SERVER] 所有采集类型已禁用，Vector 不启动") }
 
+	if p := os.Getenv("SERVER_PORT"); p != "" { listenAddr = ":" + p } else { listenAddr = ":8080" }
 	go alertChecker()
 
 	log.Printf("[SERVER] 日志管理: http://localhost%s", listenAddr)

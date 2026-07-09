@@ -4,16 +4,26 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR"
 export LMS_PROJECT_ROOT="$PROJECT_ROOT"
+
+# 加载配置文件
+[ -f "$PROJECT_ROOT/config.env" ] && source "$PROJECT_ROOT/config.env"
+
+SERVER_PORT=${SERVER_PORT:-8080}
+COLLECTOR_PORT=${COLLECTOR_PORT:-8081}
+CLICKHOUSE_PORT=${CLICKHOUSE_PORT:-8123}
+KAFKA_PORT=${KAFKA_PORT:-9092}
+KAFKA_HOME=${KAFKA_HOME:-$HOME/kafka}
+
 CH_BIN="$PROJECT_ROOT/data/clickhouse_data/clickhouse"
 CH_CFG="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config.xml"
 CH_CFG_SAFE="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config_minimal.xml"
-CH_HTTP="http://localhost:8123"
+CH_HTTP="http://localhost:$CLICKHOUSE_PORT"
 VECTOR_BIN="$HOME/.vector/bin/vector"
 VECTOR_CFG="$PROJECT_ROOT/collector/vector_wsl.toml"
-KAFKA_BIN="$HOME/kafka/bin/kafka-server-start.sh"
+KAFKA_BIN="$KAFKA_HOME/bin/kafka-server-start.sh"
 KAFKA_CFG="$HOME/kafka/config/kraft/server.properties"
 PROCESSOR_BIN="$PROJECT_ROOT/processor/processor"
-FRONTEND_PORT=8080
+FRONTEND_PORT=$SERVER_PORT
 
 echo "=========================================="
 echo "  LMS 日志管理系统 启动脚本"
@@ -136,5 +146,5 @@ echo "  前端界面: http://localhost:$FRONTEND_PORT"
 echo "  服务端 (日志管理):  http://localhost:8080"
 echo "  采集器 (管理):      http://localhost:8081"
 echo "  ClickHouse:         $CH_HTTP"
-echo "  Kafka:              localhost:9092"
+echo "  Kafka:              localhost:$KAFKA_PORT"
 echo "=========================================="
