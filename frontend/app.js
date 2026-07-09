@@ -747,10 +747,9 @@ function toggleSourceType(type, enable) {
 function updateKafkaAddr() {
     const addr = document.getElementById('collector-kafka-addr').value.trim();
     if (!addr) return;
-    fetchAPI('/api/collection-prefs').then(prefs => {
-        if (!prefs) return;
-        prefs.kafka_addr = addr;
-        postAPI('/api/collection-prefs', prefs).then(() => alert('Kafka 地址已保存: ' + addr));
+    postAPI('/api/collection-prefs', { kafka_broker: addr }).then(r => {
+        if (r && r.ok) alert('采集器发送目标已更新为: ' + addr + '\nVector 已重启，采集器已重新注册到服务端');
+        else alert('更新失败');
     });
 }
 

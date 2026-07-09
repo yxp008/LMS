@@ -152,6 +152,16 @@ func generateVectorConfig(prefs CollectionPrefs) {
 	os.WriteFile(vectorCfg, []byte(cfg), 0644)
 }
 
+func generateVectorConfigWithBroker(prefs CollectionPrefs, broker string) {
+	generateVectorConfig(prefs)
+	// 替换 Vector 配置中的 Kafka 地址
+	cfgData, err := os.ReadFile(vectorCfg)
+	if err != nil { return }
+	cfg := strings.ReplaceAll(string(cfgData), "localhost:9092", broker)
+	os.WriteFile(vectorCfg, []byte(cfg), 0644)
+	log.Printf("[COLLECTOR] Kafka broker 已更新为: %s", broker)
+}
+
 // ============ Vector 进程管理 ============
 func vectorIsRunning() bool {
 	pidData, err := os.ReadFile(vectorPID)
@@ -377,6 +387,26 @@ func apiCollectionPrefsPost(w http.ResponseWriter, r *http.Request) {
 	if v, ok := data["network_device_logs"].(bool); ok { prefs.NetworkDeviceLogs = v }
 	if v, ok := data["elk_file_logs"].(bool); ok { prefs.ElkFileLogs = v }
 	if v, ok := data["elk_file_path"].(string); ok && v != "" { prefs.ElkFilePath = v }
+	// Kafka broker 地址更新
+	if v, ok := data["kafka_broker"].(string); ok && v != "" {
+		os.MkdirAll(filepath.Dir(prefsFile), 0755)
+		// 保存到 prefs 文件（扩展字段）
+		allData := map[string]interface{}{}
+		if d, e := os.ReadFile(prefsFile); e == nil { json.Unmarshal(d, &allData) }
+		allData["kafka_broker"] = v
+		allData["linux_system_logs"] = prefs.LinuxSystemLogs
+		allData["network_device_logs"] = prefs.NetworkDeviceLogs
+		allData["elk_file_logs"] = prefs.ElkFileLogs
+		allData["elk_file_path"] = prefs.ElkFilePath
+		b, _ := json.MarshalIndent(allData, "", "  ")
+		os.WriteFile(prefsFile, b, 0644)
+		// 重新生成 Vector 配置时替换 Kafka 地址
+		generateVectorConfigWithBroker(prefs, v)
+		restartVector(prefs)
+		go registerWithServer()
+		jsonResp(w, 200, map[string]interface{}{"ok": true})
+		return
+	}
 	savePrefs(prefs)
 	restartVector(prefs)
 	any := prefs.LinuxSystemLogs || prefs.NetworkDeviceLogs || prefs.ElkFileLogs
