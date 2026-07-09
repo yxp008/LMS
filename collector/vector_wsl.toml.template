@@ -260,15 +260,4 @@ encoding.codec = "text"
 # 存储层 (Storage Layer)
 # =========================================
 
-# ===== INPUTS =====
-[sinks.clickhouse_sink]
-type = "clickhouse"
-inputs = ["cleanup_journald", "cleanup_syslog"]
-endpoint = "http://localhost:8123"
-database = "LMS"
-table = "LMS_Logs"
-compression = "gzip"
-skip_unknown_fields = true
-batch.max_events = 100000
-batch.timeout_secs = 1
-# ===== END INPUTS =====
+# ClickHouse 写入由 Processor 处理，不再经 Vector
