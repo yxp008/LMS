@@ -84,6 +84,17 @@ func desensitize(raw map[string]interface{}) {
 
 // ============ 字段解析 (对应 VRL process_elk) ============
 // generateLogID 基于纳秒时间戳+随机数，每条日志唯一
+func getCollectorID(raw map[string]interface{}) string {
+	if v, ok := raw["Collector_ID"].(string); ok && v != "" {
+		delete(raw, "Collector_ID")
+		return v
+	}
+	// 回退：主机名前8位
+	host, _ := os.Hostname()
+	if len(host) > 8 { host = host[:8] }
+	return "C_" + host
+}
+
 func generateLogID() string {
 	n, _ := rand.Int(rand.Reader, big.NewInt(9000))
 	randS := fmt.Sprintf("%04d", 1000+n.Int64())
@@ -311,7 +322,7 @@ func main() {
 			"Source_Type": "ELK本地日志文件",
 			"Message":     msgText,
 			"Tags":        json.RawMessage(tagsJSON),
-			"Collector_ID": "C001",
+			"Collector_ID": getCollectorID(raw),
 		})
 
 		count++

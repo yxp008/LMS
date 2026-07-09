@@ -224,10 +224,18 @@ del(.Tags.source)
 # ===== END COLLECTION =====
 
 # ===== COLLECTION: elk_file_logs =====
+# --- 注入采集器标识 ---
+[transforms.inject_collector_id]
+type = "remap"
+inputs = ["elk_file"]
+source = '''
+.Collector_ID = "__COLLECTOR_ID__"
+'''
+
 # --- Kafka 缓冲 ---
 [sinks.kafka_elk_out]
 type = "kafka"
-inputs = ["elk_file"]
+inputs = ["inject_collector_id"]
 bootstrap_servers = "localhost:9092"
 topic = "lms_elk_logs"
 encoding.codec = "text"

@@ -149,6 +149,7 @@ func generateVectorConfig(prefs CollectionPrefs) {
 	cfg := strings.Join(output, "\n") + "\n"
 	cfg = strings.ReplaceAll(cfg, "__PROJECT_ROOT__", projectRoot)
 	cfg = strings.ReplaceAll(cfg, "__ELK_FILE_PATH__", prefs.ElkFilePath)
+	cfg = strings.ReplaceAll(cfg, "__COLLECTOR_ID__", loadCollectorState().CollectorID)
 	os.MkdirAll(filepath.Dir(vectorCfg), 0755)
 	os.WriteFile(vectorCfg, []byte(cfg), 0644)
 }
