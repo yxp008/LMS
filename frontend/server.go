@@ -541,6 +541,31 @@ func apiCollectorsLocalPost(w http.ResponseWriter, r *http.Request) {
 }
 
 // ============ 采集器路由（8081） ============
+func registerWithServer() {
+	serverURL := os.Getenv("LMS_SERVER_URL")
+	if serverURL == "" { serverURL = "http://localhost:8080" }
+	cs := loadCollectorState()
+	prefs := loadPrefs()
+	payload, _ := json.Marshal(map[string]interface{}{
+		"action": "create",
+		"Collector_ID": cs.CollectorID, "Name": cs.Name,
+		"Address": cs.Address,
+		"Source_Types": []map[string]interface{}{
+			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": prefs.LinuxSystemLogs},
+			{"name": "网络设备日志", "key": "network_device_logs", "enabled": prefs.NetworkDeviceLogs},
+			{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": prefs.ElkFileLogs},
+		},
+	})
+	resp, err := http.Post(serverURL+"/api/collectors", "application/json", strings.NewReader(string(payload)))
+	if err != nil {
+		log.Printf("[COLLECTOR] 服务端注册失败: %v", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := io.ReadAll(resp.Body)
+	log.Printf("[COLLECTOR] 已向 %s 注册: %s", serverURL, string(body))
+}
+
 func collectorRouter(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
@@ -704,7 +729,6 @@ func main() {
 
 	if *collectorMode {
 		listenAddr = ":8081"
-		// 确保本地状态文件存在
 		loadCollectorState()
 		saveCollectorState(loadCollectorState())
 		prefs := loadPrefs()
@@ -713,6 +737,8 @@ func main() {
 			generateVectorConfig(prefs)
 			startVector()
 		}
+		// 向服务端注册
+		go registerWithServer()
 		log.Printf("[COLLECTOR] 采集器管理: http://localhost%s", listenAddr)
 		log.Fatal(http.ListenAndServe(listenAddr, http.HandlerFunc(collectorRouter)))
 	}
