@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 export LMS_PROJECT_ROOT="$SCRIPT_DIR"
 
 # 加载服务端配置
-[ -f "$SCRIPT_DIR/config_server.env" ] && source "$SCRIPT_DIR/config_server.env"
+[ -f "$SCRIPT_DIR/server/config_server.env" ] && source "$SCRIPT_DIR/config_server.env"
 
 SERVER_PORT=${SERVER_PORT:-8080}
 KAFKA_HOME=${KAFKA_HOME:-$HOME/kafka}
@@ -74,7 +74,7 @@ echo "[3/4] 启动 Processor..."
 if pgrep -f "processor/processor" > /dev/null 2>&1; then
     echo "  -> Processor 已在运行"
 else
-    nohup $PROCESSOR_BIN > "$SCRIPT_DIR/logs/processor.log" 2>&1 &
+    nohup $PROCESSOR_BIN > "$SCRIPT_DIR/../logs/processor.log" 2>&1 &
     disown
     sleep 2
     if pgrep -f "processor/processor" > /dev/null 2>&1; then
@@ -92,7 +92,7 @@ if curl -s "http://localhost:$SERVER_PORT/api/stats" > /dev/null 2>&1; then
 else
     fuser -k $SERVER_PORT/tcp 2>/dev/null
     sleep 1
-    nohup $SCRIPT_DIR/frontend/server > "$SCRIPT_DIR/logs/frontend.log" 2>&1 &
+    nohup $SCRIPT_DIR/../frontend/server > "$SCRIPT_DIR/../logs/frontend.log" 2>&1 &
     disown
     for i in 1 2 3 4 5; do
         sleep 2

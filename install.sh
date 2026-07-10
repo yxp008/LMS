@@ -32,7 +32,7 @@ fi
 # ---------- 2. 编译 processor ----------
 echo ""
 echo "[2/7] 编译 Processor（Kafka → 脱敏 → ClickHouse）..."
-cd "$SCRIPT_DIR/processor"
+cd "$SCRIPT_DIR/server/processor"
 if command -v go &> /dev/null; then
     GOPROXY=${GOPROXY:-https://goproxy.cn,direct} go build -o processor . 2>/dev/null || {
         GOPROXY=https://goproxy.cn,direct go build -o processor .
@@ -58,7 +58,7 @@ fi
 # ---------- 4. 编译 reader ----------
 echo ""
 echo "[4/7] 编译 Reader（JSON数组 → NDJSON 转换）..."
-cd "$SCRIPT_DIR/collector/elk_logs"
+cd "$SCRIPT_DIR/client/collector/elk_logs"
 if command -v go &> /dev/null && [ -f reader.go ]; then
     GOPROXY=${GOPROXY:-https://goproxy.cn,direct} go build -o reader reader.go 2>/dev/null || {
         GOPROXY=https://goproxy.cn,direct go build -o reader reader.go
@@ -101,8 +101,8 @@ echo ""
 echo "[6/7] 初始化配置..."
 
 # 确保默认采集配置存在
-if [ ! -f "$SCRIPT_DIR/collector/collection_prefs.json" ]; then
-    cat > "$SCRIPT_DIR/collector/collection_prefs.json" << 'EOF'
+if [ ! -f "$SCRIPT_DIR/client/collector/collection_prefs.json" ]; then
+    cat > "$SCRIPT_DIR/client/collector/collection_prefs.json" << 'EOF'
 {
   "linux_system_logs": false,
   "network_device_logs": false,
@@ -111,7 +111,7 @@ if [ ! -f "$SCRIPT_DIR/collector/collection_prefs.json" ]; then
 }
 EOF
     # 替换为实际路径
-    sed -i "s|__ELK_FILE_PATH__|$SCRIPT_DIR/collector/elk_logs/incoming/|g" "$SCRIPT_DIR/collector/collection_prefs.json"
+    sed -i "s|__ELK_FILE_PATH__|$SCRIPT_DIR/collector/elk_logs/incoming/|g" "$SCRIPT_DIR/client/collector/collection_prefs.json"
     echo "  -> collection_prefs.json 已创建"
 else
     echo "  -> collection_prefs.json 已存在，跳过"
@@ -122,7 +122,7 @@ cd "$SCRIPT_DIR"
 # Vector 配置由 Go server 启动时自动生成，无需额外步骤
 echo "  -> Vector 配置将在服务启动时自动生成"
 
-mkdir -p "$SCRIPT_DIR/collector/vector_data" "$SCRIPT_DIR/logs"
+mkdir -p "$SCRIPT_DIR/client/collector/vector_data" "$SCRIPT_DIR/logs"
 	echo "  -> 运行时目录已创建"
 
 # ---------- 完成 ----------
@@ -141,7 +141,7 @@ echo "  3. rm -rf ~/.vector  (如果安装了 Vector)"
 echo ""
 echo "已安装的项目组件:"
 echo "  - processor/processor  (Go 二进制)"
-echo "  - collector/elk_logs/reader  (Go 二进制)"
+echo "  - client/collector/elk_logs/reader  (Go 二进制)"
 echo "  - collection_prefs.json (配置文件)"
 echo "  - vector_wsl.toml (Vector 配置)"
 echo ""

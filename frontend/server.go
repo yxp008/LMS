@@ -27,15 +27,15 @@ var (
 	chURL         = getEnvDefault("LMS_CLICKHOUSE_URL", "http://localhost:8123")
 	database      = "LMS"
 	table         = "LMS_Logs"
-	prefsFile     = filepath.Join(projectRoot, "collector", "collection_prefs.json")
-	vectorTpl     = filepath.Join(projectRoot, "collector", "vector_wsl.toml.template")
-	vectorCfg     = filepath.Join(projectRoot, "collector", "vector_wsl.toml")
+	prefsFile     = filepath.Join(projectRoot, "client/collector", "collection_prefs.json")
+	vectorTpl     = filepath.Join(projectRoot, "client/collector", "vector_wsl.toml.template")
+	vectorCfg     = filepath.Join(projectRoot, "client/collector", "vector_wsl.toml")
 	vectorBin     = getEnvDefault("LMS_VECTOR_BIN", filepath.Join(os.Getenv("HOME"), ".vector", "bin", "vector"))
 	vectorPID     = "/tmp/vector.pid"
 	vectorLog     = "/tmp/vector.log"
 	smtpCfgFile   = filepath.Join(frontendDir, "smtp_config.json")
 	listenAddr    = ":" + getEnvDefault("LMS_SERVER_PORT", "8080")
-	collectorStateFile = filepath.Join(projectRoot, "collector", "collector_state.json")
+	collectorStateFile = filepath.Join(projectRoot, "client/collector", "collector_state.json")
 	isCollector     bool
 )
 
@@ -76,7 +76,7 @@ func loadPrefs() CollectionPrefs {
 	prefs := CollectionPrefs{
 		LinuxSystemLogs: false, NetworkDeviceLogs: false,
 		ElkFileLogs: true,
-		ElkFilePath: filepath.Join(projectRoot, "collector/elk_logs/incoming/"),
+		ElkFilePath: filepath.Join(projectRoot, "client/collector/elk_logs/incoming/"),
 	}
 	data, err := os.ReadFile(prefsFile)
 	if err != nil {

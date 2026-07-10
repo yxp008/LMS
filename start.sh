@@ -6,7 +6,7 @@ PROJECT_ROOT="$SCRIPT_DIR"
 export LMS_PROJECT_ROOT="$PROJECT_ROOT"
 
 # 加载配置文件
-[ -f "$PROJECT_ROOT/config_server.env" ] && source "$PROJECT_ROOT/config_server.env"
+[ -f "$PROJECT_ROOT/server/config_server.env" ] && source "$PROJECT_ROOT/server/config_server.env"
 
 SERVER_PORT=${SERVER_PORT:-8080}
 COLLECTOR_PORT=${COLLECTOR_PORT:-8081}
@@ -19,10 +19,10 @@ CH_CFG="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config.xml"
 CH_CFG_SAFE="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config_minimal.xml"
 CH_HTTP="http://localhost:$CLICKHOUSE_PORT"
 VECTOR_BIN="$HOME/.vector/bin/vector"
-VECTOR_CFG="$PROJECT_ROOT/collector/vector_wsl.toml"
+VECTOR_CFG="$PROJECT_ROOT/client/collector/vector_wsl.toml"
 KAFKA_BIN="$KAFKA_HOME/bin/kafka-server-start.sh"
 KAFKA_CFG="$KAFKA_HOME/config/kraft/server.properties"
-PROCESSOR_BIN="$PROJECT_ROOT/processor/processor"
+PROCESSOR_BIN="$PROJECT_ROOT/server/processor/processor"
 FRONTEND_PORT=$SERVER_PORT
 
 echo "=========================================="

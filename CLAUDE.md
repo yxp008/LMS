@@ -41,9 +41,9 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 
 五层架构，同级协作：
 
-- **采集层**（`collector/`）：可独立部署在客户端。Vector file 源 + Go reader 读取 NDJSON / JSON 数组文件，发往 Kafka topic `lms_elk_logs`。支持 journald 和 syslog 源（当前关闭）。**技术栈：Vector + Go。**
+- **采集层**（`client/collector/`）：可独立部署在客户端。Vector file 源 + Go reader 读取 NDJSON / JSON 数组文件，发往 Kafka topic `lms_elk_logs`。支持 journald 和 syslog 源（当前关闭）。**技术栈：Vector + Go。**
 - **Kafka**（v3.6.0，KRaft 模式）：采集层与处理层之间的消息队列缓冲。Topic `lms_elk_logs` 6 分区 zstd 压缩，数据目录 `kafka/data/`。
-- **处理层**（`processor/`）：Go 编译的独立程序，消费 Kafka → 正则脱敏 → 解析 ELK JSON 字段 → 批量写入 ClickHouse。**技术栈：Go。**
+- **处理层**（`server/processor/`）：Go 编译的独立程序，消费 Kafka → 正则脱敏 → 解析 ELK JSON 字段 → 批量写入 ClickHouse。**技术栈：Go。**
 - **存储层**（`data/clickhouse_data/`）：ClickHouse v26.6.1，列式 OLAP 数据库。时区 `Asia/Shanghai`。四张表：`LMS.LMS_Logs`、`LMS.LMS_Collectors`、`LMS.LMS_AlertRules`、`LMS.LMS_AlertTriggers`。**三级存储策略 (hot_warm_cold)**：热(0-7d SSD)→温(7-30d HDD)→冷(30-180d MinIO对象存储)。配置见 `config_minimal.xml`。
 - **查询层**（`frontend/server.go`）：Go 编译的独立二进制。HTTP REST API（16 个端点）+ 告警规则定时轮询（goroutine，每 5 秒）二合一。
 - **可视化层**（`frontend/`）：原生 JS SPA（index.html + app.js + style.css），Chart.js 4.4.4 CDN 加载，自定义日历日期选择器。**技术栈：Vanilla JS。**
@@ -55,16 +55,16 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 | `frontend/server` | Go 编译的查询层二进制 |
 | `frontend/app.js` | SPA 全部逻辑（原生 JS） |
 | `frontend/style.css` | 全部样式（含自定义日期选择器） |
-| `collector/vector_wsl.toml` | 生成的 Vector 采集配置（**勿直接编辑**） |
-| `collector/vector_wsl.toml.template` | 模板文件，含 `# ===== COLLECTION: xxx =====` 标记 |
-| `collector/collection_prefs.json` | 持久化的采集源开关 + ELK 文件路径 |
-| `collector/elk_logs/incoming/` | ELK NDJSON 文件投放目录 |
-| `collector/elk_logs/reader` | Go 编译的 JSON 数组 → NDJSON 转换工具 |
-| `processor/main.go` | Go 处理程序源码（Kafka 消费 → 脱敏 → ClickHouse） |
-| `processor/rules.json` | 脱敏正则规则配置 |
+| `client/collector/vector_wsl.toml` | 生成的 Vector 采集配置（**勿直接编辑**） |
+| `client/collector/vector_wsl.toml.template` | 模板文件，含 `# ===== COLLECTION: xxx =====` 标记 |
+| `client/collector/collection_prefs.json` | 持久化的采集源开关 + ELK 文件路径 |
+| `client/collector/elk_logs/incoming/` | ELK NDJSON 文件投放目录 |
+| `client/collector/elk_logs/reader` | Go 编译的 JSON 数组 → NDJSON 转换工具 |
+| `server/processor/main.go` | Go 处理程序源码（Kafka 消费 → 脱敏 → ClickHouse） |
+| `server/processor/rules.json` | 脱敏正则规则配置 |
 | `frontend/collector_state.go` | 采集器本地状态（ID/名称/地址/来源） |
-| `collector/collector_state.json` | 采集器运行时状态持久化文件 |
-| `collector/collection_prefs.json` | 采集源开关 + Kafka broker 持久化 |
+| `client/collector/collector_state.json` | 采集器运行时状态持久化文件 |
+| `client/collector/collection_prefs.json` | 采集源开关 + Kafka broker 持久化 |
 | `config_server.env` | 服务端配置文件 |
 | `config_client.env` | 客户端配置文件 |
 

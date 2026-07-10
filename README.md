@@ -76,21 +76,21 @@ SYSLOG_PORT=1514
 
 ## ELK 日志采集
 
-1. 将 NDJSON 文件放入 `collector/elk_logs/incoming/`
+1. 将 NDJSON 文件放入 `client/collector/elk_logs/incoming/`
 2. Vector 自动检测 → Kafka → Processor → ClickHouse
 3. 前端来源选择「ELK本地日志文件」
 
-JSON 数组转换：`collector/elk_logs/reader input.json > output.ndjson`
+JSON 数组转换：`client/collector/elk_logs/reader input.json > output.ndjson`
 
 ## 目录结构
 
 ```
 LMS/
-├── collector/              # 采集层
+├── client/collector/              # 采集层
 │   ├── vector_wsl.toml.template
 │   ├── elk_logs/incoming/  # 日志投放
 │   └── collector_state.json # 客户端本地状态
-├── processor/              # 处理层 (Go)
+├── server/processor/              # 处理层 (Go)
 ├── frontend/               # 查询层 + 可视化层
 │   ├── server.go           # Go 服务 (-collector 切换模式)
 │   └── index.html / app.js / style.css

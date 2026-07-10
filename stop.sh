@@ -19,7 +19,7 @@ echo "  -> Vector 已停止"
 # 2. 停止 Processor
 echo ""
 echo "[2/5] 停止 Processor..."
-pkill -f "processor/processor" 2>/dev/null
+pkill -f "server/processor/processor" 2>/dev/null
 sleep 1
 echo "  -> Processor 已停止"
 

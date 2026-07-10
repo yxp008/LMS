@@ -6,11 +6,11 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 export LMS_PROJECT_ROOT="$SCRIPT_DIR"
 
 # 加载客户端配置
-[ -f "$SCRIPT_DIR/config_client.env" ] && source "$SCRIPT_DIR/config_client.env"
+[ -f "$SCRIPT_DIR/client/config_client.env" ] && source "$SCRIPT_DIR/config_client.env"
 
 COLLECTOR_PORT=${COLLECTOR_PORT:-8081}
 
-mkdir -p "$SCRIPT_DIR/logs"
+mkdir -p "$SCRIPT_DIR/../logs"
 
 echo "========================================"
 echo "  LMS 客户端（采集器）"
@@ -26,7 +26,7 @@ echo ""
 if pgrep -f "server.*-collector" > /dev/null 2>&1; then
     echo "采集器服务已在运行"
 else
-    nohup $SCRIPT_DIR/frontend/server -collector > "$SCRIPT_DIR/logs/collector.log" 2>&1 &
+    nohup $SCRIPT_DIR/../frontend/server -collector > "$SCRIPT_DIR/../logs/collector.log" 2>&1 &
     disown
     sleep 3
     if pgrep -f "server.*-collector" > /dev/null 2>&1; then
