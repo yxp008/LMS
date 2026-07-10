@@ -58,7 +58,7 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 | `client/collector/vector_wsl.toml` | 生成的 Vector 采集配置（**勿直接编辑**） |
 | `client/collector/vector_wsl.toml.template` | 模板文件，含 `# ===== COLLECTION: xxx =====` 标记 |
 | `client/collector/collection_prefs.json` | 持久化的采集源开关 + ELK 文件路径 |
-| `client/collector/elk_logs/incoming/` | ELK NDJSON 文件投放目录 |
+| `client/client/collector/elk_logs/incoming/` | ELK NDJSON 文件投放目录 |
 | `client/collector/elk_logs/reader` | Go 编译的 JSON 数组 → NDJSON 转换工具 |
 | `server/processor/main.go` | Go 处理程序源码（Kafka 消费 → 脱敏 → ClickHouse） |
 | `server/processor/rules.json` | 脱敏正则规则配置 |
@@ -118,7 +118,7 @@ bash stop.sh
 # 单独启动组件
 frontend/server
 # 告警已合并到 server 中 (goroutine)
-./processor/processor &
+./server/processor/processor &
 
 # 直接查询 ClickHouse
 curl -s 'http://localhost:8123/' -d 'SELECT 1'
@@ -144,12 +144,12 @@ curl -X POST http://localhost:8080/api/collection-prefs -H 'Content-Type: applic
 fuser -k 8080/tcp; sleep 2; nohup $PROJECT_ROOT/frontend/server > /tmp/lms_frontend.log 2>&1 & disown
 
 # 重新采集 ELK 数据（清除进度 + 删除 ClickHouse 数据）
-rm -rf collector/vector_data/elk_file
+rm -rf client/collector/vector_data/elk_file
 curl -s 'http://localhost:8123/' -d "ALTER TABLE LMS.LMS_Logs DELETE WHERE Source_Type='ELK本地日志文件'"
-pkill -x vector; sleep 2; nohup ~/.vector/bin/vector --config collector/vector_wsl.toml > /tmp/vector.log 2>&1 & disown
+pkill -x vector; sleep 2; nohup ~/.vector/bin/vector --config client/collector/vector_wsl.toml > /tmp/vector.log 2>&1 & disown
 
 # JSON 数组 → NDJSON 转换
-./collector/elk_logs/reader /path/to/array.json > /path/to/output.ndjson
+./client/collector/elk_logs/reader /path/to/array.json > /path/to/output.ndjson
 
 # 查看 Kafka topic 状态
 ~/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic lms_elk_logs
@@ -183,7 +183,7 @@ pkill -x vector; sleep 2; nohup ~/.vector/bin/vector --config collector/vector_w
 ### ELK 日志采集全链路
 
 ```
-1. export_data.ndjson 放入 collector/elk_logs/incoming/
+1. export_data.ndjson 放入 client/collector/elk_logs/incoming/
 2. Vector file 源检测到新 .ndjson，逐行读取
 3. Kafka sink 以 text 编码发送到 lms_elk_logs（仅发原始行，不带 Vector 元数据）
 4. Processor(Go) 从 Kafka 消费每条消息
@@ -205,7 +205,7 @@ pkill -x vector; sleep 2; nohup ~/.vector/bin/vector --config collector/vector_w
 
 ## Vector 配置模板系统
 
-`collector/vector_wsl.toml.template` 使用注释标记按采集类型控制配置段的显隐：
+`client/collector/vector_wsl.toml.template` 使用注释标记按采集类型控制配置段的显隐：
 
 ```
 # ===== COLLECTION: linux_system_logs =====

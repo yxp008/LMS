@@ -111,7 +111,7 @@ if [ ! -f "$SCRIPT_DIR/client/collector/collection_prefs.json" ]; then
 }
 EOF
     # 替换为实际路径
-    sed -i "s|__ELK_FILE_PATH__|$SCRIPT_DIR/collector/elk_logs/incoming/|g" "$SCRIPT_DIR/client/collector/collection_prefs.json"
+    sed -i "s|__ELK_FILE_PATH__|$SCRIPT_DIR/client/collector/elk_logs/incoming/|g" "$SCRIPT_DIR/client/collector/collection_prefs.json"
     echo "  -> collection_prefs.json 已创建"
 else
     echo "  -> collection_prefs.json 已存在，跳过"
