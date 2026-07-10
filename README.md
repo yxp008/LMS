@@ -49,11 +49,13 @@ bash start.sh
 git clone --filter=blob:none --sparse <repo-url>
 cd LMS
 git sparse-checkout set client/ frontend/ test/ install.sh README.md
+bash client/install.sh
 
 # 服务端（只拉 server/ + frontend/ + test/）
 git clone --filter=blob:none --sparse <repo-url>
 cd LMS
 git sparse-checkout set server/ frontend/ test/ install.sh README.md
+bash server/install.sh
 ```
 
 ## 从零部署
@@ -65,7 +67,7 @@ git sparse-checkout set server/ frontend/ test/ install.sh README.md
 # 2. 克隆项目
 git clone <repo-url> && cd LMS
 # 3. 安装
-bash install.sh
+bash install.sh          # 全量安装（或 client/install.sh + server/install.sh）
 # 4. 启动
 bash start.sh
 # 5. 访问
@@ -81,6 +83,7 @@ bash start.sh
 git clone --filter=blob:none --sparse <repo-url>
 cd LMS
 git sparse-checkout set server/ frontend/ test/ install.sh README.md
+bash server/install.sh
 bash install.sh
 
 # 编辑配置（默认 localhost 即可）
@@ -94,7 +97,7 @@ bash server/start_server.sh
 git clone --filter=blob:none --sparse <repo-url>
 cd LMS
 git sparse-checkout set client/ frontend/ test/ install.sh README.md
-bash install.sh
+bash client/install.sh
 
 # 修改三个地址指向服务端 IP
 vim client/config_client.env
