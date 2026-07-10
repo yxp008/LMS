@@ -14,9 +14,9 @@ CLICKHOUSE_PORT=${CLICKHOUSE_PORT:-8123}
 KAFKA_PORT=${KAFKA_PORT:-9092}
 KAFKA_HOME=${KAFKA_HOME:-$HOME/kafka}
 
-CH_BIN="$PROJECT_ROOT/data/clickhouse_data/clickhouse"
-CH_CFG="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config.xml"
-CH_CFG_SAFE="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config_minimal.xml"
+CH_BIN="$PROJECT_ROOT/server/data/clickhouse_data/clickhouse"
+CH_CFG="$PROJECT_ROOT/server/data/clickhouse_data/preprocessed_configs/config.xml"
+CH_CFG_SAFE="$PROJECT_ROOT/server/data/clickhouse_data/preprocessed_configs/config_minimal.xml"
 CH_HTTP="http://localhost:$CLICKHOUSE_PORT"
 VECTOR_BIN="$HOME/.vector/bin/vector"
 VECTOR_CFG="$PROJECT_ROOT/client/collector/vector_wsl.toml"

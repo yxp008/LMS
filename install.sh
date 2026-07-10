@@ -81,11 +81,11 @@ else
 fi
 
 # ClickHouse
-CH_PATH="$SCRIPT_DIR/data/clickhouse_data/clickhouse"
+CH_PATH="$SCRIPT_DIR/server/data/clickhouse_data/clickhouse"
 if [ -f "$CH_PATH" ]; then
     echo "  -> ClickHouse: $CH_PATH ✓"
 else
-    echo "  -> ClickHouse: 未找到（请将 clickhouse 二进制放入 data/clickhouse_data/）"
+    echo "  -> ClickHouse: 未找到（请将 clickhouse 二进制放入 server/data/clickhouse_data/）"
 fi
 
 # Kafka
@@ -140,14 +140,14 @@ echo "  2. rm -rf $SCRIPT_DIR"
 echo "  3. rm -rf ~/.vector  (如果安装了 Vector)"
 echo ""
 echo "已安装的项目组件:"
-echo "  - processor/processor  (Go 二进制)"
+echo "  - server/processor/processor  (Go 二进制)"
 echo "  - client/collector/elk_logs/reader  (Go 二进制)"
 echo "  - collection_prefs.json (配置文件)"
 echo "  - vector_wsl.toml (Vector 配置)"
 echo ""
 echo "环境依赖（需单独安装，不在本脚本范围）:"
 echo "  - Vector:     ~/.vector/bin/vector"
-echo "  - ClickHouse: data/clickhouse_data/clickhouse"
+echo "  - ClickHouse: server/data/clickhouse_data/clickhouse"
 echo "  - Kafka:      ~/kafka/"
 echo "  - Go:         golang-go (已自动安装)"
 echo "  - Python:     系统自带"

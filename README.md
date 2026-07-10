@@ -1,104 +1,134 @@
 # LMS 日志管理系统
 
-> V4.6 — 五层架构，Go 全栈，Kafka 缓冲，三级存储，客户端/服务端分离，AI分析
+> V4.7 — 五层架构，Go 全栈，Kafka 缓冲，三级存储，客户端/服务端分离，交互式AI对话
 
 集日志采集、存储、查询、分析、可视化、告警于一体的集中式日志管理系统。
 
 ## 架构
 
 ```
-客户端 (电脑A)                       服务端 (电脑B)
-┌──────────────────┐               ┌──────────────────────────┐
-│ 采集层           │               │        采集器监控(只读)    │
-│ Vector(file)     │──Kafka:9092──►│ 处理层                   │
-│ Go server        │               │ Processor(Go)            │
-│   -collector     │──注册:8080──►│         ↓                │
-│     :8081        │               │ 存储层                   │
-│                  │               │ ClickHouse(SSD→HDD→MinIO)│
-└──────────────────┘               │         ↓                │
-                                   │ 查询层                   │
-                                   │ Go server(:8080)+告警     │
-                                   │         ↓                │
-                                   │ 可视化层                 │
-                                   │ 浏览器 SPA               │
-                                   └──────────────────────────┘
+客户端 (机器A)                           服务端 (机器B)
+┌────────────────────┐                 ┌────────────────────────────┐
+│ client/            │                 │ server/                    │
+│ ├── collector/     │──Kafka:9092──►  │ ├── processor/             │
+│ │   Vector + reader│                 │ │   Kafka→脱敏→ClickHouse   │
+│ └── ...            │──注册:8080──►   │ ├── data/clickhouse_data/  │
+│                    │                 │ ├── kafka/                 │
+│ frontend/(共用)    │                 │ ├── database_design/       │
+│ Go server          │                 │ └── ...                    │
+│   -collector :8081 │                 │                            │
+└────────────────────┘                 │ frontend/(共用)            │
+                                       │ Go server :8080            │
+                                       └────────────────────────────┘
 ```
 
-## 快速开始
+## 前置依赖
+
+| 组件 | 安装方式 |
+|---|---|
+| Go | `sudo apt-get install -y golang-go` |
+| Vector | `curl --proto '=https' --tlsv1.2 -sSf https://sh.vector.dev \| bash` |
+| Kafka | 下载解压到 `~/kafka/`（[kafka.apache.org](https://kafka.apache.org/downloads)） |
+| ClickHouse | 下载二进制放入 `server/data/clickhouse_data/`（[clickhouse.com](https://packages.clickhouse.com/tgz/stable/)） |
+
+## 拉取项目
+
+**全量克隆**（开发/单机测试）：
 
 ```bash
-# 首次安装
+git clone <repo-url>
+cd LMS_mimo
+bash install.sh
+bash start.sh
+```
+
+**按角色拉取**（分离部署）：
+
+```bash
+# 客户端（只拉 client/ + frontend/ + test/）
+git clone --filter=blob:none --sparse <repo-url>
+cd LMS_mimo
+git sparse-checkout set client/ frontend/ test/ install.sh README.md
+
+# 服务端（只拉 server/ + frontend/ + test/）
+git clone --filter=blob:none --sparse <repo-url>
+cd LMS_mimo
+git sparse-checkout set server/ frontend/ test/ install.sh README.md
+```
+
+## 从零部署
+
+### 单机（全部在本机）
+
+```bash
+# 1. 安装前置依赖
+# 2. 克隆项目
+git clone <repo-url> && cd LMS_mimo
+# 3. 安装
+bash install.sh
+# 4. 启动
+bash start.sh
+# 5. 访问
+#    服务端: http://localhost:8080
+#    客户端: http://localhost:8081
+```
+
+### 双机分离
+
+**服务端**（运行 Kafka + ClickHouse + Processor + Web）：
+
+```bash
+git clone --filter=blob:none --sparse <repo-url>
+cd LMS_mimo
+git sparse-checkout set server/ frontend/ test/ install.sh README.md
 bash install.sh
 
-# 修改 config.env 自定义端口（可选）
-
-# 启动
-bash start.sh
-
-# 访问
-服务端: http://localhost:8080
-采集器: http://localhost:8081
+# 编辑配置（默认 localhost 即可）
+vim server/config_server.env
+bash server/start_server.sh
 ```
 
-## 分离部署
+**客户端**（运行 Vector + 采集器管理）：
 
-**客户端（采集器）**：`bash start_client.sh`
-- 配置传输地址指向服务端 Kafka `服务端IP:9092`
-- 设环境变量 `LMS_SERVER_URL=http://服务端IP:8080` 自动注册
+```bash
+git clone --filter=blob:none --sparse <repo-url>
+cd LMS_mimo
+git sparse-checkout set client/ frontend/ test/ install.sh README.md
+bash install.sh
 
-**服务端（日志管理）**：`bash start_server.sh`
-- 需要 ClickHouse + Kafka + Processor
+# 修改三个地址指向服务端 IP
+vim client/config_client.env
+#   LMS_CLICKHOUSE_URL=http://<服务端IP>:8123
+#   LMS_KAFKA_BROKER=<服务端IP>:9092
+#   LMS_SERVER_URL=http://<服务端IP>:8080
 
-详见 `config_client.env` 中的注释
-
-## 配置
-
-所有端口通过配置文件修改：
-
-- `config_server.env` — 服务端
-- `config_client.env` — 客户端
-CLICKHOUSE_PORT=8123
-KAFKA_PORT=9092
-KAFKA_HOME=$HOME/kafka
-SYSLOG_PORT=1514
+bash client/start_client.sh
 ```
-
-## 组件
-
-| 层级 | 技术栈 | 说明 |
-|---|---|---|
-| 采集层 | Vector + Go | file 源读取 NDJSON，发往 Kafka |
-| 消息队列 | Kafka 3.6 (KRaft) | 6 分区 zstd 压缩 |
-| 处理层 | Go Processor | Kafka → 脱敏 → 解析 → ClickHouse |
-| 存储层 | ClickHouse 26.6 | SSD(0-7d)→HDD(7-30d)→MinIO(30-180d) |
-| 查询层 | Go server | REST API + 告警 goroutine |
-| 可视化层 | Vanilla JS | SPA，自定义日历，Chart.js + marked.js CDN |
-
-## ELK 日志采集
-
-1. 将 NDJSON 文件放入 `client/collector/elk_logs/incoming/`
-2. Vector 自动检测 → Kafka → Processor → ClickHouse
-3. 前端来源选择「ELK本地日志文件」
-
-JSON 数组转换：`client/collector/elk_logs/reader input.json > output.ndjson`
 
 ## 目录结构
 
 ```
-LMS/
-├── client/collector/              # 采集层
-│   ├── vector_wsl.toml.template
-│   ├── elk_logs/incoming/  # 日志投放
-│   └── collector_state.json # 客户端本地状态
-├── server/processor/              # 处理层 (Go)
-├── frontend/               # 查询层 + 可视化层
-│   ├── server.go           # Go 服务 (-collector 切换模式)
-│   └── index.html / app.js / style.css
-├── data/clickhouse_data/   # 存储层
-├── kafka/                  # 消息队列
+LMS_mimo/
+├── client/                          # 客户端（采集器）
+│   ├── collector/                   # Vector 配置 + ELK reader
+│   ├── config_client.env            # 客户端配置
+│   └── start_client.sh              # 客户端启动
+├── server/                          # 服务端
+│   ├── processor/                   # Kafka→ClickHouse 处理程序
+│   ├── data/clickhouse_data/        # ClickHouse 二进制+数据
+│   ├── kafka/                       # Kafka 数据
+│   ├── database_design/sql/         # 建表 SQL
+│   ├── config_server.env            # 服务端配置
+│   └── start_server.sh              # 服务端启动
+├── frontend/                        # 共用（Go Web 服务 + SPA）
+├── test/                            # 测试脚本
 ├── install.sh / start.sh / stop.sh
-└── README.md
+├── README.md / CLAUDE.md
 ```
+
+## API
+
+全部端点位于 `http://localhost:8080`，详见 `test/Test.md`。
 
 ## 许可证
 
