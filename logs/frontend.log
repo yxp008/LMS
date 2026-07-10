@@ -1,4 +1,5 @@
-2026/07/10 10:52:16 [SERVER] Vector 已启用, PID=71585
-2026/07/10 10:52:16 [SERVER] 日志管理: http://localhost:8080
-2026/07/10 10:52:16 ClickHouse: http://localhost:8123
-2026/07/10 10:52:16 [ALERT] 告警检查器已启动
+2026/07/10 11:49:35 [SERVER] Vector 已启用, PID=79806
+79807
+2026/07/10 11:49:35 [SERVER] 日志管理: http://localhost:8080
+2026/07/10 11:49:35 ClickHouse: http://localhost:8123
+2026/07/10 11:49:35 [ALERT] 告警检查器已启动

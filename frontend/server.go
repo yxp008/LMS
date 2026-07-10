@@ -31,8 +31,8 @@ var (
 	vectorTpl     = filepath.Join(projectRoot, "client/collector", "vector_wsl.toml.template")
 	vectorCfg     = filepath.Join(projectRoot, "client/collector", "vector_wsl.toml")
 	vectorBin     = getEnvDefault("LMS_VECTOR_BIN", filepath.Join(os.Getenv("HOME"), ".vector", "bin", "vector"))
-	vectorPID     = "/tmp/vector.pid"
-	vectorLog     = "/tmp/vector.log"
+	vectorPID     = filepath.Join(projectRoot, "logs", "vector.pid")
+	vectorLog     = filepath.Join(projectRoot, "logs", "vector.log")
 	smtpCfgFile   = filepath.Join(frontendDir, "smtp_config.json")
 	listenAddr    = ":" + getEnvDefault("LMS_SERVER_PORT", "8080")
 	collectorStateFile = filepath.Join(projectRoot, "client/collector", "collector_state.json")

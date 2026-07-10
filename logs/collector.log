@@ -1,4 +1,5 @@
-2026/07/10 10:52:16 [SERVER] Vector 已启用, PID=71582
-2026/07/10 10:52:16 [COLLECTOR] 采集器管理: http://localhost:8081
-2026/07/10 10:52:16 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8080/api/collectors": dial tcp 127.0.0.1:8080: connect: connection refused
-2026/07/10 10:52:19 [COLLECTOR] 已向 http://localhost:8080 注册: {"Collector_ID":"C_LAPTOP_0ca52635","ok":true}
+2026/07/10 11:49:35 [SERVER] Vector 已启用, PID=79806
+79807
+2026/07/10 11:49:35 [COLLECTOR] 采集器管理: http://localhost:8081
+2026/07/10 11:49:35 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8080/api/collectors": dial tcp 127.0.0.1:8080: connect: connection refused
+2026/07/10 11:49:35 [COLLECTOR] 已向 http://localhost:8080 注册: {"Collector_ID":"C_LAPTOP_0ca52635","ok":true}

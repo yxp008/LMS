@@ -1,11 +1,30 @@
-2026-07-08T06:43:46.853591Z  INFO vector::app: Log level is enabled. level="info"
-2026-07-08T06:43:46.856365Z  INFO vector::app: Loading configs. paths=["/home/yxp/LMS_mimo/collector/vector_wsl.toml"]
-2026-07-08T06:43:46.935909Z  INFO vector::topology::running: Running healthchecks.
-2026-07-08T06:43:46.936170Z  INFO vector: Vector has started. debug="false" version="0.56.0" arch="x86_64" revision="6817c02 2026-06-03 14:25:37.451398530"
-2026-07-08T06:43:46.936184Z  INFO vector::app: API is disabled, enable by setting `api.enabled` to `true` and use commands like `vector top`.
-2026-07-08T06:43:46.936349Z  INFO source{component_kind="source" component_id=elk_file component_type=file}: vector::sources::file: Starting file server. include=["/home/yxp/LMS_mimo/collector/elk_logs/incoming/*.ndjson"] exclude=[]
-2026-07-08T06:43:46.938664Z  INFO source{component_kind="source" component_id=journald component_type=journald}: vector::sources::journald: Starting journalctl.
-2026-07-08T06:43:46.941976Z  INFO vector::topology::builder: Healthcheck passed.
-2026-07-08T06:43:46.998200Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
-2026-07-08T06:43:47.290333Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Found new file to watch. file=/home/yxp/LMS_mimo/collector/elk_logs/incoming/export_data.ndjson
-2026-07-08T06:43:47.291556Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Internal log [Found new file to watch.] is being suppressed to avoid flooding.
+2026-07-10T03:07:56.126361Z  INFO vector::app: Log level is enabled. level="info"
+2026-07-10T03:07:56.130265Z  INFO vector::app: Loading configs. paths=["/home/yxp/LMS_mimo/client/collector/vector_wsl.toml"]
+2026-07-10T03:07:56.201833Z ERROR librdkafka: librdkafka: FAIL [thrd:localhost:9092/bootstrap]: localhost:9092/bootstrap: Connect to ipv4#127.0.0.1:9092 failed: Connection refused (after 3ms in state CONNECT)
+2026-07-10T03:07:56.201927Z ERROR log: Internal log [librdkafka: FAIL [thrd:localhost:9092/bootstrap]: localhost:9092/bootstrap: Connect to ipv4#127.0.0.1:9092 failed: Connection refused (after 3ms in state CONNECT)] is being suppressed to avoid flooding.
+2026-07-10T03:07:56.400335Z ERROR vector::topology::builder: Configuration error. error=Source "journald": data_dir "/home/yxp/LMS_mimo/collector/vector_data" does not exist internal_log_rate_limit=false
+2026-07-10T03:49:32.074691Z  INFO vector::app: Log level is enabled. level="info"
+2026-07-10T03:49:32.074688Z  INFO vector::app: Log level is enabled. level="info"
+2026-07-10T03:49:32.077866Z  INFO vector::app: Loading configs. paths=["/home/yxp/LMS_mimo/client/collector/vector_wsl.toml"]
+2026-07-10T03:49:32.078255Z  INFO vector::app: Loading configs. paths=["/home/yxp/LMS_mimo/client/collector/vector_wsl.toml"]
+2026-07-10T03:49:32.133345Z  INFO vector::topology::running: Running healthchecks.
+2026-07-10T03:49:32.133552Z  INFO vector: Vector has started. debug="false" version="0.56.0" arch="x86_64" revision="6817c02 2026-06-03 14:25:37.451398530"
+2026-07-10T03:49:32.133595Z  INFO vector::app: API is disabled, enable by setting `api.enabled` to `true` and use commands like `vector top`.
+2026-07-10T03:49:32.133693Z  INFO source{component_kind="source" component_id=elk_file component_type=file}: vector::sources::file: Starting file server. include=["/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/*.ndjson"] exclude=[]
+2026-07-10T03:49:32.134287Z  INFO vector::topology::running: Running healthchecks.
+2026-07-10T03:49:32.134513Z  INFO vector: Vector has started. debug="false" version="0.56.0" arch="x86_64" revision="6817c02 2026-06-03 14:25:37.451398530"
+2026-07-10T03:49:32.134538Z  INFO vector::app: API is disabled, enable by setting `api.enabled` to `true` and use commands like `vector top`.
+2026-07-10T03:49:32.134655Z  INFO source{component_kind="source" component_id=elk_file component_type=file}: vector::sources::file: Starting file server. include=["/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/*.ndjson"] exclude=[]
+2026-07-10T03:49:32.136191Z  INFO source{component_kind="source" component_id=journald component_type=journald}: vector::sources::journald: Starting journalctl.
+2026-07-10T03:49:32.136658Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: file_source_common::checkpointer: Loaded checkpoint data.
+2026-07-10T03:49:32.137012Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: file_source_common::checkpointer: Loaded checkpoint data.
+2026-07-10T03:49:32.137105Z  INFO source{component_kind="source" component_id=journald component_type=journald}: vector::sources::journald: Starting journalctl.
+2026-07-10T03:49:32.139780Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Resuming to watch file. file=/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/test_incre.ndjson file_position=1664
+2026-07-10T03:49:32.140086Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Resuming to watch file. file=/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/test_incre.ndjson file_position=1664
+2026-07-10T03:49:32.140602Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Internal log [Resuming to watch file.] is being suppressed to avoid flooding.
+2026-07-10T03:49:32.140850Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Internal log [Resuming to watch file.] is being suppressed to avoid flooding.
+2026-07-10T03:49:32.211687Z  INFO vector::topology::builder: Healthcheck passed.
+2026-07-10T03:49:32.222103Z  INFO vector::topology::builder: Healthcheck passed.
+2026-07-10T03:49:32.232906Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
+2026-07-10T03:49:32.247625Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
+2026-07-10T03:49:33.371473Z ERROR vector::internal_events::file::source: Failed writing checkpoints. error=No such file or directory (os error 2) error_code="writing_checkpoints" error_type="writer_failed" stage="receiving"

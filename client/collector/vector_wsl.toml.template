@@ -5,7 +5,7 @@
 # 此文件由 server.py 根据 collection_prefs.json 动态生成 vector_wsl.toml
 #
 
-data_dir = "__PROJECT_ROOT__/collector/vector_data"
+data_dir = "__PROJECT_ROOT__/client/collector/vector_data"
 
 # =========================================
 # 采集层 (Collection Layer)
