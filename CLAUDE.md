@@ -45,15 +45,13 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 - **Kafka**（v3.6.0，KRaft 模式）：采集层与处理层之间的消息队列缓冲。Topic `lms_elk_logs` 6 分区 zstd 压缩，数据目录 `kafka/data/`。
 - **处理层**（`processor/`）：Go 编译的独立程序，消费 Kafka → 正则脱敏 → 解析 ELK JSON 字段 → 批量写入 ClickHouse。**技术栈：Go。**
 - **存储层**（`data/clickhouse_data/`）：ClickHouse v26.6.1，列式 OLAP 数据库。时区 `Asia/Shanghai`。四张表：`LMS.LMS_Logs`、`LMS.LMS_Collectors`、`LMS.LMS_AlertRules`、`LMS.LMS_AlertTriggers`。**三级存储策略 (hot_warm_cold)**：热(0-7d SSD)→温(7-30d HDD)→冷(30-180d MinIO对象存储)。配置见 `config_minimal.xml`。
-- **查询层**（`frontend/server.go`）：Go 编译的独立二进制。HTTP REST API（16 个端点）+ 告警规则定时轮询（goroutine，每 5 秒）二合一。原 Python 文件保留作参考。
+- **查询层**（`frontend/server.go`）：Go 编译的独立二进制。HTTP REST API（16 个端点）+ 告警规则定时轮询（goroutine，每 5 秒）二合一。
 - **可视化层**（`frontend/`）：原生 JS SPA（index.html + app.js + style.css），Chart.js 4.4.4 CDN 加载，自定义日历日期选择器。**技术栈：Vanilla JS。**
 ## 关键路径
 
 | 路径 | 用途 |
 |---|---|
 | `frontend/server.go` | Go Web 服务 + 告警 goroutine（已编译为 `frontend/server`） |
-| `frontend/server.py` | Python 原版（保留作参考） |
-| `frontend/alert_checker.py` | Python 原告警（参考） |
 | `frontend/server` | Go 编译的查询层二进制 |
 | `frontend/app.js` | SPA 全部逻辑（原生 JS） |
 | `frontend/style.css` | 全部样式（含自定义日期选择器） |
@@ -67,7 +65,8 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 | `frontend/collector_state.go` | 采集器本地状态（ID/名称/地址/来源） |
 | `collector/collector_state.json` | 采集器运行时状态持久化文件 |
 | `collector/collection_prefs.json` | 采集源开关 + Kafka broker 持久化 |
-| `config.env` | 统一配置文件（所有端口+地址） |
+| `config_server.env` | 服务端配置文件 |
+| `config_client.env` | 客户端配置文件 |
 
 ### Collector_ID 生成规则
 
@@ -86,11 +85,6 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 - 不支持 AI 功能的采集器端不显示 AI 子标签
 
 
-| `processor/processor` | Go 编译的处理器二进制 |
-| `kafka/data/` | Kafka 持久化数据目录 |
-| `data/clickhouse_data/` | ClickHouse 二进制、数据和配置 |
-| `data/clickhouse_data/preprocessed_configs/config_minimal.xml` | ClickHouse 最小可用配置备份 |
-
 ## 跨机器部署环境变量
 
 所有地址通过环境变量配置，支持客户端/服务端分离部署：
@@ -107,7 +101,7 @@ LMS（日志管理系统）— 集日志采集、存储、查询、分析、可�
 | `SERVER_PORT` | 8080 | 服务端 Web 端口 |
 | `COLLECTOR_PORT` | 8081 | 采集器管理端口 |
 
-**分离部署时**，在客户端机器的 `config.env` 中设置：
+**分离部署时**，在客户端机器复制 `config_client.env` 并修改：
 ```bash
 LMS_CLICKHOUSE_URL=http://<服务端IP>:8123
 LMS_KAFKA_BROKER=<服务端IP>:9092

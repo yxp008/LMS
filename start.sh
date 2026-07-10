@@ -6,7 +6,7 @@ PROJECT_ROOT="$SCRIPT_DIR"
 export LMS_PROJECT_ROOT="$PROJECT_ROOT"
 
 # 加载配置文件
-[ -f "$PROJECT_ROOT/config.env" ] && source "$PROJECT_ROOT/config.env"
+[ -f "$PROJECT_ROOT/config_server.env" ] && source "$PROJECT_ROOT/config_server.env"
 
 SERVER_PORT=${SERVER_PORT:-8080}
 COLLECTOR_PORT=${COLLECTOR_PORT:-8081}

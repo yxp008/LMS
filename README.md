@@ -42,22 +42,21 @@ bash start.sh
 
 ## 分离部署
 
-**客户端（采集器）**：`bash deploy/client/start.sh`
+**客户端（采集器）**：`bash start_client.sh`
 - 配置传输地址指向服务端 Kafka `服务端IP:9092`
 - 设环境变量 `LMS_SERVER_URL=http://服务端IP:8080` 自动注册
 
-**服务端（日志管理）**：`bash deploy/server/start.sh`
+**服务端（日志管理）**：`bash start_server.sh`
 - 需要 ClickHouse + Kafka + Processor
 
-详见 `deploy/README.md`
+详见 `config_client.env` 中的注释
 
 ## 配置
 
-所有端口通过 `config.env` 修改：
+所有端口通过配置文件修改：
 
-```bash
-SERVER_PORT=8080        # 服务端
-COLLECTOR_PORT=8081     # 采集器
+- `config_server.env` — 服务端
+- `config_client.env` — 客户端
 CLICKHOUSE_PORT=8123
 KAFKA_PORT=9092
 KAFKA_HOME=$HOME/kafka
@@ -97,10 +96,6 @@ LMS/
 │   └── index.html / app.js / style.css
 ├── data/clickhouse_data/   # 存储层
 ├── kafka/                  # 消息队列
-├── deploy/                 # 分离部署脚本
-│   ├── client/start.sh
-│   └── server/start.sh
-├── config.env              # 端口配置
 ├── install.sh / start.sh / stop.sh
 └── README.md
 ```
