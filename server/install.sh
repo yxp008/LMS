@@ -41,11 +41,11 @@ echo "  -> server 编译成功"
 # 4. 检查外部依赖
 echo ""
 echo "[4/4] 检查外部依赖..."
-CH_PATH="$PROJECT_ROOT/server/data/clickhouse_data/clickhouse"
+CH_PATH="$PROJECT_ROOT/data/clickhouse_data/clickhouse"
 if [ -f "$CH_PATH" ]; then
     echo "  -> ClickHouse: $CH_PATH ✓"
 else
-    echo "  -> ClickHouse: 未找到（请将 clickhouse 二进制放入 server/data/clickhouse_data/）"
+    echo "  -> ClickHouse: 未找到（请将 clickhouse 二进制放入 data/clickhouse_data/）"
 fi
 KAFKA_PATH="$HOME/kafka/bin/kafka-server-start.sh"
 if [ -f "$KAFKA_PATH" ]; then

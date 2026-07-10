@@ -81,7 +81,7 @@ else
 fi
 
 # ClickHouse
-CH_PATH="$SCRIPT_DIR/server/data/clickhouse_data/clickhouse"
+CH_PATH="$SCRIPT_DIR/data/clickhouse_data/clickhouse"
 if [ -f "$CH_PATH" ]; then
     echo "  -> ClickHouse: $CH_PATH ✓"
 else

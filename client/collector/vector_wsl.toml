@@ -82,7 +82,7 @@ if starts_with(.syslog_id, "SW-") || starts_with(.syslog_id, "ROUTER-") || start
 if match(.msg_upper, r'%[A-Z]+-[0-9]+-[A-Z_]+') { ._is_network = true }
 if match(.msg_upper, r'(UPDOWN|LINEPROTO|LINK|INTERFACE|GIGABITETHERNET|FASTETHERNET)') && match(.msg_upper, r'(CHANGED STATE|CHANGE|UP|DOWN)') { ._is_network = true }
 .Source_Type = if ._is_network { "网络设备日志" } else { "Linux系统日志" }
-.Collector_ID = "C_LAPTOP_173e6afa"
+.Collector_ID = "C_LAPTOP_0ca52635"
 
 # 动态收集额外字段到 Tags
 .Tags = .
@@ -175,7 +175,7 @@ else if exists(.host) { .Host = string!(.host) }
 if exists(.message) { .Message = string!(.message) }
 else if exists(.msg) { .Message = string!(.msg) }
 .Source_Type = "网络设备日志"
-.Collector_ID = "C_LAPTOP_173e6afa"
+.Collector_ID = "C_LAPTOP_0ca52635"
 
 # 动态收集额外字段到 Tags
 .Tags = .
@@ -233,7 +233,7 @@ encoding.codec = "json"
 type = "remap"
 inputs = ["elk_file"]
 source = '''
-.Collector_ID = "C_LAPTOP_173e6afa"
+.Collector_ID = "C_LAPTOP_0ca52635"
 '''
 
 # --- Kafka 缓冲 ---

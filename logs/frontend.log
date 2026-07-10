@@ -1,8 +1,4 @@
-2026/07/09 13:36:46 [SERVER] Vector 已启用, PID=41157
-2026/07/09 13:36:46 [SERVER] 日志管理: http://localhost:8080
-2026/07/09 13:36:46 ClickHouse: http://localhost:8123
-2026/07/09 13:36:46 [ALERT] 告警检查器已启动
-2026/07/09 14:59:15 [SERVER] 采集器 none 已断开并删除
-2026/07/09 15:00:50 [SERVER] 采集器 C_LAPTOP_9eab66f1 已断开并删除
-2026/07/09 15:39:51 [SERVER] 采集器 C_LAPTOP_ac941f3e 已断开并删除
-2026/07/09 15:54:21 [SERVER] 采集器 C_LAPTOP_5df39011 已断开并删除
+2026/07/10 10:52:16 [SERVER] Vector 已启用, PID=71585
+2026/07/10 10:52:16 [SERVER] 日志管理: http://localhost:8080
+2026/07/10 10:52:16 ClickHouse: http://localhost:8123
+2026/07/10 10:52:16 [ALERT] 告警检查器已启动

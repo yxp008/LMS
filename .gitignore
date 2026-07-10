@@ -15,10 +15,10 @@ __pycache__/
 *.pyc
 
 # ClickHouse（仅保留最小配置）
-server/data/clickhouse_data/*
-!server/data/clickhouse_data/preprocessed_configs/
-server/data/clickhouse_data/preprocessed_configs/*
-!server/data/clickhouse_data/preprocessed_configs/config_minimal.xml
+data/clickhouse_data/*
+!data/clickhouse_data/preprocessed_configs/
+data/clickhouse_data/preprocessed_configs/*
+!data/clickhouse_data/preprocessed_configs/config_minimal.xml
 
 # Kafka 数据
 server/kafka/data/
