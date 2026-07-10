@@ -21,7 +21,7 @@ data/clickhouse_data/preprocessed_configs/*
 !data/clickhouse_data/preprocessed_configs/config_minimal.xml
 
 # Kafka 数据
-server/kafka/data/
+kafka/data/
 
 # Vector 运行时
 client/collector/vector_data/
@@ -54,7 +54,7 @@ frontend/smtp_config.json
 database_design/*.docx
 client/collector/elk_logs/incoming/
 data/clickhouse_data/
-server/kafka/data/
+kafka/data/
 logs/
 frontend/server
 server/processor/processor
