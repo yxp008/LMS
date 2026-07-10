@@ -1,11 +1,11 @@
 #!/bin/bash
-# 查看服务端仪表盘统计
+# 查看服务端仪表盘统计（纯命令行）
 HOST=${1:-localhost:8080}
-curl -s "http://$HOST/api/stats" | python3 -c "
-import json,sys
-s=json.load(sys.stdin)
-print('日志总量:   '+str(s.get('total_logs',0)))
-print('错误日志:   '+str(s.get('error_count',0)))
-print('警告日志:   '+str(s.get('warn_count',0)))
-print('近24小时:   '+str(s.get('last_24h',0)))
-"
+echo ">>> 仪表盘"
+curl -s "http://$HOST/api/stats" | python3 -m json.tool
+echo ""
+echo ">>> 等级分布"
+curl -s "http://$HOST/api/levels" | python3 -m json.tool
+echo ""
+echo ">>> 来源分布"
+curl -s "http://$HOST/api/sources" | python3 -m json.tool
