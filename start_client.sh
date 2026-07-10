@@ -5,8 +5,8 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 export LMS_PROJECT_ROOT="$SCRIPT_DIR"
 
-# 加载配置文件
-[ -f "$SCRIPT_DIR/config.env" ] && source "$SCRIPT_DIR/config.env"
+# 加载客户端配置
+[ -f "$SCRIPT_DIR/config_client.env" ] && source "$SCRIPT_DIR/config_client.env"
 
 COLLECTOR_PORT=${COLLECTOR_PORT:-8081}
 

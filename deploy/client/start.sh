@@ -4,6 +4,9 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 export LMS_PROJECT_ROOT="$PROJECT_ROOT"
 
+# 加载客户端配置
+[ -f "$PROJECT_ROOT/config_client.env" ] && source "$PROJECT_ROOT/config_client.env"
+
 echo "========================================"
 echo "  LMS 采集器客户端"
 echo "========================================"

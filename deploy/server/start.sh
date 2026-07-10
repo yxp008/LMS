@@ -4,6 +4,9 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 export LMS_PROJECT_ROOT="$PROJECT_ROOT"
 
+# 加载服务端配置
+[ -f "$PROJECT_ROOT/config_server.env" ] && source "$PROJECT_ROOT/config_server.env"
+
 echo "========================================"
 echo "  LMS 日志管理服务端"
 echo "========================================"
