@@ -28,3 +28,13 @@
 2026-07-10T03:49:32.232906Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
 2026-07-10T03:49:32.247625Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
 2026-07-10T03:49:33.371473Z ERROR vector::internal_events::file::source: Failed writing checkpoints. error=No such file or directory (os error 2) error_code="writing_checkpoints" error_type="writer_failed" stage="receiving"
+2026-07-10T05:30:31.792743Z  INFO vector::app: Log level is enabled. level="info"
+2026-07-10T05:30:31.799046Z  INFO vector::app: Loading configs. paths=["/home/yxp/LMS_mimo/client/collector/vector_wsl.toml"]
+2026-07-10T05:30:31.976142Z  INFO vector::topology::running: Running healthchecks.
+2026-07-10T05:30:31.977869Z  INFO vector: Vector has started. debug="false" version="0.56.0" arch="x86_64" revision="6817c02 2026-06-03 14:25:37.451398530"
+2026-07-10T05:30:31.977909Z  INFO vector::app: API is disabled, enable by setting `api.enabled` to `true` and use commands like `vector top`.
+2026-07-10T05:30:31.980621Z  INFO source{component_kind="source" component_id=journald component_type=journald}: vector::sources::journald: Starting journalctl.
+2026-07-10T05:30:31.996946Z  INFO source{component_kind="source" component_id=syslog_udp component_type=syslog}: vector::sources::syslog: Listening. addr=0.0.0.0:1514 type="udp"
+2026-07-10T05:30:32.010409Z  INFO source{component_kind="source" component_id=syslog_tcp component_type=syslog}: vector::sources::util::net::tcp: Listening. addr=0.0.0.0:1514
+2026-07-10T05:30:32.030215Z  INFO vector::topology::builder: Healthcheck passed.
+2026-07-10T05:30:32.037064Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.

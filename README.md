@@ -4,6 +4,19 @@
 
 集日志采集、存储、查询、分析、可视化、告警于一体的集中式日志管理系统。
 
+## 功能
+
+| 模块 | 说明 |
+|---|---|
+| 仪表盘 | 日志总量/错误/警告统计，级别分布图，来源分布图 |
+| 日志查询 | 分页查询，按级别/主机/来源/日期/关键词过滤，自动刷新 |
+| 可视化分析 | 时间线图、主机排名、来源占比，等级过滤 |
+| AI 分析 | 基于 DeepSeek 的交互式对话，自动分析日志数据 |
+| 采集器管理 | 注册/编辑采集器，管理采集源开关，Kafka 连通性测试 |
+| 告警规则 | 自定义 SQL 告警，邮件/SMS/Webhook 通知，定时轮询 |
+| 日志脱敏 | 正则规则脱敏（手机号、身份证等），processor/rules.json 可配置 |
+| 三级存储 | SSD(0-7d) → HDD(7-30d) → MinIO(30-180d) 自动迁移 |
+
 ## 架构
 
 ```
@@ -27,111 +40,102 @@
 | 组件 | 安装方式 |
 |---|---|
 | Go | `sudo apt-get install -y golang-go` |
-| Vector | `curl --proto '=https' --tlsv1.2 -sSf https://sh.vector.dev \| bash` |
-| Kafka | 下载解压到 `~/kafka/`（[kafka.apache.org](https://kafka.apache.org/downloads)） |
-| ClickHouse | 下载二进制放入 `server/data/clickhouse_data/`（[clickhouse.com](https://packages.clickhouse.com/tgz/stable/)） |
+| Vector | `curl --proto '=https' --tlsv1.2 -sSf https://sh.vector.dev \| bash`（安装到 `~/.vector/`） |
+| Kafka | 下载 [kafka_2.13-3.6.0.tgz](https://archive.apache.org/dist/kafka/3.6.0/) 解压到 `~/kafka/` |
+| ClickHouse | 下载 [clickhouse](https://packages.clickhouse.com/tgz/stable/) 二进制放入 `data/clickhouse_data/` |
 
-## 拉取项目
+> 仅客户端部署不需要 Kafka 和 ClickHouse。
 
-**全量克隆**（开发/单机测试）：
+## 安装
 
 ```bash
 git clone <repo-url>
 cd LMS
 bash install.sh
-bash start.sh
 ```
 
-**按角色拉取**（分离部署）：
+`install.sh` 自动完成：检查 Go → 编译 processor/server/reader → 检查外部依赖 → 初始化配置文件。
+
+按角色安装：
 
 ```bash
-# 客户端（只拉 client/ + frontend/ + test/）
-git clone --filter=blob:none --sparse <repo-url>
-cd LMS
+# 仅客户端
+git clone --filter=blob:none --sparse <repo-url> && cd LMS
 git sparse-checkout set client/ frontend/ test/ install.sh README.md
 bash client/install.sh
 
-# 服务端（只拉 server/ + frontend/ + test/）
-git clone --filter=blob:none --sparse <repo-url>
-cd LMS
+# 仅服务端
+git clone --filter=blob:none --sparse <repo-url> && cd LMS
 git sparse-checkout set server/ frontend/ test/ install.sh README.md
 bash server/install.sh
 ```
 
-## 从零部署
-
-### 单机（全部在本机）
+## 启动
 
 ```bash
-# 1. 安装前置依赖
-# 2. 克隆项目
-git clone <repo-url> && cd LMS
-# 3. 安装
-bash install.sh          # 全量安装（或 client/install.sh + server/install.sh）
-# 4. 启动
+# 单机全部启动
 bash start.sh
-# 5. 访问
-#    服务端: http://localhost:8080
-#    客户端: http://localhost:8081
-```
 
-### 双机分离
-
-**服务端**（运行 Kafka + ClickHouse + Processor + Web）：
-
-```bash
-git clone --filter=blob:none --sparse <repo-url>
-cd LMS
-git sparse-checkout set server/ frontend/ test/ install.sh README.md
-bash server/install.sh
-bash install.sh
-
-# 编辑配置（默认 localhost 即可）
-vim server/config_server.env
+# 仅服务端
 bash server/start_server.sh
-```
 
-**客户端**（运行 Vector + 采集器管理）：
-
-```bash
-git clone --filter=blob:none --sparse <repo-url>
-cd LMS
-git sparse-checkout set client/ frontend/ test/ install.sh README.md
-bash client/install.sh
-
-# 修改三个地址指向服务端 IP
-vim client/config_client.env
-#   LMS_CLICKHOUSE_URL=http://<服务端IP>:8123
-#   LMS_KAFKA_BROKER=<服务端IP>:9092
-#   LMS_SERVER_URL=http://<服务端IP>:8080
-
+# 仅客户端
 bash client/start_client.sh
 ```
+
+访问：
+- 服务端（日志管理）：`http://localhost:8080`
+- 客户端（采集器管理）：`http://localhost:8081`
+
+## 分离部署
+
+客户端 `config_client.env` 修改三个地址指向服务端：
+
+```bash
+LMS_CLICKHOUSE_URL=http://<服务端IP>:8123
+LMS_KAFKA_BROKER=<服务端IP>:9092
+LMS_SERVER_URL=http://<服务端IP>:8080
+```
+
+客户端启动后，打开 `http://<客户端IP>:8081` 注册采集器，服务端 `:8080` 即可监控到。
 
 ## 目录结构
 
 ```
 LMS/
-├── client/                          # 客户端（采集器）
+├── client/                          # 客户端
 │   ├── collector/                   # Vector 配置 + ELK reader
 │   ├── config_client.env            # 客户端配置
-│   └── start_client.sh              # 客户端启动
+│   ├── install.sh / start_client.sh
+│   └── test/
 ├── server/                          # 服务端
-│   ├── processor/                   # Kafka→ClickHouse 处理程序
-│   ├── data/clickhouse_data/        # ClickHouse 二进制+数据
-│   ├── kafka/                       # Kafka 数据
+│   ├── processor/                   # Kafka → ClickHouse
 │   ├── database_design/sql/         # 建表 SQL
-│   ├── config_server.env            # 服务端配置
-│   └── start_server.sh              # 服务端启动
-├── frontend/                        # 共用（Go Web 服务 + SPA）
-├── test/                            # 测试脚本
+│   ├── config_server.env
+│   ├── install.sh / start_server.sh
+│   └── test/
+├── frontend/                        # 共用（Go Web 服务 + 前端 SPA）
+│   ├── server.go                    # Go 服务（-collector 切换模式）
+│   ├── collector_state.go           # 采集器本地状态
+│   ├── index.html / app.js / style.css
+│   └── server                       # 编译产物
+├── data/clickhouse_data/            # ClickHouse 运行时（服务端）
+├── kafka/                           # Kafka 运行时（服务端）
+├── test/                            # 测试脚本 + API 参考
 ├── install.sh / start.sh / stop.sh
-├── README.md / CLAUDE.md
+└── README.md / CLAUDE.md
 ```
 
-## API
+## 测试
 
-全部端点位于 `http://localhost:8080`，详见 `test/Test.md`。
+```bash
+bash test/check_client.sh            # 查看客户端采集器
+bash test/check_server.sh            # 查看服务端采集器
+bash test/register.sh                # 注册采集器
+bash test/stats.sh                   # 仪表盘统计
+```
+
+所有 API 端点详见 `test/Test.md`。
 
 ## 许可证
 
