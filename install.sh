@@ -107,11 +107,11 @@ if [ ! -f "$SCRIPT_DIR/collector/collection_prefs.json" ]; then
   "linux_system_logs": false,
   "network_device_logs": false,
   "elk_file_logs": true,
-  "elk_file_path": "COLLECTOR_DIR/elk_logs/incoming/"
+  "elk_file_path": "__ELK_FILE_PATH__"
 }
 EOF
     # 替换为实际路径
-    sed -i "s|COLLECTOR_DIR|$SCRIPT_DIR/collector|g" "$SCRIPT_DIR/collector/collection_prefs.json"
+    sed -i "s|__ELK_FILE_PATH__|$SCRIPT_DIR/collector/elk_logs/incoming/|g" "$SCRIPT_DIR/collector/collection_prefs.json"
     echo "  -> collection_prefs.json 已创建"
 else
     echo "  -> collection_prefs.json 已存在，跳过"
