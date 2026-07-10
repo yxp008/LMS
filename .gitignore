@@ -56,3 +56,6 @@ client/collector/elk_logs/incoming/
 data/clickhouse_data/
 server/kafka/data/
 logs/
+frontend/server
+server/processor/processor
+client/collector/elk_logs/reader
