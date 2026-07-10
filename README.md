@@ -37,7 +37,7 @@
 
 ```bash
 git clone <repo-url>
-cd LMS_mimo
+cd LMS
 bash install.sh
 bash start.sh
 ```
@@ -47,12 +47,12 @@ bash start.sh
 ```bash
 # 客户端（只拉 client/ + frontend/ + test/）
 git clone --filter=blob:none --sparse <repo-url>
-cd LMS_mimo
+cd LMS
 git sparse-checkout set client/ frontend/ test/ install.sh README.md
 
 # 服务端（只拉 server/ + frontend/ + test/）
 git clone --filter=blob:none --sparse <repo-url>
-cd LMS_mimo
+cd LMS
 git sparse-checkout set server/ frontend/ test/ install.sh README.md
 ```
 
@@ -63,7 +63,7 @@ git sparse-checkout set server/ frontend/ test/ install.sh README.md
 ```bash
 # 1. 安装前置依赖
 # 2. 克隆项目
-git clone <repo-url> && cd LMS_mimo
+git clone <repo-url> && cd LMS
 # 3. 安装
 bash install.sh
 # 4. 启动
@@ -79,7 +79,7 @@ bash start.sh
 
 ```bash
 git clone --filter=blob:none --sparse <repo-url>
-cd LMS_mimo
+cd LMS
 git sparse-checkout set server/ frontend/ test/ install.sh README.md
 bash install.sh
 
@@ -92,7 +92,7 @@ bash server/start_server.sh
 
 ```bash
 git clone --filter=blob:none --sparse <repo-url>
-cd LMS_mimo
+cd LMS
 git sparse-checkout set client/ frontend/ test/ install.sh README.md
 bash install.sh
 
@@ -108,7 +108,7 @@ bash client/start_client.sh
 ## 目录结构
 
 ```
-LMS_mimo/
+LMS/
 ├── client/                          # 客户端（采集器）
 │   ├── collector/                   # Vector 配置 + ELK reader
 │   ├── config_client.env            # 客户端配置
