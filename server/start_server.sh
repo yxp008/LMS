@@ -3,10 +3,13 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-export LMS_PROJECT_ROOT="$SCRIPT_DIR"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+export LMS_PROJECT_ROOT="$PROJECT_ROOT"
 
-# 加载服务端配置
-[ -f "$SCRIPT_DIR/server/config_server.env" ] && source "$SCRIPT_DIR/config_server.env"
+# 加载服务端配置并导出环境变量
+set -a
+[ -f "$SCRIPT_DIR/config_server.env" ] && source "$SCRIPT_DIR/config_server.env"
+set +a
 
 SERVER_PORT=${SERVER_PORT:-8080}
 KAFKA_HOME=${KAFKA_HOME:-$HOME/kafka}

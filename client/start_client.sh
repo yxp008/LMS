@@ -3,10 +3,13 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-export LMS_PROJECT_ROOT="$SCRIPT_DIR"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+export LMS_PROJECT_ROOT="$PROJECT_ROOT"
 
-# 加载客户端配置
-[ -f "$SCRIPT_DIR/client/config_client.env" ] && source "$SCRIPT_DIR/config_client.env"
+# 加载客户端配置并导出环境变量
+set -a
+[ -f "$SCRIPT_DIR/config_client.env" ] && source "$SCRIPT_DIR/config_client.env"
+set +a
 
 COLLECTOR_PORT=${COLLECTOR_PORT:-8081}
 
