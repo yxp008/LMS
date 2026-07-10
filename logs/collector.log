@@ -7,3 +7,11 @@
 2026/07/10 13:30:31 [SERVER] Vector 已停止
 2026/07/10 13:30:34 [SERVER] Vector 已启用, PID=82716
 2026/07/10 13:30:34 [COLLECTOR] 已向 http://localhost:8080 注册: {"Collector_ID":"C_LAPTOP_0ca52635","ok":true}
+2026/07/10 13:59:11 [COLLECTOR] Kafka broker 已更新为: 192.168.1.100:9092
+2026/07/10 13:59:13 [SERVER] Vector 已停止
+2026/07/10 13:59:13 [SERVER] Vector 已启用, PID=83396
+2026/07/10 13:59:13 [COLLECTOR] 已向 http://localhost:8080 注册: {"Collector_ID":"C_LAPTOP_0ca52635","ok":true}
+2026/07/10 13:59:54 [COLLECTOR] Kafka broker 已更新为: localhost:9092
+2026/07/10 13:59:56 [SERVER] Vector 已停止
+2026/07/10 14:00:03 [SERVER] Vector 已启用, PID=83477
+2026/07/10 14:00:03 [COLLECTOR] 已向 http://localhost:8080 注册: {"Collector_ID":"C_LAPTOP_0ca52635","ok":true}

@@ -59,6 +59,8 @@ echo ""
 echo "[2/5] 启动 Kafka..."
 # 自动修正 Kafka 数据目录为当前项目路径
 sed -i "s|^log.dirs=.*|log.dirs=$PROJECT_ROOT/kafka/data|" "$KAFKA_CFG"
+	LOCAL_IP=$(hostname -I | awk '{print $1}')
+	[ -n "$LOCAL_IP" ] && sed -i "s|^advertised.listeners=.*|advertised.listeners=PLAINTEXT://$LOCAL_IP:9092|" "$KAFKA_CFG"
 if pgrep -f "kafka.Kafka" > /dev/null 2>&1; then
     echo "  -> Kafka 已在运行"
 else

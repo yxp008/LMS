@@ -1,6 +1,6 @@
 {
   "Collector_ID": "C_LAPTOP_0ca52635",
-  "Name": "Vector-WSL",
+  "Name": "生产环境采集器",
   "Status": "1",
   "Address": "localhost:9092",
   "Source_Host": "LAPTOP-2CVOKHL6 (10.255.255.254)"
