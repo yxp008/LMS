@@ -9,53 +9,38 @@ export_data.json
 server/processor/processor
 client/collector/elk_logs/reader
 *.exe
-
 # Python
 __pycache__/
 *.pyc
-
 # ClickHouse（仅保留最小配置）
 data/clickhouse_data/*
 !data/clickhouse_data/preprocessed_configs/
 data/clickhouse_data/preprocessed_configs/*
 !data/clickhouse_data/preprocessed_configs/config_minimal.xml
-
 # Kafka 数据
 kafka/data/
-
 # Vector 运行时
 client/collector/vector_data/
 client/collector/elk_logs/.processed.json
 client/collector/elk_logs/.reader.lock
 client/collector/vector_wsl.toml
-
 # Go module
-processor/go.sum
-collector/elk_logs/go.sum
-collector/elk_logs/go.mod
-
+server/processor/go.sum
+client/collector/elk_logs/go.sum
+client/collector/elk_logs/go.mod
 # IDE / 系统
 .idea/
 .vscode/
 *:Zone.Identifier
 Thumbs.db
-
 # 运行时配置（首次启动自动生成）
 client/collector/collection_prefs.json
-
 # 运行时配置（首次启动自动生成，含本地路径）
-client/collector/collection_prefs.json
-client/collector/vector_wsl.toml
-
 # 凭据
 frontend/smtp_config.json
-
 # 数据库设计文档（二进制）
-database_design/*.docx
+server/database_design/*.docx
 client/collector/elk_logs/incoming/
 data/clickhouse_data/
-kafka/data/
 logs/
 frontend/server
-server/processor/processor
-client/collector/elk_logs/reader

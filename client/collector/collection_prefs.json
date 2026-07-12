@@ -1,7 +1,0 @@
-{
-  "elk_file_logs": true,
-  "elk_file_path": "/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/",
-  "kafka_broker": "localhost:9092",
-  "linux_system_logs": true,
-  "network_device_logs": false
-}
