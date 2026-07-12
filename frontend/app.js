@@ -724,11 +724,11 @@ async function loadCollectors() {
             : '';
         const address = c.Address || c.Collector_Address || '-';
         const sourceHost = c.Source_Host || '-';
-        return `
-        const connected = c.Connected !== false
+        const connected = c.Connected !== false;
         const connIcon = typeof c.Connected === 'boolean'
             ? (connected ? '<span style="color:#2ecc71" title="已连接">&#9679;</span>' : '<span style="color:#e74c3c" title="未连接">&#9679;</span>')
-            : ''
+            : '';
+        return `
         <tr>
             <td>${escapeHtml(c.Collector_ID)}</td>
             <td>${escapeHtml(c.Name)}</td>

@@ -10230,3 +10230,41 @@
 2026-07-12T13:20:12.079867Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
 2026-07-12T13:20:12.099534Z ERROR source{component_kind="source" component_id=elk_file component_type=file}:file_server: file_source::file_server: Error writing checkpoints before shutdown error=Os { code: 2, kind: NotFound, message: "No such file or directory" }
 2026-07-12T13:20:12.099932Z  INFO vector: Vector has stopped.
+2026-07-12T13:35:37.857310Z  INFO vector::app: Log level is enabled. level="info"
+2026-07-12T13:35:37.860587Z  INFO vector::app: Log level is enabled. level="info"
+2026-07-12T13:35:37.861386Z  INFO vector::app: Loading configs. paths=["/home/yxp/LMS_mimo/client/collector/vector_wsl.toml"]
+2026-07-12T13:35:37.865540Z  INFO vector::app: Loading configs. paths=["/home/yxp/LMS_mimo/client/collector/vector_wsl.toml"]
+2026-07-12T13:35:37.946480Z  INFO vector::topology::running: Running healthchecks.
+2026-07-12T13:35:37.946848Z  INFO vector: Vector has started. debug="false" version="0.56.0" arch="x86_64" revision="6817c02 2026-06-03 14:25:37.451398530"
+2026-07-12T13:35:37.946875Z  INFO vector::app: API is disabled, enable by setting `api.enabled` to `true` and use commands like `vector top`.
+2026-07-12T13:35:37.947027Z  INFO source{component_kind="source" component_id=elk_file component_type=file}: vector::sources::file: Starting file server. include=["/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/*.ndjson"] exclude=[]
+2026-07-12T13:35:37.948230Z  INFO vector::topology::running: Running healthchecks.
+2026-07-12T13:35:37.948567Z  INFO vector: Vector has started. debug="false" version="0.56.0" arch="x86_64" revision="6817c02 2026-06-03 14:25:37.451398530"
+2026-07-12T13:35:37.948593Z  INFO vector::app: API is disabled, enable by setting `api.enabled` to `true` and use commands like `vector top`.
+2026-07-12T13:35:37.948696Z  INFO source{component_kind="source" component_id=elk_file component_type=file}: vector::sources::file: Starting file server. include=["/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/*.ndjson"] exclude=[]
+2026-07-12T13:35:37.952782Z  INFO source{component_kind="source" component_id=journald component_type=journald}: vector::sources::journald: Starting journalctl.
+2026-07-12T13:35:37.952885Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: file_source_common::checkpointer: Loaded checkpoint data.
+2026-07-12T13:35:37.952938Z  INFO source{component_kind="source" component_id=journald component_type=journald}: vector::sources::journald: Starting journalctl.
+2026-07-12T13:35:37.953115Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: file_source_common::checkpointer: Loaded checkpoint data.
+2026-07-12T13:35:37.956527Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Resuming to watch file. file=/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/test_incre.ndjson file_position=1664
+2026-07-12T13:35:37.956600Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Resuming to watch file. file=/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/test_incre.ndjson file_position=1664
+2026-07-12T13:35:37.957171Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Internal log [Resuming to watch file.] is being suppressed to avoid flooding.
+2026-07-12T13:35:37.957462Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Internal log [Resuming to watch file.] is being suppressed to avoid flooding.
+2026-07-12T13:35:37.974044Z ERROR source{component_kind="source" component_id=syslog_udp component_type=syslog}: vector::internal_events::socket: Error binding socket. error=Address already in use (os error 98) error_code="socket_bind" error_type="io_failed" stage="initializing" mode=udp
+2026-07-12T13:35:37.974274Z ERROR source{component_kind="source" component_id=syslog_udp component_type=syslog}: vector::topology: An error occurred that Vector couldn't handle: the task completed with an error.
+2026-07-12T13:35:37.974359Z  INFO vector: Vector is stopping.
+2026-07-12T13:35:37.975092Z  INFO vector::topology::running: Shutting down... Waiting on running components. remaining_components="process_syslog, kafka_elk_out, journald, syslog_tcp, elk_file, kafka_journald_out, process_journald, cleanup_journald, kafka_syslog_out, cleanup_syslog" time_remaining="59 seconds left"
+2026-07-12T13:35:37.985477Z ERROR source{component_kind="source" component_id=syslog_tcp component_type=syslog}: vector::internal_events::socket: Error binding socket. error=TCP bind failed: Address already in use (os error 98) error_code="socket_bind" error_type="io_failed" stage="initializing" mode=tcp
+2026-07-12T13:35:37.985700Z ERROR source{component_kind="source" component_id=syslog_tcp component_type=syslog}: vector::topology: An error occurred that Vector couldn't handle: the task completed with an error.
+2026-07-12T13:35:37.997252Z ERROR source{component_kind="source" component_id=syslog_tcp component_type=syslog}: vector::internal_events::socket: Error binding socket. error=TCP bind failed: Address already in use (os error 98) error_code="socket_bind" error_type="io_failed" stage="initializing" mode=tcp
+2026-07-12T13:35:37.997378Z ERROR source{component_kind="source" component_id=syslog_tcp component_type=syslog}: vector::topology: An error occurred that Vector couldn't handle: the task completed with an error.
+2026-07-12T13:35:37.997422Z  INFO vector: Vector is stopping.
+2026-07-12T13:35:37.997906Z  INFO vector::topology::running: Shutting down... Waiting on running components. remaining_components="elk_file, syslog_tcp, kafka_journald_out, journald, cleanup_journald, process_syslog, syslog_udp, inject_collector_id, cleanup_syslog, process_journald, kafka_elk_out, kafka_syslog_out" time_remaining="59 seconds left"
+2026-07-12T13:35:38.008510Z ERROR source{component_kind="source" component_id=syslog_udp component_type=syslog}: vector::internal_events::socket: Error binding socket. error=Address already in use (os error 98) error_code="socket_bind" error_type="io_failed" stage="initializing" mode=udp
+2026-07-12T13:35:38.008629Z ERROR source{component_kind="source" component_id=syslog_udp component_type=syslog}: vector::topology: An error occurred that Vector couldn't handle: the task completed with an error.
+2026-07-12T13:35:38.099801Z  INFO vector::topology::builder: Healthcheck passed.
+2026-07-12T13:35:38.120433Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
+2026-07-12T13:35:38.147155Z  INFO vector::topology::builder: Healthcheck passed.
+2026-07-12T13:35:38.159484Z  INFO vector: Vector has stopped.
+2026-07-12T13:35:38.220555Z ERROR source{component_kind="source" component_id=elk_file component_type=file}:file_server: file_source::file_server: Error writing checkpoints before shutdown error=Os { code: 2, kind: NotFound, message: "No such file or directory" }
+2026-07-12T13:35:38.221203Z  INFO vector: Vector has stopped.

@@ -911,8 +911,14 @@ func main() {
 			generateVectorConfig(prefs)
 			startVector()
 		}
-		// 向服务端注册
+		// 向服务端注册 + 每30秒心跳保活
 		go registerWithServer()
+		go func() {
+			for {
+				time.Sleep(30 * time.Second)
+				registerWithServer()
+			}
+		}()
 		log.Printf("[COLLECTOR] 采集器管理: http://localhost%s", listenAddr)
 		log.Fatal(http.ListenAndServe(listenAddr, http.HandlerFunc(collectorRouter)))
 	}
