@@ -10058,3 +10058,15 @@
 2026-07-12T11:03:28.540060Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Internal log [Resuming to watch file.] is being suppressed to avoid flooding.
 2026-07-12T11:03:28.545385Z  INFO vector::topology::builder: Healthcheck passed.
 2026-07-12T11:03:28.553720Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
+2026-07-12T11:36:07.190715Z  INFO vector::app: Log level is enabled. level="info"
+2026-07-12T11:36:07.194514Z  INFO vector::app: Loading configs. paths=["/home/yxp/LMS_mimo/client/collector/vector_wsl.toml"]
+2026-07-12T11:36:07.253598Z  INFO vector::topology::running: Running healthchecks.
+2026-07-12T11:36:07.254490Z  INFO vector: Vector has started. debug="false" version="0.56.0" arch="x86_64" revision="6817c02 2026-06-03 14:25:37.451398530"
+2026-07-12T11:36:07.254528Z  INFO vector::app: API is disabled, enable by setting `api.enabled` to `true` and use commands like `vector top`.
+2026-07-12T11:36:07.254798Z  INFO source{component_kind="source" component_id=elk_file component_type=file}: vector::sources::file: Starting file server. include=["/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/*.ndjson"] exclude=[]
+2026-07-12T11:36:07.257635Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: file_source_common::checkpointer: Loaded checkpoint data.
+2026-07-12T11:36:07.257715Z  INFO source{component_kind="source" component_id=journald component_type=journald}: vector::sources::journald: Starting journalctl.
+2026-07-12T11:36:07.260584Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Resuming to watch file. file=/home/yxp/LMS_mimo/client/collector/elk_logs/incoming/test_incre.ndjson file_position=1664
+2026-07-12T11:36:07.261501Z  INFO source{component_kind="source" component_id=elk_file component_type=file}:file_server: vector::internal_events::file::source: Internal log [Resuming to watch file.] is being suppressed to avoid flooding.
+2026-07-12T11:36:07.280263Z  INFO vector::topology::builder: Healthcheck passed.
+2026-07-12T11:36:07.291175Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.

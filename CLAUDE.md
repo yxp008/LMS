@@ -112,7 +112,8 @@ LMS_SERVER_URL=http://<服务端IP>:8080
 
 ```bash
 # 启动 / 停止全部服务（6 个组件）
-bash start.sh
+bash server/start_server.sh
+bash client/start_client.sh
 bash stop.sh
 
 # 单独启动组件

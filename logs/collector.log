@@ -23,3 +23,12 @@
 2026/07/12 19:04:46 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8080/api/collectors": EOF
 2026/07/12 19:05:09 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8080/api/collectors": EOF
 2026/07/12 19:05:12 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/12 19:36:05 [COLLECTOR] Kafka broker 已更新为: localhost:9092
+2026/07/12 19:36:07 [SERVER] Vector 已停止
+2026/07/12 19:36:10 [SERVER] Vector 已启用, PID=7704
+2026/07/12 19:36:17 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:36:41 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:37:04 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:37:25 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:37:46 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:37:49 [COLLECTOR] 服务端注册失败（已重试5次）

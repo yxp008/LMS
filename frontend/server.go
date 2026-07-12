@@ -250,7 +250,9 @@ func restartVector(prefs CollectionPrefs) {
 		startVector()
 	} else {
 		stopVector()
-		cq(`ALTER TABLE ` + database + `.LMS_Collectors UPDATE Status = '0' WHERE 1=1`)
+		if !isCollector {
+			cq(`ALTER TABLE ` + database + `.LMS_Collectors UPDATE Status = '0' WHERE 1=1`)
+		}
 		log.Println("[SERVER] 所有采集类型已禁用，Vector 不启动")
 	}
 }
@@ -403,30 +405,6 @@ func apiHosts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func apiCollectors(w http.ResponseWriter, r *http.Request) {
-	results := cq(fmt.Sprintf("SELECT * FROM %s.LMS_Collectors ORDER BY Collector_ID", database))
-	prefs := loadPrefs()
-	anyEnabled := prefs.LinuxSystemLogs || prefs.NetworkDeviceLogs || prefs.ElkFileLogs
-	actualStatus := "0"
-	if anyEnabled && vectorIsRunning() { actualStatus = "1" }
-	for _, r := range results {
-		r["Status"] = actualStatus
-		// 从数据库读取采集源配置（客户端/服务端分离）
-		if stJSON, ok := r["Source_Types"].(string); ok && stJSON != "" && stJSON != "[]" {
-			var sourceTypes []map[string]interface{}
-			if json.Unmarshal([]byte(stJSON), &sourceTypes) == nil {
-				r["Source_Types"] = sourceTypes
-				continue
-			}
-		}
-		r["Source_Types"] = []map[string]interface{}{
-			{"name": "Linux系统日志", "key": "linux_system_logs", "enabled": false},
-			{"name": "网络设备日志", "key": "network_device_logs", "enabled": false},
-			{"name": "ELK本地日志文件", "key": "elk_file_logs", "enabled": false},
-		}
-	}
-	jsonResp(w, 200, results)
-}
 func apiCollectorsPost(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
 	json.NewDecoder(r.Body).Decode(&data)

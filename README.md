@@ -51,10 +51,10 @@
 ```bash
 git clone <repo-url>
 cd LMS
-bash install.sh
+bash server/install.sh && bash client/install.sh
 ```
 
-`install.sh` 自动完成：检查 Go → 编译 processor/server/reader → 检查外部依赖 → 初始化配置文件。
+安装脚本 自动完成：检查 Go → 编译 processor/server/reader → 检查外部依赖 → 初始化配置文件。
 
 按角色安装：
 
@@ -73,8 +73,11 @@ bash server/install.sh
 ## 启动
 
 ```bash
-# 单机全部启动
-bash start.sh
+# 服务端
+bash server/start_server.sh
+
+# 客户端
+bash client/start_client.sh
 
 # 仅服务端
 bash server/start_server.sh
@@ -89,10 +92,9 @@ bash client/start_client.sh
 
 ## 分离部署
 
-客户端 `config_client.env` 修改三个地址指向服务端：
+客户端 `config_client.env` 修改两个地址指向服务端：
 
 ```bash
-LMS_CLICKHOUSE_URL=http://<服务端IP>:8123
 LMS_KAFKA_BROKER=<服务端IP>:9092
 LMS_SERVER_URL=http://<服务端IP>:8080
 ```
@@ -122,7 +124,7 @@ LMS/
 ├── data/clickhouse_data/            # ClickHouse 运行时（服务端）
 ├── kafka/                           # Kafka 运行时（服务端）
 ├── test/                            # 测试脚本 + API 参考
-├── install.sh / start.sh / stop.sh
+├── stop.sh
 └── README.md / CLAUDE.md
 ```
 
