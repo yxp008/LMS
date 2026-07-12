@@ -35,6 +35,7 @@ client/collector/elk_logs/go.mod
 Thumbs.db
 # 运行时配置（首次启动自动生成）
 client/collector/collection_prefs.json
+client/collector/collector_state.json
 # 运行时配置（首次启动自动生成，含本地路径）
 # 凭据
 frontend/smtp_config.json
