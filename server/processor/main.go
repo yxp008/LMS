@@ -176,6 +176,15 @@ func parseHost(src map[string]interface{}) string {
 	return "unknown"
 }
 
+func normalizeHost(h string) string {
+	if h == "localhost" || h == "127.0.0.1" || h == "::1" {
+		if host, err := os.Hostname(); err == nil {
+			return host
+		}
+	}
+	return h
+}
+
 func parseMessage(src map[string]interface{}) string {
 	for _, k := range []string{"syslog_message", "message", "msg", "log"} {
 		if v, ok := src[k]; ok {
@@ -297,7 +306,7 @@ func main() {
 				"Log_ID":      generateLogID(),
 				"Timestamp":   ts.Format("2006-01-02 15:04:05"),
 				"Level":       fmt.Sprint(raw["Level"]),
-				"Host":        fmt.Sprint(raw["Host"]),
+				"Host":        normalizeHost(fmt.Sprint(raw["Host"])),
 				"Source_Type": fmt.Sprint(raw["Source_Type"]),
 				"Message":     fmt.Sprint(raw["Message"]),
 				"Tags":        json.RawMessage(getTagsJSON(raw)),
@@ -349,7 +358,7 @@ func main() {
 			"Log_ID":      generateLogID(),
 			"Timestamp":   tsStr,
 			"Level":       level,
-			"Host":        host,
+			"Host":        normalizeHost(host),
 			"Source_Type": "ELK本地日志文件",
 			"Message":     msgText,
 			"Tags":        json.RawMessage(tagsJSON),

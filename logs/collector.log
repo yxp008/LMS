@@ -1,6 +1,25 @@
-2026/07/10 17:37:20 [SERVER] Vector 已启用, PID=83477
-88426
-88428
-2026/07/10 17:37:20 [COLLECTOR] 采集器管理: http://localhost:8081
-2026/07/10 17:37:20 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8080/api/collectors": dial tcp 127.0.0.1:8080: connect: connection refused
-2026/07/10 17:37:24 [COLLECTOR] 已向 http://localhost:8080 注册: {"Collector_ID":"C_LAPTOP_0ca52635","ok":true}
+2026/07/12 18:15:02 [SERVER] Vector 已启用, PID=4095
+4455
+4456
+4587
+4682
+4778
+5030
+5153
+5496
+2026/07/12 18:15:02 [COLLECTOR] 采集器管理: http://localhost:8081
+2026/07/12 18:15:11 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 18:15:33 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 18:15:55 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 18:16:18 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 18:16:39 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 18:16:42 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/12 19:03:26 [COLLECTOR] Kafka broker 已更新为: localhost:9092
+2026/07/12 19:03:28 [SERVER] Vector 已停止
+2026/07/12 19:03:31 [SERVER] Vector 已启用, PID=6902
+2026/07/12 19:03:37 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:04:02 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:04:25 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:04:46 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:05:09 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8080/api/collectors": EOF
+2026/07/12 19:05:12 [COLLECTOR] 服务端注册失败（已重试5次）
