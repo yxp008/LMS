@@ -424,9 +424,9 @@ func apiCollectorsPost(w http.ResponseWriter, r *http.Request) {
 		}
 		existing := cq(fmt.Sprintf("SELECT 1 FROM %s.LMS_Collectors WHERE Collector_ID = '%s'", database, cid))
 		if len(existing) > 0 {
-			cq(fmt.Sprintf("ALTER TABLE %s.LMS_Collectors UPDATE Name = '%s', Address = '%s', Source_Types = '%s', Source_Host = '%s', Status = '1' WHERE Collector_ID = '%s'", database, name, addr, escSQL(sourceTypesJSON), escSQL(srcHost), cid))
+			cq(fmt.Sprintf("ALTER TABLE %s.LMS_Collectors UPDATE Name = '%s', Address = '%s', Source_Types = '%s', Source_Host = '%s', Status = '1', Last_Seen = now() WHERE Collector_ID = '%s'", database, name, addr, escSQL(sourceTypesJSON), escSQL(srcHost), cid))
 		} else {
-			cq(fmt.Sprintf("INSERT INTO %s.LMS_Collectors VALUES ('%s','%s','1','%s','%s','%s')", database, cid, name, addr, escSQL(sourceTypesJSON), escSQL(srcHost)))
+			cq(fmt.Sprintf("INSERT INTO %s.LMS_Collectors VALUES ('%s','%s','1','%s','%s','%s',now())", database, cid, name, addr, escSQL(sourceTypesJSON), escSQL(srcHost)))
 		}
 		jsonResp(w, 200, map[string]interface{}{"ok": true, "Collector_ID": cid})
 	} else if action == "delete" {
@@ -757,9 +757,16 @@ func collectorRouter(w http.ResponseWriter, r *http.Request) {
 func apiCollectorsReadonly(w http.ResponseWriter, r *http.Request) {
 	// 返回服务端已注册的采集器（客户端启动时主动注册）
 	// 采集源数据从数据库读取，不再依赖本地 prefs 文件（客户端/服务端分离部署）
-	results := cq(fmt.Sprintf("SELECT * FROM %s.LMS_Collectors ORDER BY Collector_ID", database))
+	results := cq(fmt.Sprintf("SELECT *, dateDiff('second', Last_Seen, now()) as Seconds_Ago FROM %s.LMS_Collectors ORDER BY Collector_ID", database))
 	if results == nil { results = make([]map[string]interface{}, 0) }
 	for _, r := range results {
+		// 60秒内有心跳视为在线
+		r["Connected"] = false
+		if secs, ok := r["Seconds_Ago"]; ok {
+			if s, ok := secs.(float64); ok && s < 60 {
+				r["Connected"] = true
+			}
+		}
 		if stJSON, ok := r["Source_Types"].(string); ok && stJSON != "" && stJSON != "[]" {
 			var sourceTypes []map[string]interface{}
 			if json.Unmarshal([]byte(stJSON), &sourceTypes) == nil {

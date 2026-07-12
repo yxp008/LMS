@@ -725,6 +725,10 @@ async function loadCollectors() {
         const address = c.Address || c.Collector_Address || '-';
         const sourceHost = c.Source_Host || '-';
         return `
+        const connected = c.Connected !== false
+        const connIcon = typeof c.Connected === 'boolean'
+            ? (connected ? '<span style="color:#2ecc71" title="已连接">&#9679;</span>' : '<span style="color:#e74c3c" title="未连接">&#9679;</span>')
+            : ''
         <tr>
             <td>${escapeHtml(c.Collector_ID)}</td>
             <td>${escapeHtml(c.Name)}</td>
@@ -732,6 +736,7 @@ async function loadCollectors() {
             <td>${escapeHtml(address)}</td>
             <td>${sourceTypes || '<span style="color:var(--text-secondary)">-</span>'}</td>
             <td><span class="level-badge ${enabled ? 'level-1' : 'level-3'}">${enabled ? '已启用' : '已停用'}</span></td>
+            <td>${connIcon} ${connected ? '在线' : '离线'}</td>
             <td>${actionBtn}</td>
         </tr>`;
     }).join('');
