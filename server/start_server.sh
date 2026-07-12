@@ -14,15 +14,15 @@ set +a
 SERVER_PORT=${SERVER_PORT:-8080}
 KAFKA_HOME=${KAFKA_HOME:-$HOME/kafka}
 
-CH_BIN="$SCRIPT_DIR/data/clickhouse_data/clickhouse"
-CH_CFG="$SCRIPT_DIR/data/clickhouse_data/preprocessed_configs/config.xml"
-CH_CFG_SAFE="$SCRIPT_DIR/data/clickhouse_data/preprocessed_configs/config_minimal.xml"
+CH_BIN="$PROJECT_ROOT/data/clickhouse_data/clickhouse"
+CH_CFG="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config.xml"
+CH_CFG_SAFE="$PROJECT_ROOT/data/clickhouse_data/preprocessed_configs/config_minimal.xml"
 CH_URL="${LMS_CLICKHOUSE_URL:-http://localhost:8123}"
 KAFKA_BIN="$KAFKA_HOME/bin/kafka-server-start.sh"
 KAFKA_CFG="$KAFKA_HOME/config/kraft/server.properties"
 PROCESSOR_BIN="$SCRIPT_DIR/processor/processor"
 
-mkdir -p "$SCRIPT_DIR/logs"
+mkdir -p "$PROJECT_ROOT/logs"
 
 echo "========================================"
 echo "  LMS 服务端"
