@@ -5,8 +5,10 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR"
 export LMS_PROJECT_ROOT="$PROJECT_ROOT"
 
-# 加载配置文件
+# 加载服务端配置并导出环境变量
+set -a
 [ -f "$PROJECT_ROOT/server/config_server.env" ] && source "$PROJECT_ROOT/server/config_server.env"
+set +a
 
 SERVER_PORT=${SERVER_PORT:-8080}
 COLLECTOR_PORT=${COLLECTOR_PORT:-8081}

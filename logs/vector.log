@@ -335,3 +335,31 @@
 2026-07-10T09:37:20.799964Z  INFO vector::topology::builder: Healthcheck passed.
 2026-07-10T09:37:20.810776Z  INFO vector::topology::builder: Internal log [Healthcheck passed.] is being suppressed to avoid flooding.
 2026-07-10T09:37:21.887587Z ERROR vector::internal_events::file::source: Failed writing checkpoints. error=No such file or directory (os error 2) error_code="writing_checkpoints" error_type="writer_failed" stage="receiving"
+2026-07-10T09:59:22.199927Z  INFO librdkafka: librdkafka: REQTMOUT [thrd:127.0.0.1:9092/1]: 192.168.97.160:9092/1: Timed out ProduceRequest in flight (after 60566ms, timeout #0)
+2026-07-10T09:59:22.199974Z  INFO log: Internal log [librdkafka: FAIL [thrd:127.0.0.1:9092/1]: 127.0.0.1:9092/1: Disconnected: connection closed by peer: receive 0 after POLLIN (after 13277579ms in state UP)] is being suppressed to avoid flooding.
+2026-07-10T09:59:22.200244Z  WARN librdkafka: librdkafka: REQTMOUT [thrd:127.0.0.1:9092/1]: 192.168.97.160:9092/1: Timed out 2 in-flight, 0 retry-queued, 0 out-queue, 0 partially-sent requests
+2026-07-10T09:59:22.330299Z  INFO librdkafka: librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out ProduceRequest in flight (after 60697ms, timeout #0)
+2026-07-10T09:59:22.330399Z  INFO log: Internal log [librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out ProduceRequest in flight (after 60697ms, timeout #0)] is being suppressed to avoid flooding.
+2026-07-10T09:59:22.330412Z  WARN librdkafka: librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out 2 in-flight, 0 retry-queued, 0 out-queue, 0 partially-sent requests
+2026-07-10T09:59:22.338192Z  INFO librdkafka: librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out ProduceRequest in flight (after 60705ms, timeout #0)
+2026-07-10T09:59:22.338228Z  INFO log: Internal log [librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out ProduceRequest in flight (after 60705ms, timeout #0)] is being suppressed to avoid flooding.
+2026-07-10T09:59:22.338240Z  WARN librdkafka: librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out 2 in-flight, 0 retry-queued, 0 out-queue, 0 partially-sent requests
+2026-07-10T09:59:50.211358Z  WARN librdkafka: librdkafka: FAIL [thrd:127.0.0.1:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 30228ms in state CONNECT)
+2026-07-10T09:59:50.305139Z  WARN librdkafka: librdkafka: FAIL [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 30183ms in state CONNECT)
+2026-07-10T09:59:51.171792Z  WARN librdkafka: librdkafka: FAIL [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 31058ms in state CONNECT)
+2026-07-10T10:00:19.670411Z  WARN librdkafka: librdkafka: FAIL [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 30671ms in state CONNECT, 1 identical error(s) suppressed)
+2026-07-10T10:00:19.812914Z  WARN librdkafka: librdkafka: FAIL [thrd:127.0.0.1:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 30717ms in state CONNECT, 1 identical error(s) suppressed)
+2026-07-10T10:00:20.991283Z  WARN librdkafka: librdkafka: FAIL [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 31130ms in state CONNECT, 1 identical error(s) suppressed)
+2026-07-10T10:00:50.756651Z  WARN librdkafka: librdkafka: FAIL [thrd:127.0.0.1:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 30776ms in state CONNECT, 1 identical error(s) suppressed)
+2026-07-10T10:00:50.831312Z  WARN librdkafka: librdkafka: FAIL [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 30717ms in state CONNECT, 1 identical error(s) suppressed)
+2026-07-10T10:00:51.705406Z  WARN librdkafka: librdkafka: FAIL [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 30659ms in state CONNECT, 1 identical error(s) suppressed)
+2026-07-10T10:01:20.585444Z  WARN librdkafka: librdkafka: FAIL [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 32248ms in state CONNECT, 1 identical error(s) suppressed)
+2026-07-10T10:01:21.519989Z  INFO log: Internal log [librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out ProduceRequest in flight (after 60705ms, timeout #0)] has been suppressed 1 times.
+2026-07-10T10:01:21.520018Z  INFO librdkafka: librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out MetadataRequest in flight (after 60099ms, timeout #0)
+2026-07-10T10:01:21.520042Z  WARN log: Internal log [librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out 2 in-flight, 0 retry-queued, 0 out-queue, 0 partially-sent requests] is being suppressed to avoid flooding.
+2026-07-10T10:01:21.734192Z  WARN librdkafka: librdkafka: FAIL [thrd:127.0.0.1:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 33385ms in state CONNECT, 1 identical error(s) suppressed)
+2026-07-10T10:01:21.734288Z  WARN librdkafka: librdkafka: FAIL [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Connection setup timed out in state CONNECT (after 32128ms in state CONNECT, 1 identical error(s) suppressed)
+2026-07-10T10:01:21.978056Z  INFO log: Internal log [librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out ProduceRequest in flight (after 60697ms, timeout #0)] has been suppressed 1 times.
+2026-07-10T10:01:21.978090Z  INFO librdkafka: librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out MetadataRequest in flight (after 60328ms, timeout #0)
+2026-07-10T10:01:21.978107Z  WARN log: Internal log [librdkafka: REQTMOUT [thrd:192.168.97.160:9092/1]: 192.168.97.160:9092/1: Timed out 2 in-flight, 0 retry-queued, 0 out-queue, 0 partially-sent requests] is being suppressed to avoid flooding.
+                                                                                                                     
