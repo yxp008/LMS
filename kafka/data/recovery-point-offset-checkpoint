@@ -4,7 +4,7 @@ __consumer_offsets 13 0
 __consumer_offsets 46 0
 __consumer_offsets 9 0
 __consumer_offsets 42 0
-lms_elk_logs 0 4448
+lms_elk_logs 0 6282
 __consumer_offsets 21 0
 __consumer_offsets 17 0
 __consumer_offsets 30 0
@@ -35,7 +35,7 @@ __consumer_offsets 23 0
 __consumer_offsets 19 0
 __consumer_offsets 32 0
 __consumer_offsets 28 0
-__consumer_offsets 7 4453
+__consumer_offsets 7 11720
 __consumer_offsets 40 0
 __consumer_offsets 3 0
 __consumer_offsets 36 0

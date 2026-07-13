@@ -1,6 +1,5 @@
-# LMS 客户端（Vector + 采集器管理）
-# Vector 需要直接访问系统日志源（journald/syslog），建议在宿主机安装
-# 容器内仅运行采集器管理界面
+# LMS 客户端（Docker Compose）
+# 与服务端共享 lms_net 网络
 
 services:
   collector:
@@ -9,7 +8,14 @@ services:
       dockerfile: docker/Dockerfile
     command: collector
     environment:
-      LMS_KAFKA_BROKER: ${LMS_KAFKA_BROKER:-localhost:9092}
-      LMS_SERVER_URL: ${LMS_SERVER_URL:-http://localhost:8080}
+      COLLECTOR_PORT: "8081"
+      LMS_KAFKA_BROKER: ${LMS_KAFKA_BROKER:-kafka:9092}
+      LMS_SERVER_URL: ${LMS_SERVER_URL:-http://server:8088}
     ports:
       - "8081:8081"
+    networks:
+      - lms_net
+
+networks:
+  lms_net:
+    external: true

@@ -1,281 +1,393 @@
-2026/07/13 10:18:38 [SERVER] Vector 已启用, PID=6233
-2026/07/13 10:18:38 [COLLECTOR] 采集器管理: http://localhost:8081
-2026/07/13 10:18:38 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0ca52635","ok":true}
-2026/07/13 10:19:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0ca52635","ok":true}
-2026/07/13 10:19:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"error":"missing fields"}
-2026/07/13 10:19:34 [SERVER] Vector 已停止
-2026/07/13 10:19:34 [COLLECTOR] 采集器 C_LAPTOP_0ca52635 已删除并通知服务端 http://localhost:8088
-2026/07/13 10:19:55 [SERVER] Vector 已启用, PID=6309
-2026/07/13 10:19:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:19:55 [COLLECTOR] Kafka broker 已更新为: localhost:9092
-2026/07/13 10:19:57 [SERVER] Vector 已停止
-2026/07/13 10:20:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:20:00 [SERVER] Vector 已启用, PID=6361
-2026/07/13 10:20:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:20:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:20:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:21:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:21:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:22:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:22:43 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:23:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:23:38 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:23:41 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:23:44 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:23:47 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:23:50 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": read tcp 127.0.0.1:45506->127.0.0.1:8088: read: connection reset by peer
-2026/07/13 10:23:53 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 10:24:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_69c16902","ok":true}
-2026/07/13 10:24:33 [SERVER] Vector 已停止
-2026/07/13 10:24:44 [COLLECTOR] 采集器 C_LAPTOP_69c16902 已删除并通知服务端 http://localhost:8088
-2026/07/13 10:24:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"error":"missing fields"}
-2026/07/13 10:25:02 [SERVER] Vector 已启用, PID=6745
-2026/07/13 10:25:02 [COLLECTOR] Kafka broker 已更新为: localhost:9092
-2026/07/13 10:25:04 [SERVER] Vector 已停止
-2026/07/13 10:25:07 [SERVER] Vector 已启用, PID=6799
-2026/07/13 10:25:15 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:25:20 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:25:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:26:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:27:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:27:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:28:20 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:29:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:29:28 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:29:31 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": read tcp 127.0.0.1:44910->127.0.0.1:8088: read: connection reset by peer
-2026/07/13 10:29:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:29:49 [COLLECTOR] Kafka broker 已更新为: localhost:9092
-2026/07/13 10:29:48 [SERVER] Vector 已停止
-2026/07/13 10:29:51 [SERVER] Vector 已启用, PID=7158
-2026/07/13 10:29:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:30:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_8609435a","ok":true}
-2026/07/13 10:30:12 [SERVER] Vector 已停止
-2026/07/13 10:30:12 [COLLECTOR] 采集器 C_LAPTOP_8609435a 已删除并通知服务端 http://localhost:8088
-2026/07/13 10:30:23 [SERVER] Vector 已启用, PID=7215
-2026/07/13 10:30:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:30:23 [COLLECTOR] Kafka broker 已更新为: localhost:9092
-2026/07/13 10:30:25 [SERVER] Vector 已停止
-2026/07/13 10:30:28 [SERVER] Vector 已启用, PID=7268
-2026/07/13 10:30:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:30:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:30:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:31:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:31:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:32:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:32:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:33:13 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": read tcp 127.0.0.1:48382->127.0.0.1:8088: read: connection reset by peer
-2026/07/13 10:33:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:33:43 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:34:10 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:34:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:35:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_c803a232","ok":true}
-2026/07/13 10:35:10 [SERVER] Vector 已停止
-2026/07/13 10:35:10 [COLLECTOR] 采集器 C_LAPTOP_c803a232 已删除并通知服务端 http://localhost:8088
-2026/07/13 10:35:21 [SERVER] Vector 已启用, PID=7619
-2026/07/13 10:35:21 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_d4b92a60","ok":true}
-2026/07/13 10:35:21 [COLLECTOR] Kafka broker 已更新为: localhost:9092
-2026/07/13 10:35:23 [SERVER] Vector 已停止
-2026/07/13 10:35:26 [SERVER] Vector 已启用, PID=7670
-2026/07/13 10:35:26 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_d4b92a60","ok":true}
-2026/07/13 10:35:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_d4b92a60","ok":true}
-2026/07/13 10:35:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_d4b92a60","ok":true}
-2026/07/13 10:36:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_d4b92a60","ok":true}
-2026/07/13 10:36:54 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:36:57 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:37:00 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:37:03 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:37:06 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:37:09 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 10:37:33 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:37:36 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:37:39 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:37:42 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:37:45 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 10:37:48 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 10:38:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_d4b92a60","ok":true}
-2026/07/13 10:38:21 [SERVER] Vector 已停止
-2026/07/13 10:38:22 [COLLECTOR] 采集器 C_LAPTOP_d4b92a60 已删除并通知服务端 http://localhost:8088
-2026/07/13 10:38:34 [SERVER] Vector 已启用, PID=7888
-2026/07/13 10:38:34 [COLLECTOR] Kafka broker 已更新为: localhost:9092
-2026/07/13 10:38:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:38:36 [SERVER] Vector 已停止
-2026/07/13 10:38:39 [SERVER] Vector 已启用, PID=7940
-2026/07/13 10:38:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:38:43 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:39:10 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:39:38 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:40:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:40:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:41:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:41:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:41:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:42:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:42:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:43:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:43:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:44:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:44:38 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:45:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:45:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:46:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:46:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
-2026/07/13 10:46:35 [SERVER] Vector 已停止
-2026/07/13 10:46:36 [COLLECTOR] 采集器 C_LAPTOP_34fc46e5 已删除并通知服务端 http://localhost:8088
-2026/07/13 10:46:52 [SERVER] Vector 已启用, PID=8450
-2026/07/13 10:46:52 [COLLECTOR] Kafka broker 已更新为: localhost:9092
-2026/07/13 10:46:52 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:46:54 [SERVER] Vector 已停止
-2026/07/13 10:46:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:46:57 [SERVER] Vector 已启用, PID=8501
-2026/07/13 10:46:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:47:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:47:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:48:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:48:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:49:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:49:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:50:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:50:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:51:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:51:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:51:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:52:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:52:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:53:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:53:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:54:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:54:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:55:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:55:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:56:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:56:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:56:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:57:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:57:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:58:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:58:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:59:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 10:59:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 11:00:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 11:00:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 11:01:01 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:04 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:07 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:10 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:10 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:13 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:01:41 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:44 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:47 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:50 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:53 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:01:56 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:02:23 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:02:26 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:02:29 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:02:32 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:02:32 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:02:35 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:03:03 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:06 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:09 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:12 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:15 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:18 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:03:45 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:48 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:51 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:54 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:54 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:03:57 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:04:24 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:04:27 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:04:30 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:04:33 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:04:37 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:04:40 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:05:07 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:05:10 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:05:13 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:05:16 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:05:16 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:05:19 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:05:46 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:05:49 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:05:52 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:05:55 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:05:58 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:06:01 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:06:29 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:06:32 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:06:35 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:06:38 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:06:38 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:06:41 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:07:08 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:07:11 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:07:14 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:07:17 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:07:20 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:07:23 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:07:51 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:07:54 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:07:57 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:08:00 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:08:00 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:08:03 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:08:30 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:08:33 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": read tcp 127.0.0.1:47222->127.0.0.1:8088: read: connection reset by peer
-2026/07/13 11:08:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 11:09:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 11:09:31 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 11:09:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
-2026/07/13 11:10:17 [SERVER] Vector 已启用, PID=8501
-9759
-2026/07/13 11:10:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:10:25 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:10:53 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:11:20 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:11:47 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:12:15 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:12:42 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:13:09 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:13:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:14:04 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:14:31 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:14:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:15:26 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": read tcp 127.0.0.1:47158->127.0.0.1:8088: read: connection reset by peer
-2026/07/13 11:15:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:15:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:16:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:16:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:17:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:17:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:18:13 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:18:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:19:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:19:35 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:20:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:20:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:20:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:21:24 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:21:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:22:18 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:22:21 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:22:24 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:22:27 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:22:30 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
-2026/07/13 11:22:33 [COLLECTOR] 服务端注册失败（已重试5次）
-2026/07/13 11:23:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:23:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:23:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:24:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:24:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:25:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:25:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:26:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:26:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:27:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:27:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:27:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
-2026/07/13 11:28:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:57:37 [SERVER] Vector 已启用, PID=13315
+2026/07/13 11:57:37 [COLLECTOR] 采集器管理: http://localhost:8081
+2026/07/13 11:57:37 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:57:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:58:04 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:58:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:58:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:59:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:59:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:00:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:00:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:01:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:01:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:02:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:02:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:03:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:03:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:04:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:04:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:04:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:05:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:05:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:06:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:06:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:07:13 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:07:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:08:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:08:35 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:09:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:09:30 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:09:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:10:25 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:10:52 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:11:19 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:11:47 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:12:14 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:12:42 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:13:10 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:13:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:14:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:14:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:14:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:15:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:15:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:16:21 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:16:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:17:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:17:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:18:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:18:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:19:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:19:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:20:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:20:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:20:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:21:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:21:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:22:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:22:46 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:23:13 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:23:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:24:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:24:35 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:25:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:25:30 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:25:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:26:25 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:26:52 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:27:20 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:27:47 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:28:15 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:28:42 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:29:10 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:29:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:30:04 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:30:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:30:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:31:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:31:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:32:21 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:32:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:33:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:33:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:34:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:34:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:35:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:35:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:36:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:36:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:36:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:37:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:37:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:38:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:38:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:39:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:39:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:40:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:40:35 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:41:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:41:30 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:41:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:42:24 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:42:52 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:43:19 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:43:47 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:44:14 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:44:41 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:45:09 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:45:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:46:04 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:46:31 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:46:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:47:26 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:47:53 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:48:21 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:48:48 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:49:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:49:43 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:50:10 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:50:38 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:51:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:51:32 [COLLECTOR] Kafka broker 已更新为: localhost:9092
+2026/07/13 12:51:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:51:34 [SERVER] Vector 已停止
+2026/07/13 12:51:37 [SERVER] Vector 已启用, PID=14353
+2026/07/13 12:51:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:52:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:52:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:52:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:53:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:53:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:54:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:54:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:55:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:55:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:56:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:56:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:57:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:57:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:57:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:58:24 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:58:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:59:19 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 12:59:46 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:00:13 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:00:41 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:01:08 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:01:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:02:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:39:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:39:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:40:08 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:40:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:41:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:41:30 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:41:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:42:25 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:42:53 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:43:20 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:43:48 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:44:15 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:44:43 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:45:10 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:45:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:46:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:46:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:47:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:47:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:47:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:48:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:48:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:49:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:49:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:50:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:50:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:51:04 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:51:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:51:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:52:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:52:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:53:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:53:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:54:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:54:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:55:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:55:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:56:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:56:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:57:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:57:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:57:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:58:24 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:58:52 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:59:19 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 13:59:46 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:00:14 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:00:41 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:01:09 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:01:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:02:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:02:31 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:02:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:03:26 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:03:53 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:04:21 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:04:48 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:05:15 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:05:43 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:06:10 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:06:38 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:07:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:07:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:08:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:08:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:08:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:09:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:09:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:10:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:10:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:11:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:11:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:12:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:12:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:13:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:13:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:13:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:14:24 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:14:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:15:19 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:15:46 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:16:14 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:16:41 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:17:08 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:17:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:18:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:18:30 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:18:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:19:25 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:19:53 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:20:20 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:20:47 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:21:15 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:21:42 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:22:09 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:22:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:23:04 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:23:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:23:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:24:26 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:24:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:25:21 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:25:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:26:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:26:43 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:27:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:27:38 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:28:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:28:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:29:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:29:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:29:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:30:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:30:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:31:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:31:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:32:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:32:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:33:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:33:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:34:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:34:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:34:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:35:24 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:35:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:36:19 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:36:46 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:37:14 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:37:41 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:38:08 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:38:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:39:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:39:31 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:39:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:40:25 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:40:53 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:41:20 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:41:48 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:42:15 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:42:43 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:43:10 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:43:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:44:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:44:32 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:45:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:45:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:45:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:46:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:46:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:47:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:47:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:48:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:48:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:49:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:49:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:50:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:50:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:50:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:51:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:51:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:52:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:52:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:53:13 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:53:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:54:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:54:35 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:55:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:55:30 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:55:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:56:25 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:56:52 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:57:19 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:57:47 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:58:14 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:58:42 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:59:09 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 14:59:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:00:04 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:00:31 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:00:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:01:26 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:01:54 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:02:21 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:02:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:03:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:03:43 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:04:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:04:38 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:05:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:05:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:06:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:06:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:06:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:07:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:07:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:08:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:08:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:09:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:09:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:10:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:10:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:11:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:11:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:11:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:12:24 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:12:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:13:19 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:13:46 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:14:14 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:14:41 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:15:08 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:15:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:16:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:16:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:17:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:17:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:17:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:18:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:18:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:19:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:19:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:20:26 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:20:52 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:21:21 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:21:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:22:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:22:46 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:23:13 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:23:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:24:08 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:24:35 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:25:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:25:30 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:25:36 [COLLECTOR] Kafka broker 已更新为: localhost:9092
+2026/07/13 15:25:39 [SERVER] Vector 已停止
+2026/07/13 15:25:42 [SERVER] Vector 已启用, PID=19121
+2026/07/13 15:25:42 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:25:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:26:26 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:26:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:27:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:27:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:28:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 15:28:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
