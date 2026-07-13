@@ -1,0 +1,58 @@
+# LMS 服务端（Kafka + ClickHouse + Processor + Web）
+
+services:
+  kafka:
+    image: apache/kafka:3.9.0
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - kafka_data:/tmp/kraft-combined-logs
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    environment:
+      CLICKHOUSE_DB: LMS
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ../server/database_design/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "8123:8123"
+
+  server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: server
+    environment:
+      LMS_CLICKHOUSE_URL: http://clickhouse:8123
+      LMS_KAFKA_BROKER: kafka:9092
+      LMS_SERVER_URL: http://server:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+      - clickhouse
+
+  processor:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: processor
+    environment:
+      LMS_CLICKHOUSE_URL: http://clickhouse:8123
+      LMS_KAFKA_BROKER: kafka:9092
+    depends_on:
+      - kafka
+      - clickhouse
+
+volumes:
+  kafka_data:
+  clickhouse_data:

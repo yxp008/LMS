@@ -1,0 +1,13 @@
+.git
+data/
+kafka/
+logs
+*.log
+*.pid
+frontend/server
+server/processor/processor
+client/collector/elk_logs/reader
+client/collector/vector_wsl.toml
+client/collector/collection_prefs.json
+client/collector/collector_state.json
+client/collector/vector_data

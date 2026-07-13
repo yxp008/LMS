@@ -10622,3 +10622,5 @@
 2026-07-12T14:20:54.100370Z ERROR log: Internal log [librdkafka: FAIL [thrd:localhost:9092/bootstrap]: localhost:9092/bootstrap: Connect to ipv4#127.0.0.1:9092 failed: Connection refused (after 2ms in state CONNECT)] is being suppressed to avoid flooding.
 2026-07-12T14:20:58.103272Z ERROR sink{component_kind="sink" component_id=kafka_journald_out component_type=kafka}:request{request_id=122}: vector_common::internal_event::service: Internal log [Service call failed. No retries or retries exhausted.] is being suppressed to avoid flooding.
 2026-07-12T14:20:58.103386Z ERROR sink{component_kind="sink" component_id=kafka_journald_out component_type=kafka}:request{request_id=122}: vector_common::internal_event::component_events_dropped: Internal log [Events dropped] is being suppressed to avoid flooding.
+2026-07-12T14:53:40.079283Z  INFO vector::signal: Signal received. signal="SIGTERM"
+2026-07-12T14:53:40.083073Z  INFO vector: Vector is stopping.

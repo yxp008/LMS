@@ -232,10 +232,12 @@ func startVector() {
 	time.Sleep(3 * time.Second)
 	out, _ := exec.Command("pgrep", "-x", "vector").Output()
 	realPID := strings.TrimSpace(string(out))
-	if realPID == "" {
+	if realPID == "" && cmd.Process != nil {
 		realPID = fmt.Sprintf("%d", cmd.Process.Pid)
 	}
-	os.WriteFile(vectorPID, []byte(realPID), 0644)
+	if realPID != "" {
+		os.WriteFile(vectorPID, []byte(realPID), 0644)
+	}
 	if !isCollector {
 		cq(`ALTER TABLE `+database+`.LMS_Collectors UPDATE Status = '1' WHERE 1=1`)
 	}
