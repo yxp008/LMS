@@ -67,7 +67,16 @@ function initNavigation() {
                 const subtab = activeTab ? activeTab.dataset.subtab : 'dashboard';
                 handleSubTabLoad(subtab);
             }
-            if (page === 'collectors') { stopLogAutoRefresh(); loadCollectors(); }
+            if (page === 'collectors') {
+                stopLogAutoRefresh();
+                loadCollectors();
+                // 服务端每5秒、客户端每10秒自动刷新
+                var interval = isCollectorMode ? 10000 : 5000;
+                clearInterval(window._collectorTimer);
+                window._collectorTimer = setInterval(loadCollectors, interval);
+            } else {
+                clearInterval(window._collectorTimer);
+            }
             if (page === 'alerts') { stopLogAutoRefresh(); loadAlertRules(); }
         });
     });
@@ -696,20 +705,24 @@ async function loadCollectors() {
     const data = await fetchAPI('/api/collectors');
     const tbody = document.getElementById('collectors-table-body');
 
-    if (!data || data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="empty-state">暂无采集器数据</td></tr>';
-        return;
-    }
-
+    // 客户端按钮状态始终更新
     if (isCollectorMode) {
         var regBtn = document.getElementById('btn-reg-collector');
         if (regBtn) {
-            regBtn.disabled = data.length > 0;
-            regBtn.style.opacity = data.length > 0 ? '0.5' : '1';
-            regBtn.title = data.length > 0 ? '已存在采集器，请使用编辑功能' : '注册新采集器';
+            var hasCollector = data && data.length > 0;
+            regBtn.disabled = hasCollector;
+            regBtn.style.opacity = hasCollector ? '0.5' : '1';
+            regBtn.title = hasCollector ? '已存在采集器，请使用编辑功能' : '注册新采集器';
         }
         var addBtn = document.getElementById('btn-add-collector');
         if (addBtn) addBtn.style.display = 'none';
+        var bar = document.getElementById('collector-self-info');
+        if (bar) bar.style.display = 'block';
+    }
+
+    if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-state">暂无采集器数据</td></tr>';
+        return;
     }
     tbody.innerHTML = data.map(c => {
         const enabled = c.Status === '1';

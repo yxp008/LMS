@@ -13,6 +13,8 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
     volumes:
       - kafka_data:/tmp/kraft-combined-logs
 
@@ -20,9 +22,12 @@ services:
     image: clickhouse/clickhouse-server:latest
     environment:
       CLICKHOUSE_DB: LMS
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: ""
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
     volumes:
       - clickhouse_data:/var/lib/clickhouse
-      - ../server/database_design/sql:/docker-entrypoint-initdb.d
+      - ../docker/sql:/docker-entrypoint-initdb.d
     ports:
       - "8123:8123"
 
@@ -35,8 +40,9 @@ services:
       LMS_CLICKHOUSE_URL: http://clickhouse:8123
       LMS_KAFKA_BROKER: kafka:9092
       LMS_SERVER_URL: http://server:8080
+      SERVER_PORT: "8088"
     ports:
-      - "8080:8080"
+      - "8088:8088"
     depends_on:
       - kafka
       - clickhouse

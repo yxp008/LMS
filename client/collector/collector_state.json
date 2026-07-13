@@ -1,6 +1,6 @@
 {
-  "Collector_ID": "C_LAPTOP_0ca52635",
-  "Name": "生产环境采集器",
+  "Collector_ID": "C_LAPTOP_34fc46e5",
+  "Name": "dtor-WSL",
   "Status": "1",
   "Address": "localhost:9092",
   "Source_Host": "LAPTOP-2CVOKHL6 (10.255.255.254)"

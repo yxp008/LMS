@@ -18,7 +18,7 @@ case "${1:-server}" in
     ;;
   processor)
     echo ">>> 启动 LMS Processor"
-    exec /app/server/processor/processor
+    exec /app/processor/processor
     ;;
   *)
     echo "用法: docker run ... [server|collector|processor]"
