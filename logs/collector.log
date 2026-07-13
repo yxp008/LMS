@@ -114,3 +114,168 @@
 2026/07/13 10:43:16 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
 2026/07/13 10:43:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
 2026/07/13 10:44:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
+2026/07/13 10:44:38 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
+2026/07/13 10:45:05 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
+2026/07/13 10:45:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
+2026/07/13 10:46:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
+2026/07/13 10:46:27 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_34fc46e5","ok":true}
+2026/07/13 10:46:35 [SERVER] Vector 已停止
+2026/07/13 10:46:36 [COLLECTOR] 采集器 C_LAPTOP_34fc46e5 已删除并通知服务端 http://localhost:8088
+2026/07/13 10:46:52 [SERVER] Vector 已启用, PID=8450
+2026/07/13 10:46:52 [COLLECTOR] Kafka broker 已更新为: localhost:9092
+2026/07/13 10:46:52 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:46:54 [SERVER] Vector 已停止
+2026/07/13 10:46:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:46:57 [SERVER] Vector 已启用, PID=8501
+2026/07/13 10:46:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:47:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:47:49 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:48:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:48:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:49:11 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:49:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:50:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:50:33 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:51:00 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:51:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:51:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:52:22 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:52:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:53:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:53:44 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:54:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:54:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:55:06 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:55:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:56:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:56:28 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:56:55 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:57:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:57:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:58:17 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:58:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:59:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 10:59:39 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 11:00:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 11:00:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 11:01:01 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:04 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:07 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:10 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:10 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:13 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:01:41 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:44 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:47 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:50 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:53 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:01:56 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:02:23 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:02:26 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:02:29 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:02:32 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:02:32 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:02:35 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:03:03 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:06 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:09 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:12 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:15 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:18 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:03:45 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:48 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:51 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:54 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:54 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:03:57 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:04:24 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:04:27 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:04:30 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:04:33 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:04:37 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:04:40 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:05:07 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:05:10 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:05:13 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:05:16 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:05:16 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:05:19 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:05:46 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:05:49 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:05:52 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:05:55 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:05:58 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:06:01 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:06:29 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:06:32 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:06:35 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:06:38 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:06:38 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:06:41 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:07:08 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:07:11 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:07:14 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:07:17 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:07:20 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:07:23 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:07:51 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:07:54 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:07:57 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:08:00 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:08:00 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:08:03 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:08:30 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:08:33 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": read tcp 127.0.0.1:47222->127.0.0.1:8088: read: connection reset by peer
+2026/07/13 11:08:36 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 11:09:03 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 11:09:31 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 11:09:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_0d3e774d","ok":true}
+2026/07/13 11:10:17 [SERVER] Vector 已启用, PID=8501
+9759
+2026/07/13 11:10:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:10:25 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:10:53 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:11:20 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:11:47 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:12:15 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:12:42 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:13:09 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:13:37 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:14:04 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:14:31 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:14:59 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:15:26 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": read tcp 127.0.0.1:47158->127.0.0.1:8088: read: connection reset by peer
+2026/07/13 11:15:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:15:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:16:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:16:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:17:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:17:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:18:13 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:18:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:19:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:19:35 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:20:02 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:20:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:20:57 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:21:24 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:21:51 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:22:18 [COLLECTOR] 注册重试 1/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:22:21 [COLLECTOR] 注册重试 2/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:22:24 [COLLECTOR] 注册重试 3/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:22:27 [COLLECTOR] 注册重试 4/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:22:30 [COLLECTOR] 注册重试 5/5: Post "http://localhost:8088/api/collectors": dial tcp 127.0.0.1:8088: connect: connection refused
+2026/07/13 11:22:33 [COLLECTOR] 服务端注册失败（已重试5次）
+2026/07/13 11:23:01 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:23:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:23:56 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:24:23 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:24:50 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:25:18 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:25:45 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:26:12 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:26:40 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:27:07 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:27:34 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:27:58 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}
+2026/07/13 11:28:29 [COLLECTOR] 已向 http://localhost:8088 注册: {"Collector_ID":"C_LAPTOP_598c65be","ok":true}

@@ -1,6 +1,6 @@
 {
-  "Collector_ID": "C_LAPTOP_34fc46e5",
-  "Name": "dtor-WSL",
+  "Collector_ID": "C_LAPTOP_598c65be",
+  "Name": "Docker-Test",
   "Status": "1",
   "Address": "localhost:9092",
   "Source_Host": "LAPTOP-2CVOKHL6 (10.255.255.254)"

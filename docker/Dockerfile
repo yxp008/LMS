@@ -22,7 +22,7 @@ WORKDIR /app
 COPY --from=builder /build/server/processor/processor /app/processor/
 COPY --from=builder /build/frontend/server /app/frontend/
 # 复制配置和静态文件
-COPY --from=builder /build/server/processor/rules.json /app/server/processor/
+COPY --from=builder /build/server/processor/rules.json /app/processor/
 COPY --from=builder /build/frontend/index.html /app/frontend/
 COPY --from=builder /build/frontend/app.js /app/frontend/
 COPY --from=builder /build/frontend/style.css /app/frontend/
